@@ -27,7 +27,7 @@ function observer(fixture: InstallObservation) {
   }
 }
 
-// Intentionally red: assert the desired behavior, not the unimplemented error.
+// Assert the state and evidence produced from raw observations.
 // These fixtures replace browser observation only; the classifier is never mocked.
 test('check_install: present includes the successfully loaded script as evidence', async () => {
   const result = await checkInstall(URL, { observe: observer(observation({
@@ -92,4 +92,42 @@ test('check_install: not installed includes the completed observation scope as e
   assert.deepEqual(result.evidence.find((e) => e.kind === 'absence'), {
     kind: 'absence', inspectedScriptUrls: [unrelated], observationDurationMs: 1000,
   })
+})
+
+test('check_install: failed downloads are errors with script_load evidence', async () => {
+  for (const outcome of [{ status: 404 }, { failure: 'net::ERR_NAME_NOT_RESOLVED' }, { failure: 'net::ERR_CONNECTION_RESET' }, { failure: 'net::ERR_BLOCKED_BY_CLIENT' }]) {
+    const result = await checkInstall(URL, { observe: observer(observation({
+      scriptElements: [{ src: SCRIPT }], requests: [{ url: SCRIPT, ...outcome }],
+    })) })
+    assert.equal(result.state, 'error')
+    assert.deepEqual(result.evidence, [{ kind: 'script_load', scriptUrl: SCRIPT,
+      ...('status' in outcome ? { httpStatus: outcome.status } : { failure: outcome.failure }) }])
+  }
+})
+
+test('check_install: consent-held tag without a request is blocked', async () => {
+  const attributes = { 'data-cookieconsent': 'marketing' }
+  const result = await checkInstall(URL, { observe: observer(observation({
+    scriptElements: [{ src: SCRIPT, type: 'text/plain', attributes }],
+  })) })
+  assert.equal(result.state, 'blocked')
+  assert.deepEqual(result.evidence, [{ kind: 'consent', scriptUrl: SCRIPT, type: 'text/plain', attributes }])
+})
+
+test('check_install: unknown load outcome and navigation failure are not absence', async () => {
+  await assert.rejects(checkInstall(URL, { observe: observer(observation({ scriptElements: [{ src: SCRIPT }] })) }), /could not be established/)
+  await assert.rejects(checkInstall(URL, { observe: async () => { throw new Error('Navigation failed') } }), /Navigation failed/)
+})
+
+test('check_install: exact identity, report-only CSP and unrelated errors', async () => {
+  const script = `${SCRIPT}?v=2#embed`
+  const result = await checkInstall(URL, { observe: observer(observation({
+    requests: [{ url: script, status: 200 }],
+    policyViolations: [{ blockedUrl: script, directive: 'script-src', policy: "script-src 'none'", disposition: 'report' }],
+    runtimeErrors: [{ scriptUrl: 'https://site.example/app.js', message: 'unrelated' }],
+  })) })
+  assert.equal(result.state, 'present')
+  for (const src of ['https://enhancer.webability.io.evil.test/widget.min.js', 'https://enhancer.webability.io/other.js', 'http://enhancer.webability.io/widget.min.js']) {
+    assert.equal((await checkInstall(URL, { observe: observer(observation({ scriptElements: [{ src }], requests: [{ url: src, status: 200 }] })) })).state, 'not_installed')
+  }
 })

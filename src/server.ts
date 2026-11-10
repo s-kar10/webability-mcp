@@ -40,6 +40,7 @@ import { AccountError, addSite, createUpgradeLink, describeSite, findSite, INSTA
 import { ACCOUNT_TOOLS, signInRequired } from './signIn.js'
 import { ToolRefusal, assertSelectorMatches, readElementColors, scopeAxeRules } from './pageChecks.js'
 import { checkInstall } from './installCheck.js'
+import { observeInstall } from './installObservation.js'
 
 /** Every arg that can carry a URL the server will navigate to; the hosted SSRF guard checks all of them. */
 export const HOSTED_URL_ARG_KEYS: string[] = [...new Set(['url', 'startUrl', 'baselineUrl', ...VERIFY_FIX_URL_KEYS])]
@@ -537,7 +538,7 @@ ${routingExtra}
  * (DEV-1049). start_audit is absent on purpose: its description already says
  * "not localhost", because its pipeline is server-side in EVERY transport.
  */
-const LOCALHOST_CAPABLE_TOOLS = new Set(['scan_page', 'flow_scan', 'verify_fix', 'diff_scan', 'detect_framework', 'generate_ai_fix', 'visual_audit', 'check_color_contrast', 'check_aria'])
+const LOCALHOST_CAPABLE_TOOLS = new Set(['check_install', 'scan_page', 'flow_scan', 'verify_fix', 'diff_scan', 'detect_framework', 'generate_ai_fix', 'visual_audit', 'check_color_contrast', 'check_aria'])
 
 /** Appended on the hosted transport so the calling model does not retry a refused localhost URL in a loop. */
 const REMOTE_LOCALHOST_CAVEAT =
@@ -546,7 +547,7 @@ const REMOTE_LOCALHOST_CAVEAT =
 const ALL_TOOLS = [
     {
       name: 'check_install',
-      description: 'Check whether the WebAbility embed script is present, blocked by an enforced security policy, failing with an error, or not installed, with evidence. Skeleton only: detection is not implemented yet and calls return an explicit tool error. This is not an accessibility-conformance check. Local HTTP(S) URLs are accepted locally; hosted calls retain the standard private-address restrictions.',
+      description: 'Check whether the WebAbility embed script is present, blocked by an enforced security policy or consent manager, failing with an error, or not installed, with evidence. This is not an accessibility-conformance check. Local HTTP(S) URLs are accepted locally; hosted calls retain the standard private-address restrictions.',
       inputSchema: {
         type: 'object' as const,
         properties: {
@@ -1178,7 +1179,12 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
       return toolError('Error: url must be a valid HTTP or HTTPS URL')
     }
     try {
-      const result = await checkInstall(url)
+      const result = await checkInstall(url, {
+        observe: (target) => observeInstall(target, {
+          remote: opts.remote,
+          setupContext: (context) => (opts.remote || tunnel ? installSsrfRoute(context, tunnel) : undefined),
+        }),
+      })
       return {
         structuredContent: result,
         content: [{ type: 'text', text: '```json\n' + JSON.stringify(result, null, 2) + '\n```' }],
