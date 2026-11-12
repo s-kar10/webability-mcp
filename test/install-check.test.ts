@@ -131,3 +131,17 @@ test('check_install: exact identity, report-only CSP and unrelated errors', asyn
     assert.equal((await checkInstall(URL, { observe: observer(observation({ scriptElements: [{ src }], requests: [{ url: src, status: 200 }] })) })).state, 'not_installed')
   }
 })
+
+test('check_install: dashboard and legacy embed hosts are recognized', async () => {
+  for (const src of ['https://widget.webability.io/widget.min.js', 'https://widget.access-widget.com/widget.min.js']) {
+    const result = await checkInstall(URL, { observe: observer(observation({
+      scriptElements: [{ src }],
+      requests: [{ url: src, status: 200 }],
+    })) })
+    assert.equal(result.state, 'present', src)
+    assert.deepEqual(result.evidence, [{ kind: 'script', scriptUrl: src, httpStatus: 200 }])
+  }
+  for (const src of ['https://widget.webability.io.evil.test/widget.min.js', 'https://widget.access-widget.com/other.js']) {
+    assert.equal((await checkInstall(URL, { observe: observer(observation({ scriptElements: [{ src }], requests: [{ url: src, status: 200 }] })) })).state, 'not_installed', src)
+  }
+})

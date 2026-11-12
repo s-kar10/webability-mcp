@@ -35,12 +35,17 @@ export interface InstallCheckDependencies {
   observe: (url: string) => Promise<InstallObservation>
 }
 
-/** Only the two maintainer-confirmed embed URLs; never substring matches. */
+/**
+ * Hosts that serve the embed: install snippet, docs, dashboard Install tab
+ * (widget.webability.io) and the legacy host. Exact hostnames, never substrings.
+ */
+const INSTALL_SCRIPT_HOSTS = ['enhancer.webability.io', 'widget-v2.webability.io', 'widget.webability.io', 'widget.access-widget.com']
+
 export function isInstallScript(raw: string): boolean {
   try {
     const u = new URL(raw)
     return u.protocol === 'https:' && !u.port && !u.username && !u.password &&
-      ['enhancer.webability.io', 'widget-v2.webability.io'].includes(u.hostname) && u.pathname === '/widget.min.js'
+      INSTALL_SCRIPT_HOSTS.includes(u.hostname) && u.pathname === '/widget.min.js'
   } catch { return false }
 }
 

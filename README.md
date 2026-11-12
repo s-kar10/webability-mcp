@@ -246,10 +246,12 @@ conformance; absence describes only the completed observation window.
 Script identity covers the repository's install snippet,
 `https://enhancer.webability.io/widget.min.js`, and the embed in
 [WebAbility's installation documentation](https://www.webability.io/docs),
-`https://widget-v2.webability.io/widget.min.js`. Match exact HTTPS host/path
+`https://widget-v2.webability.io/widget.min.js`, the dashboard Install tab
+snippet, `https://widget.webability.io/widget.min.js`, and the legacy
+`https://widget.access-widget.com/widget.min.js`. Match exact HTTPS host/path
 combinations, ignoring query strings and fragments. Generic widget attributes
-and substring matches do not establish identity. Legacy domains and self-hosted
-copies are outside this initial contract. Lazy initialization may delay widget
+and substring matches do not establish identity. Agency custom hostnames and
+self-hosted copies are outside this initial contract. Lazy initialization may delay widget
 activation after the embed loads.
 
 Observation starts before page scripts, waits for page load (20-second navigation
