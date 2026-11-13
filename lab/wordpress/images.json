@@ -1,0 +1,17 @@
+[
+  {
+    "tag": "mariadb:11.4",
+    "digest": "mariadb@sha256:5e73baf8179b29f115101bb102763a47a017361f3e9792daccba6646c3ab1532",
+    "id": "sha256:5e73baf8179b29f115101bb102763a47a017361f3e9792daccba6646c3ab1532"
+  },
+  {
+    "tag": "wordpress:6-php8.3-apache",
+    "digest": "wordpress@sha256:5d2c212561c4b5442ebc4d98933a9cbadcf3dee8888ed3fd9ed44667c27cc905",
+    "id": "sha256:5d2c212561c4b5442ebc4d98933a9cbadcf3dee8888ed3fd9ed44667c27cc905"
+  },
+  {
+    "tag": "wordpress:cli-php8.3",
+    "digest": "wordpress@sha256:a4fff017eb08c03187e90fe52d4bff8d3a4d4a5103de05829a6e747c4ca3056e",
+    "id": "sha256:a4fff017eb08c03187e90fe52d4bff8d3a4d4a5103de05829a6e747c4ca3056e"
+  }
+]

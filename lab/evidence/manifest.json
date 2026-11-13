@@ -1,0 +1,270 @@
+{
+  "review": "Local disposable WordPress and synthetic baseline logs only; no credentials/cookies/account screens/participant identities included. Raw copied bytes preserved.",
+  "files": [
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/build.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/typecheck.stdout.txt",
+      "sha256": "cfa0a294ffce5a5e790e5b6041b71c807df04c698a4554453270724ed4a9e71f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/test.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/build.stdout.txt",
+      "sha256": "6394ac035813823c4e301ef955b84f8ac82bc1d77001e47ffd28bd161063f527",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/typecheck.stderr.txt",
+      "sha256": "06ede01d2446a35b701474228c8ec3f3e8480fa6308bb64fd520ab39d6c8f8e6",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/run.json",
+      "sha256": "9c95433b83417d8b3b169b619715f369ba1aec73037f5527407862cf4e68da82",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/test.stdout.txt",
+      "sha256": "d27bce0451716abaa47f195951f1f5273ab973fa7f344ff8d0c43ba0c7ef28c3",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-25-35-667Z-wp-config-08578e1e/page.html",
+      "sha256": "fedf743c39fc0eb8f01655e9bbebda3099adf6cd9942c830d5d13e47bb9d2329",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-25-35-667Z-wp-config-08578e1e/headers.json",
+      "sha256": "901a0ec8ccdcca42c39066c0da8f56e1151fd809cc008bbb4f03420fe308a57e",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-25-35-667Z-wp-config-08578e1e/run.json",
+      "sha256": "6442199d5821f12538677c64ae886a1fbc407d8bdea00bed6ff32cf2e733ca60",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-25-38-341Z-check-97671f6e/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-25-38-341Z-check-97671f6e/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-25-38-341Z-check-97671f6e/run.json",
+      "sha256": "c9b32a8988d09a720a01fdb70d720d121044fb2bd5f363bc1709cce104c5d664",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-31-373Z-wp-config-b96e65e8/page.html",
+      "sha256": "1064e8e95fb7dccf338c6b9de1a23d16a15854c15deb29d4a907433a6c4e6b1c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-31-373Z-wp-config-b96e65e8/headers.json",
+      "sha256": "cf1eeece32b5debb1f9d7fbcf61985ddca77eec0c3edcefdc5bed2154ffb996b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-31-373Z-wp-config-b96e65e8/run.json",
+      "sha256": "ee039c3c9d79bbf3a44f02fa9f9aa4774cb0b0b229c0943c27979f01e912e754",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-35-413Z-check-bf2bf623/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-35-413Z-check-bf2bf623/response.json",
+      "sha256": "cc254acedd680f7b39793bd0a439bfec910a8e4d253c7513cd052ec781042576",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-35-413Z-check-bf2bf623/run.json",
+      "sha256": "5435b8c34b0db790c4e1bd264cbdbaa82801100b43fb7a7ebc9b0d10a07c1cc5",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-37-844Z-wp-config-0f898058/page.html",
+      "sha256": "fedf743c39fc0eb8f01655e9bbebda3099adf6cd9942c830d5d13e47bb9d2329",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-37-844Z-wp-config-0f898058/headers.json",
+      "sha256": "70e919f89863c8ccfce905ab8d29d635ba0f4c6861471d2330076629cdbf1813",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-37-844Z-wp-config-0f898058/run.json",
+      "sha256": "24fc8637f3521dc56c7aed3b95c6b9fda9692d6b000e0ee76002ed6b10cfab90",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-40-464Z-check-703b5e56/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-40-464Z-check-703b5e56/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-40-464Z-check-703b5e56/run.json",
+      "sha256": "f3a2a93b38615d9484ce4157f057fc46a350569ce9e09ba89df8a79d3932aeb5",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-42-779Z-wp-config-7ea0e73e/page.html",
+      "sha256": "fedf743c39fc0eb8f01655e9bbebda3099adf6cd9942c830d5d13e47bb9d2329",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-42-779Z-wp-config-7ea0e73e/headers.json",
+      "sha256": "1a1157b1b36302a9c7a00a3a4e9ebc7fd1222504060862c41147f13b505cfb6c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-42-779Z-wp-config-7ea0e73e/run.json",
+      "sha256": "7b6aab699f0e569ffa92bbf945989a791f90612000185227691bf61156d85bc3",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-45-658Z-check-f567a618/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-45-658Z-check-f567a618/response.json",
+      "sha256": "4cde593e3f1c1dc66aa528ea2a38414385ae9d725ea7517292639e437fb508b2",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-45-658Z-check-f567a618/run.json",
+      "sha256": "0a5e8eee0988201335e842c0fa2f9ebacefdbd506d37c43d8e621c7f8b003d78",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-47-717Z-wp-config-de446504/page.html",
+      "sha256": "fedf743c39fc0eb8f01655e9bbebda3099adf6cd9942c830d5d13e47bb9d2329",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-47-717Z-wp-config-de446504/headers.json",
+      "sha256": "e76eb61f862cdd89af655a93b459ec9dc145b14591b100c3bd13e9700ad856e8",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-47-717Z-wp-config-de446504/run.json",
+      "sha256": "b8ddf4b623ee5c100a21a83c7f4ae7c29b50ecbbd79403caffafe1882a843e18",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-50-295Z-check-775cdca1/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-50-295Z-check-775cdca1/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-50-295Z-check-775cdca1/run.json",
+      "sha256": "4b9e850fabee980888f2e35ee6c0d2c492a6549f6947f3edfb86744140acc8a2",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-52-592Z-wp-config-cdef4b2e/prime-headers.json",
+      "sha256": "7046a65596f40ac6f1a091615ca24fecdc4ebe4ed531ef1b59fe3381e3aecce3",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-52-592Z-wp-config-cdef4b2e/page.html",
+      "sha256": "c54680f0a0aab28d0a16009cdd5dfeeb7b24e821aa99ade1857216993bee139b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-52-592Z-wp-config-cdef4b2e/primed-page.html",
+      "sha256": "c54680f0a0aab28d0a16009cdd5dfeeb7b24e821aa99ade1857216993bee139b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-52-592Z-wp-config-cdef4b2e/headers.json",
+      "sha256": "a516a9b6ee4e1221eba06dfee50ab1ca0be12e6eadae8659eac59f3915f4de12",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-52-592Z-wp-config-cdef4b2e/run.json",
+      "sha256": "02aeb764b950fb714fc8588aac19f41f8aab0068606e2ff1f91a7a09c87720f0",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-56-461Z-check-00cd4a7f/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-56-461Z-check-00cd4a7f/response.json",
+      "sha256": "8f8811365c932b555f4653950c941d551c71b09785fd82213bce75f1f8a3374f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-56-461Z-check-00cd4a7f/run.json",
+      "sha256": "5da5a80060b966769214003e18c9969c337f91ab9b041b5319ca887c36ff6471",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-58-407Z-wp-config-f99a1508/page.html",
+      "sha256": "fedf743c39fc0eb8f01655e9bbebda3099adf6cd9942c830d5d13e47bb9d2329",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-58-407Z-wp-config-f99a1508/headers.json",
+      "sha256": "8aeaf013ca6ed8f332236eaf24712555110a9f73aeafe0f8adac61cc89f330f3",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-58-407Z-wp-config-f99a1508/run.json",
+      "sha256": "3133be3be1f753f5f9a6a4534ba61cbe3d6cb8d6f488abf1c2ffbbb5ff88dd93",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-27-01-243Z-check-14647735/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-27-01-243Z-check-14647735/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-27-01-243Z-check-14647735/run.json",
+      "sha256": "dd9a4ccc2e2b7c6f03d2856485ac61387c43893db0e2c1d61d76a1e4a32c5361",
+      "redactions": []
+    }
+  ],
+  "excluded_runs": [
+    {
+      "run_id": "2026-11-13T21-25-14-802Z-wp-config-6694f5df",
+      "reason": "Setup invocation failed before valid WordPress configuration; retained privately."
+    },
+    {
+      "run_id": "2026-11-13T21-25-15-390Z-check-82dbe120",
+      "reason": "Initial setup attempt reached WordPress installer, not the configured site; excluded from control/results and retained privately."
+    }
+  ]
+}

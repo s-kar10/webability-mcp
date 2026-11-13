@@ -1,0 +1,20 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "```json\n{\n  \"url\": \"http://127.0.0.1:8099/\",\n  \"finalUrl\": \"http://127.0.0.1:8099/\",\n  \"state\": \"present\",\n  \"evidence\": [\n    {\n      \"kind\": \"script\",\n      \"scriptUrl\": \"https://widget.webability.io/widget.min.js\",\n      \"httpStatus\": 200\n    }\n  ]\n}\n```"
+    }
+  ],
+  "structuredContent": {
+    "url": "http://127.0.0.1:8099/",
+    "finalUrl": "http://127.0.0.1:8099/",
+    "state": "present",
+    "evidence": [
+      {
+        "kind": "script",
+        "scriptUrl": "https://widget.webability.io/widget.min.js",
+        "httpStatus": 200
+      }
+    ]
+  }
+}

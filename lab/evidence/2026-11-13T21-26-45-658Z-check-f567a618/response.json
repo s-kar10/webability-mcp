@@ -1,0 +1,21 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "```json\n{\n  \"url\": \"http://127.0.0.1:8099/\",\n  \"finalUrl\": \"http://127.0.0.1:8099/\",\n  \"state\": \"blocked\",\n  \"evidence\": [\n    {\n      \"kind\": \"security_policy\",\n      \"blockedUrl\": \"https://widget.webability.io/widget.min.js\",\n      \"directive\": \"script-src-elem\",\n      \"policy\": \"script-src 'self'\"\n    }\n  ]\n}\n```"
+    }
+  ],
+  "structuredContent": {
+    "url": "http://127.0.0.1:8099/",
+    "finalUrl": "http://127.0.0.1:8099/",
+    "state": "blocked",
+    "evidence": [
+      {
+        "kind": "security_policy",
+        "blockedUrl": "https://widget.webability.io/widget.min.js",
+        "directive": "script-src-elem",
+        "policy": "script-src 'self'"
+      }
+    ]
+  }
+}
