@@ -1,0 +1,4 @@
+
+> @webability/mcp@1.10.1 typecheck
+> tsc --noEmit
+

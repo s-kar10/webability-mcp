@@ -1,0 +1,12 @@
+{
+  "connection": "Keep-Alive",
+  "content-encoding": "gzip",
+  "content-length": "12012",
+  "content-type": "text/html; charset=UTF-8",
+  "date": "Fri, 13 Nov 2026 21:26:56 GMT",
+  "keep-alive": "timeout=5, max=99",
+  "server": "Apache/2.4.67 (Debian)",
+  "vary": "Accept-Encoding",
+  "x-install-lab-cache": "HIT",
+  "x-powered-by": "PHP/8.3.31"
+}

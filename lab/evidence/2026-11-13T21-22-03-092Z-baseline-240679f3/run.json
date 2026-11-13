@@ -1,0 +1,57 @@
+{
+  "run_id": "2026-11-13T21-22-03-092Z-baseline-240679f3",
+  "timestamp": "2026-11-13T21:22:03.094Z",
+  "git_commit": "991c6edfee443599d0803dd69ce6ffa82aeb2d06",
+  "tracked_dirty": false,
+  "environment": {
+    "node": "v25.9.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "case_id": "BASELINE",
+  "builder": "repository",
+  "command": [
+    "node",
+    "lab/scripts/baseline.mjs"
+  ],
+  "results": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "started_at": "2026-11-13T21:22:03.105Z",
+      "finished_at": "2026-11-13T21:22:04.911Z",
+      "duration_ms": 1804.1720830000002,
+      "exit_code": 0,
+      "stdout_file": "typecheck.stdout.txt",
+      "stderr_file": "typecheck.stderr.txt"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "started_at": "2026-11-13T21:22:04.912Z",
+      "finished_at": "2026-11-13T21:22:07.803Z",
+      "duration_ms": 2891.573125,
+      "exit_code": 0,
+      "stdout_file": "build.stdout.txt",
+      "stderr_file": "build.stderr.txt"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "started_at": "2026-11-13T21:22:07.803Z",
+      "finished_at": "2026-11-13T21:23:28.038Z",
+      "duration_ms": 80234.704292,
+      "exit_code": 0,
+      "stdout_file": "test.stdout.txt",
+      "stderr_file": "test.stderr.txt"
+    }
+  ]
+}
