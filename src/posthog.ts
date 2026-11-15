@@ -67,13 +67,35 @@ function posthogClient(): PostHogClient | null {
   return posthog
 }
 
-const redactSensitiveMcpPayloads: BeforeSendFn = (event) => {
+export const redactSensitiveMcpPayloads: BeforeSendFn = (event) => {
   // WebAbility MCP tool args can include raw HTML snippets, element HTML,
   // screenshots, and full scan results. Keep PostHog MCP's usage metadata
   // (tool name, duration, client, success/failure), but do not ship payloads.
   delete event.properties.$mcp_parameters
   delete event.properties.$mcp_response
   if (isCallerMisuseNoise(event)) return null
+  return stabilizeScanTimeoutFingerprint(event)
+}
+
+// Hosted scan_page / diff_scan deadline timeouts are one product signal, not
+// one issue per slow site. The message embeds the URL, so PostHog's default
+// fingerprint (exception type + message) opened a new issue for every site
+// (49 events / 27 issues in 30 days). Pin one stable fingerprint so the
+// timeout rate stays visible as a single issue. The event is still captured —
+// this is deliberately NOT in MCP_CALLER_MISUSE_PATTERNS.
+const SCAN_DEADLINE_TIMEOUT_FINGERPRINT = 'webability-mcp:hosted-scan-deadline-timeout'
+const SCAN_DEADLINE_TIMEOUT_PATTERN =
+  /took longer than \d+(?:\.\d+)?s to scan, so it stopped before the 30s limit on hosted tool calls/
+
+export function stabilizeScanTimeoutFingerprint<
+  T extends { event?: string; properties?: Record<string, unknown> },
+>(event: T): T {
+  if (event.event !== '$exception') return event
+  if (!SCAN_DEADLINE_TIMEOUT_PATTERN.test(mcpExceptionText(event))) return event
+  event.properties = {
+    ...(event.properties ?? {}),
+    $exception_fingerprint: SCAN_DEADLINE_TIMEOUT_FINGERPRINT,
+  }
   return event
 }
 
