@@ -8,7 +8,7 @@ import { AI_FIX_FRAMEWORKS, aiFixFramework, detectPageStack, type PageStack } fr
 import { resolveVerifyFixArgs, verifyFixTargetUrl, VERIFY_FIX_URL_KEYS } from './verifyFixArgs.js'
 import { resolveGetRulesArgs, ruleIdMatches } from './getRulesArgs.js'
 import { runEngine, type EngineResult } from '@webability/core/engine'
-import { sessionPage } from './enginePage.js'
+import { installOwnWidgetRoute, sessionPage } from './enginePage.js'
 import { scan, verifyFixRefusal, REASON_TEXT, getContrastRatio, extractSiteTheme, VIEWPORT_SIZES, JUDGE_DEFAULT_TIMEOUT_MS, type JudgeOptions } from '@webability/core'
 import { contrastLaunchesBrowser, contrastPalette } from './contrastPalette.js'
 
@@ -31,7 +31,7 @@ import { generateReportPdf, type PdfIssue } from './reportPdf.js'
 import { axeRuleFixMeta, enrichIssue, webabilityRuleFixMeta, FIXABILITY_TIERS, type Fixability } from './fixOps.js'
 import { IMPACT_RANK, INLINE_BUDGET, OFFSET_PROPERTY, OUTPUT_CONTROL_PROPERTIES, controlsList, describeControls, filterIssues, isFiltered, parseOutputControls, renderFindingsBlock, scanLevel, type OutputControls } from './outputControls.js'
 import { collectSourcePointers, findSourceCandidates, type SourcePointer } from './sourcePointers.js'
-import { collapseRepeats, dropObsoleteParsing, mergeSameElement, nameFamilyKey, recountSummary, scanHeadline, truncationNote } from './scanShaping.js'
+import { collapseRepeats, dropObsoleteParsing, mergeSameElement, nameFamilyKey, recountSummary, scanHeadline, truncationNote, widgetViewNote } from './scanShaping.js'
 import { fastScanHtml } from './fastScan.js'
 import { openSession } from './browser.js'
 import { isBlockedAddress } from './egressProxy.js'
@@ -256,6 +256,22 @@ async function installSsrfRoute(context: BrowserContext, tunnel: TunnelTarget | 
   })
 }
 
+/**
+ * Context guards for scan_page / diff_scan: the hosted SSRF block (and the
+ * tunnel relay header) when the session is remote or tunnelled, plus the block
+ * on our own widget bundle. The widget block lives on the CONTEXT, not just the
+ * page, because an HTTP/2 retry builds a new browser, context and page
+ * (browser.ts) — a page-level route would be dropped there and the widget would
+ * load while the run still reported the source view. Installed AFTER the SSRF
+ * route so it runs first (Playwright routes are LIFO). It never calls
+ * `route.fallback()`: its predicate matches only our widget's URLs, so every
+ * other request is left to the SSRF route.
+ */
+async function installScanPageGuards(context: BrowserContext, o: { remote: boolean; tunnel: TunnelTarget | null; widget: 'blocked' | 'applied' }): Promise<void> {
+  if (o.remote || o.tunnel) await installSsrfRoute(context, o.tunnel)
+  if (o.widget === 'blocked') await installOwnWidgetRoute(context)
+}
+
 function rgbStringToHex(c: string): string | null {
   if (c.startsWith('#') && c.length === 7) return c.toLowerCase()
   const m = c.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/)
@@ -320,6 +336,14 @@ export interface PageScanOptions {
   level: 'A' | 'AA' | 'AAA'
   rootSelector?: string
   judge?: JudgeOptions
+  /**
+   * Which DOM to measure: 'blocked' (default) refuses our own widget so the
+   * scan sees the site's markup; 'applied' waits for the widget to finish and
+   * measures the visitor's view. Anything else falls back to the default.
+   */
+  widget?: 'blocked' | 'applied'
+  /** Bound on the `applied` handshake wait (ms); core's default when unset. */
+  widgetAppliedTimeoutMs?: number
 }
 
 /**
@@ -350,14 +374,15 @@ export async function scanPageOnEngine(
     contextOptions: { viewport },
     // A tunnel always installs the relay guard; with no tunnel the guard is
     // the hosted SSRF block, so a local run must not install it (localhost).
-    setupContext: (context) => (tunnel || remote ? installSsrfRoute(context, tunnel) : undefined),
+    // Our own widget is refused there too — see installScanPageGuards.
+    setupContext: (context) => installScanPageGuards(context, { remote, tunnel, widget: scanOptions.widget ?? 'blocked' }),
   })
   if (closeOnAbort(session, signal)) throw new Error('aborted')
   try {
     const result = await runEngine({
       page: sessionPage(session),
       input: { url },
-      opts: { level: scanOptions.level, scan: { dismissModals: true, ...(scanOptions.rootSelector ? { rootSelector: scanOptions.rootSelector } : {}), ...(scanOptions.judge ? { judge: scanOptions.judge } : {}) } },
+      opts: { level: scanOptions.level, widget: scanOptions.widget ?? 'blocked', ...(scanOptions.widgetAppliedTimeoutMs !== undefined ? { widgetAppliedTimeoutMs: scanOptions.widgetAppliedTimeoutMs } : {}), scan: { dismissModals: true, ...(scanOptions.rootSelector ? { rootSelector: scanOptions.rootSelector } : {}), ...(scanOptions.judge ? { judge: scanOptions.judge } : {}) } },
     })
     // The page never loaded: an error, as before the engine (never "0 issues").
     const loadError = result.stats.errors.find((e) => e.startsWith('load: '))
@@ -578,6 +603,7 @@ const ALL_TOOLS = [
           url: { type: 'string', description: 'URL to scan (e.g. https://webability.io or http://localhost:3000)' },
           rootSelector: { type: 'string', description: 'CSS selector to limit scan scope (optional)' },
           viewport: { type: 'string', enum: ['desktop', 'tablet', 'mobile'], description: 'Viewport size (default: desktop)' },
+          widgetView: { type: 'string', enum: ['source', 'applied'], description: 'Which DOM to measure when the page embeds the WebAbility widget. "source" (default) blocks our widget so the scan sees the site\'s own markup. "applied" waits for the widget to finish patching and measures the visitor\'s view — slower, and reported as `widget.visitorVerified: true` only when the widget confirmed it had finished.' },
           sourceRoot: { type: 'string', description: 'Local project root (local installs only). Issues without a framework `source` pointer get `sourceCandidates[]` — files whose contents match the selector\'s id/class/attribute tokens.' },
           ...OUTPUT_CONTROL_PROPERTIES,
           ...OFFSET_PROPERTY,
@@ -611,6 +637,7 @@ const ALL_TOOLS = [
           currentId: { type: 'string', description: 'scan_history id to use as the CURRENT side instead of scanning `url`' },
           rootSelector: { type: 'string', description: 'CSS selector to limit live scans to (optional)' },
           viewport: { type: 'string', enum: ['desktop', 'tablet', 'mobile'], description: 'Viewport for live scans (default: desktop). Use the same viewport the baseline used.' },
+          widgetView: { type: 'string', enum: ['source', 'applied'], description: 'Which DOM both live scans measure when the page embeds the WebAbility widget. "source" (default) blocks our widget; "applied" measures the visitor\'s patched view. Both sides must measure the same DOM — a source baseline against an applied current reports our widget\'s own patches as fixed/new, and the reply says so when the two sides disagree.' },
           ...OUTPUT_CONTROL_PROPERTIES,
         },
       },
@@ -1240,6 +1267,9 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
       const scanOptions: PageScanOptions = {
         rootSelector: args?.rootSelector as string | undefined,
         level: scanLevel(controls),
+        // Only 'applied' is opt-in; anything else (absent, unknown) is the
+        // default source view, so a typo never silently measures a patched page.
+        ...(args?.widgetView === 'applied' ? { widget: 'applied' as const } : {}),
         // Hosted: the judge must finish inside the scan deadline (see judgeWithin).
         judge: opts.remote ? judgeWithin(judgeFor(opts), startedAt + (opts.scanPageDeadlineMs ?? SCAN_PAGE_HOSTED_DEADLINE_MS) - JUDGE_DEADLINE_MARGIN_MS) : judgeFor(opts),
       }
@@ -1270,6 +1300,8 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
           url,
           blocked: true,
           reason: b.reason,
+          // Which DOM the (attempted) load was measuring, for shape consistency.
+          widget: result.widget,
           ...(b.vendor ? { vendor: b.vendor } : {}),
           ...(typeof b.status === 'number' ? { status: b.status } : {}),
           ...(b.signal ? { signal: b.signal } : {}),
@@ -1372,6 +1404,9 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
         truncated: issuesTruncated,
         offset: pageOffset,
         nextOffset,
+        // Which DOM was measured: the site's own markup (our widget blocked)
+        // or the visitor's patched view. Unknown is stated, never guessed.
+        widget: result.widget,
         issues: capIssues,
         issuesReturned: capIssues.length,
         issueEntries,
@@ -1391,6 +1426,7 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
         : '') + (nextOffset !== null ? ` More entries remain: pass offset: ${nextOffset} to read the next page.` : '')
       const summary =
         scanHeadline({ url, shown: shownSummary, ...(filtered ? { page: mergedSummary, filters: controlsList(controls) } : {}), issueEntries, collapsedGroups }) +
+        widgetViewNote(result.widget) +
         note
 
       const response: ToolResponse = {
@@ -1609,10 +1645,15 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
     try { diffControls = parseOutputControls(args as Record<string, unknown>, { hosted: Boolean(opts.remote) }) } catch (e) { return toolError(`Error: ${(e as Error).message}`) }
 
     type Projected = ReturnType<typeof enrichIssue> & { id: string; impact?: string }
-    const live = async (target: string, signal?: AbortSignal): Promise<{ issues: Projected[]; blocked?: unknown }> => {
+    /** Which DOM a side measured. Absent on archives written before the field existed. */
+    type SideWidget = { view: 'source' | 'applied' | 'unknown'; mode: 'blocked' | 'applied' | 'none'; blocked: number; visitorVerified: boolean } | undefined
+    const live = async (target: string, signal?: AbortSignal): Promise<{ issues: Projected[]; blocked?: unknown; widget?: SideWidget }> => {
       const scanOptions: PageScanOptions = {
         rootSelector: args?.rootSelector as string | undefined,
         level: scanLevel(diffControls),
+        // Both sides measure the same DOM: a source baseline against an applied
+        // current would report our widget's own patches as fixed/new.
+        ...(args?.widgetView === 'applied' ? { widget: 'applied' as const } : {}),
         // Not capped (unlike scan_page): both sides share one deadline, so a
         // "time left" cap would judge the current side less than the baseline
         // and skew fixed/new. If the judge overruns, the deadline message wins.
@@ -1620,11 +1661,11 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
       }
       const t = tunnelTargetFor(target, (args as any)?.tunnel_secret)
       const { result, pointers } = await scanPageOnEngine(target, t, args?.viewport, scanOptions, Boolean(opts.remote), signal, opts.openSession)
-      if (result.blocked) return { issues: [], blocked: result.blocked }
+      if (result.blocked) return { issues: [], blocked: result.blocked, widget: result.widget }
       const project = (i: any): Projected => enrichIssue({ id: i.id, impact: i.impact, wcag: i.wcag, type: i.type, message: i.message, selector: i.selector, html: i.html?.slice(0, 400), fix: i.fix, ...(pointers[i.selector] ? { source: pointers[i.selector] } : {}) })
-      return { issues: mergeSameElement(result.issues.map(project)) }
+      return { issues: mergeSameElement(result.issues.map(project)), widget: result.widget }
     }
-    const stored = (id: string): { issues: Projected[] } => {
+    const stored = (id: string): { issues: Projected[]; widget?: SideWidget } => {
       const rec = readScanResult(id) as any
       if (!rec) throw new Error(`no stored scan with id "${id}" (pruned, or never logged — see scan_history)`)
       const blocks: any[] = rec?.response?.content ?? []
@@ -1637,7 +1678,7 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
       // Merge here too: archives written before same-element merging still
       // hold both engine findings, and diffing them against a merged live
       // scan would report the folded one as fixed.
-      return { issues: mergeSameElement(payload.issues.map(project)) }
+      return { issues: mergeSameElement(payload.issues.map(project)), widget: payload.widget as SideWidget }
     }
 
     if (opts.remote && hostedDiffRunning) {
@@ -1748,9 +1789,24 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
         }
       }
       const CAP = 50
+      // Which DOM each side measured. A source baseline against an applied
+      // current (or a side that could not establish its view) makes our own
+      // widget's patches read as fixed/new, so the reply says what it compared
+      // instead of letting the caller assume both sides are the site's markup.
+      const viewName = (v: 'source' | 'applied' | 'unknown') =>
+        v === 'source' ? "the site's own markup (our widget blocked)" : v === 'applied' ? "the visitor's view (our widget applied)" : 'an UNKNOWN DOM (our widget neither blocked nor confirmed applied)'
+      const viewWarning = (() => {
+        const b = baseline.widget?.view, c = current.widget?.view
+        if (!b || !c) return ' One side did not record which DOM it measured, so fixed[]/new[] may mix the site\'s markup with our widget\'s patches.'
+        if (b !== c) return ` Baseline measured ${viewName(b)} and current measured ${viewName(c)}, so fixed[]/new[] include our own widget's patches, not only the site's changes.`
+        if (b === 'unknown') return ' Neither side could establish which DOM it measured, so fixed[]/new[] may mix the site\'s markup with our widget\'s patches.'
+        return ''
+      })()
       const payload = {
         baseline: baselineId ?? baselineUrl,
         current: currentId ?? url,
+        // Which DOM each side measured (absent on archives written before the field).
+        widget: { baseline: baseline.widget, current: current.widget },
         summary: { baseline: baseline.issues.length, current: current.issues.length, fixed: issues.gone.length, new: issues.added.length, remaining: issues.kept.length },
         fixed: issues.gone.slice(0, CAP),
         new: issues.added.slice(0, CAP),
@@ -1768,7 +1824,7 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
       const idNote = issues.added.length && issues.gone.length ? ' If you changed a fixed element\'s class/id, it appears in BOTH fixed[] and new[] — compare selectors before calling it a regression.' : ''
       return {
         content: [
-          { type: 'text', text: verdict + loadNote + idNote + (isFiltered(diffControls) ? describeControls(diffControls) : '') + (payload.truncated ? ` Lists capped at ${CAP} (severity-sorted).` : '') },
+          { type: 'text', text: verdict + viewWarning + loadNote + idNote + (isFiltered(diffControls) ? describeControls(diffControls) : '') + (payload.truncated ? ` Lists capped at ${CAP} (severity-sorted).` : '') },
           renderFindings(diffControls, payload, [{ title: 'New (regressions)', items: payload.new }, { title: 'Unstable (one load only)', items: payload.unstable }, { title: 'Fixed', items: payload.fixed }, { title: 'Remaining', items: payload.remaining }]),
         ],
       }

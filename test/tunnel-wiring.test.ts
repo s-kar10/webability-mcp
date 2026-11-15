@@ -35,8 +35,12 @@ test('scan_page and verify_fix scan a page WE opened when tunnelling', () => {
   // engine. Behaviour is pinned in scan-on-engine.test.ts (the secret reaches
   // the main document through the engine's own navigation).
   const helper = SRC.slice(SRC.indexOf('export async function scanPageOnEngine'), SRC.indexOf('async function attachSourceCandidates'))
-  assert.ok(helper.indexOf('installSsrfRoute(context, tunnel)') > 0, 'scanPageOnEngine must install the relay route')
-  assert.ok(helper.indexOf('installSsrfRoute(context, tunnel)') < helper.indexOf('runEngine('), 'the route must be on the context before the engine navigates')
+  // The relay route is installed by installScanPageGuards, which that context hook calls.
+  const guards = SRC.slice(SRC.indexOf('async function installScanPageGuards'), SRC.indexOf('function rgbStringToHex'))
+  assert.ok(guards.indexOf('installSsrfRoute(context, o.tunnel)') > 0, 'scanPageOnEngine must install the relay route')
+  const hook = helper.indexOf('installScanPageGuards(context')
+  assert.ok(hook > 0, 'scanPageOnEngine must install the guards on its context')
+  assert.ok(hook < helper.indexOf('runEngine('), 'the route must be on the context before the engine navigates')
   const scanPage = SRC.slice(SRC.indexOf("name === 'scan_page'"), SRC.indexOf("name === 'verify_fix'"))
   assert.match(scanPage, /scanPageOnEngine\(url, tunnel,/, 'scan_page must pass its tunnel target to scanPageOnEngine')
 })

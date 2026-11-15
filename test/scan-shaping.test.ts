@@ -13,7 +13,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 
-import { collapseRepeats, mergeSameElement, nameFamilyKey, recountSummary, truncationNote } from '../src/scanShaping.ts'
+import { collapseRepeats, mergeSameElement, nameFamilyKey, recountSummary, truncationNote, widgetViewNote } from '../src/scanShaping.ts'
 import { compactText, filterIssues, parseOutputControls } from '../src/outputControls.ts'
 
 const SEL = 'input.text-md.w-full.rounded-lg'
@@ -223,4 +223,22 @@ test('merge: f68 + h91_inputtext_name on one field become one issue', () => {
   assert.equal(field.wcag, '1.3.1,4.1.2')
   assert.deepEqual([...field.rules!].sort(), ['f68', 'h91_inputtext_name'])
   assert.equal(nameFamilyKey({ type: 'f68', selector: '#captcha > input' }), 'name|#captcha > input')
+})
+
+// The note must never claim a view nobody confirmed. run.ts sets 'applied' and
+// visitorVerified from the same handshake, so an 'applied' without verification
+// is a contradiction: it reads as UNKNOWN, not as "applied (unconfirmed)".
+test('widgetViewNote: applied without the verification flag is reported as UNKNOWN', () => {
+  const applied = widgetViewNote({ view: 'applied', mode: 'applied', blocked: 0, handshake: 'applied', visitorVerified: true })
+  assert.match(applied, /the visitor's view/)
+  assert.doesNotMatch(applied, /unconfirmed/i)
+
+  const contradictory = widgetViewNote({ view: 'applied', mode: 'applied', blocked: 0, handshake: 'timeout', visitorVerified: false })
+  assert.match(contradictory, /UNKNOWN/)
+  assert.doesNotMatch(contradictory, /the visitor's view/)
+
+  const source = widgetViewNote({ view: 'source', mode: 'blocked', blocked: 2, visitorVerified: false })
+  assert.match(source, /the site's own markup/)
+  assert.match(source, /2 requests refused/)
+  assert.equal(widgetViewNote({ view: 'source', mode: 'none', blocked: 0, visitorVerified: false }), '')
 })

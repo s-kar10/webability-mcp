@@ -51,8 +51,11 @@ const issueKeys = (list: object[]) => [...new Set(list.flatMap((i) => Object.key
 test('scan_page on a local page: same top-level and issue fields', { timeout: 180_000 }, async () => {
   const r = await call('scan_page', { url: base, format: 'json' })
   assert.equal(r.isError, false, r.text.slice(0, 300))
-  assert.deepEqual(keys(r.json), ['counts', 'cssFramework', 'cssToolkit', 'framework', 'internal_bugs', 'issueEntries', 'issues', 'issuesReturned', 'issuesTotal', 'nextOffset', 'offset', 'summary', 'truncated', 'url'])
+  assert.deepEqual(keys(r.json), ['counts', 'cssFramework', 'cssToolkit', 'framework', 'internal_bugs', 'issueEntries', 'issues', 'issuesReturned', 'issuesTotal', 'nextOffset', 'offset', 'summary', 'truncated', 'url', 'widget'])
   assert.deepEqual(keys(r.json.summary), ['critical', 'minor', 'moderate', 'serious', 'total'])
+  // Which DOM was measured, stated on every result (source / applied / unknown).
+  assert.deepEqual(keys(r.json.widget), ['blocked', 'mode', 'view', 'visitorVerified'])
+  assert.equal(r.json.widget.view, 'source')
   assert.deepEqual(issueKeys(r.json.issues), ['count', 'examples', 'expand', 'fix', 'fixability', 'html', 'id', 'impact', 'message', 'selector', 'type', 'wcag'])
   assert.ok(r.json.issuesTotal > 0)
   assert.ok(r.json.issues.some((i: any) => i.count > 1), 'the fixture must group a repeated rule')

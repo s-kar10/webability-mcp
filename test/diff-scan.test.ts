@@ -147,3 +147,41 @@ test('diff keeps baseline multiplicity: an extra equivalent element is NEW', asy
   assert.deepEqual(p.summary, { baseline: 1, current: 2, fixed: 0, new: 1, remaining: 1 })
   assert.match(String(res.content[0].text), /REGRESSIONS/)
 })
+
+// A page that embeds our own widget exists in two DOMs. Diffing a source-view
+// scan against an applied-view one reports our widget's own patches as the
+// site's changes, so the reply must name the views it compared.
+const view = (v: 'source' | 'applied') => ({ view: v, mode: v === 'source' ? 'blocked' : 'applied', blocked: v === 'source' ? 1 : 0, visitorVerified: v === 'applied' })
+storeScan('wv-source', { url: 'https://example.test', widget: view('source'), issues: [issue('a')] })
+storeScan('wv-source-2', { url: 'https://example.test', widget: view('source'), issues: [issue('a')] })
+storeScan('wv-applied', { url: 'https://example.test', widget: view('applied'), issues: [issue('b')] })
+
+test('diff_scan names both views and warns when the two sides measured different DOMs', async () => {
+  const client = await connect(false)
+  const res: any = await client.callTool({ name: 'diff_scan', arguments: { baselineId: 'wv-source', currentId: 'wv-applied' } })
+  const out = jsonBlock(res)
+  assert.equal(out.widget.baseline.view, 'source')
+  assert.equal(out.widget.current.view, 'applied')
+  const text = String(res.content[0].text)
+  assert.match(text, /Baseline measured the site's own markup/)
+  assert.match(text, /current measured the visitor's view/)
+  assert.match(text, /our own widget's patches/)
+})
+
+test('diff_scan stays quiet when both sides measured the same DOM', async () => {
+  const client = await connect(false)
+  const res: any = await client.callTool({ name: 'diff_scan', arguments: { baselineId: 'wv-source', currentId: 'wv-source-2' } })
+  const out = jsonBlock(res)
+  assert.equal(out.widget.baseline.view, 'source')
+  assert.equal(out.widget.current.view, 'source')
+  assert.doesNotMatch(String(res.content[0].text), /Baseline measured/)
+})
+
+test('diff_scan says so when a side predates the widget view field', async () => {
+  const client = await connect(false)
+  const res: any = await client.callTool({ name: 'diff_scan', arguments: { baselineId: 'base-1', currentId: 'wv-source' } })
+  const out = jsonBlock(res)
+  assert.equal(out.widget.baseline, undefined)
+  assert.equal(out.widget.current.view, 'source')
+  assert.match(String(res.content[0].text), /did not record which DOM it measured/)
+})

@@ -56,6 +56,16 @@ test('every openSession call in server.ts installs the SSRF guard in remote mode
   for (const part of parts) {
     const opts = part.slice(0, part.indexOf('\n      })') > 0 ? part.search(/\}\)\n/) : 400)
     assert.match(opts, /remote(: opts\.remote)?,|remote: /, `call sets remote: ${opts.slice(0, 80)}`)
-    assert.match(opts, /setupContext:[^\n]*(remote|opts\.remote)[^\n]*installSsrfRoute/, `call must install installSsrfRoute when remote: ${opts.slice(0, 120)}`)
+    // Either straight to the guard, or to the scan_page helper that installs it.
+    assert.match(opts, /setupContext:/, `call sets setupContext: ${opts.slice(0, 80)}`)
+    assert.match(opts, /installSsrfRoute|installScanPageGuards/, `call must install installSsrfRoute when remote: ${opts.slice(0, 120)}`)
+    assert.match(opts.slice(opts.indexOf('setupContext:')), /remote|tunnel/, `the guard must be tied to remote/tunnel mode: ${opts.slice(0, 120)}`)
   }
+})
+
+test('the scan_page context guard keeps the SSRF route in remote/tunnel mode and blocks our own widget', () => {
+  const src = readFileSync(path.join(SRC, 'server.ts'), 'utf8')
+  const body = src.slice(src.indexOf('async function installScanPageGuards')).slice(0, 1200)
+  assert.match(body, /o\.remote \|\| o\.tunnel[\s\S]{0,40}installSsrfRoute\(/, 'remote/tunnel must still get the SSRF/relay route')
+  assert.match(body, /o\.widget === 'blocked'[\s\S]{0,40}installOwnWidgetRoute\(/, 'the source view must block our own widget on the context')
 })

@@ -219,6 +219,39 @@ export type SeveritySummary = ReturnType<typeof recountSummary>
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
 
+/** The widget view a scan measured (core's EngineWidgetView, structurally). */
+export interface WidgetViewNoteInput {
+  view: 'source' | 'applied' | 'unknown'
+  mode: 'blocked' | 'applied' | 'none'
+  blocked: number
+  handshake?: 'applied' | 'timeout'
+  visitorVerified: boolean
+}
+
+/**
+ * One line naming which DOM was measured. A page that embeds our own widget
+ * exists in two states — the site's markup and the visitor's patched view —
+ * and a caller that does not know which one it got can report a difference
+ * that is only our own widget. 'unknown' is never softened into 'source':
+ * the scan could not establish it, so the reply says so.
+ */
+export function widgetViewNote(w: WidgetViewNoteInput): string {
+  if (w.mode === 'none') return ''
+  // 'applied' is only ever set together with visitorVerified (run.ts sets both
+  // from the same handshake), so an unverified 'applied' is a contradiction:
+  // it falls through to UNKNOWN rather than claiming a view nobody confirmed.
+  if (w.view === 'applied' && w.visitorVerified) {
+    return " DOM measured: the visitor's view — our own widget finished applying before the scan."
+  }
+  if (w.view === 'source') {
+    return ` DOM measured: the site's own markup — our own widget was blocked (${plural(w.blocked, 'request', 'requests')} refused).`
+  }
+  return (
+    ' DOM measured: UNKNOWN — our own widget could be neither blocked nor confirmed as applied, so findings here may mix' +
+    ' the site\'s markup with our widget\'s patches. Do not compare them with a source-view scan.'
+  )
+}
+
 /**
  * The lead sentence of a scan_page response. Persona round 4: 24/80 runs read
  * "Found 67 issue(s) … issues[] has 34 entries for 67 issue(s)" as two
