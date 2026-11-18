@@ -43,7 +43,9 @@ test('scan_html and check_aria close their session in a finally, never a bare br
   const src = readFileSync(path.join(SRC, 'server.ts'), 'utf8')
   assert.equal((src.match(/await browser\.close\(\)/g) ?? []).length, 0, 'a throw between launch and a bare close() leaks Chromium')
   for (const tool of ["name === 'scan_html'", "name === 'check_aria'"]) {
-    const body = src.slice(src.indexOf(tool)).slice(0, 4000)
+    // The handler body: scan_html carries its caps + deadline branches before
+    // the browser path, so the window is 6000 chars, not 4000.
+    const body = src.slice(src.indexOf(tool)).slice(0, 6000)
     assert.match(body, /finally\s*\{\s*await session\.close\(\)/, `${tool} must close in finally`)
   }
 })

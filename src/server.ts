@@ -32,7 +32,7 @@ import { axeRuleFixMeta, enrichIssue, webabilityRuleFixMeta, FIXABILITY_TIERS, t
 import { IMPACT_RANK, INLINE_BUDGET, OFFSET_PROPERTY, OUTPUT_CONTROL_PROPERTIES, controlsList, describeControls, filterIssues, isFiltered, parseOutputControls, renderFindingsBlock, scanLevel, type OutputControls } from './outputControls.js'
 import { collectSourcePointers, findSourceCandidates, type SourcePointer } from './sourcePointers.js'
 import { collapseRepeats, dropObsoleteParsing, mergeSameElement, nameFamilyKey, recountSummary, scanHeadline, truncationNote, widgetViewNote } from './scanShaping.js'
-import { fastScanHtml } from './fastScan.js'
+import { SCAN_HTML_DEADLINE_MS, ScanHtmlBusyError, ScanHtmlLimitError, assertScanHtmlWithinCaps, fastScanHtml } from './fastScan.js'
 import { openSession } from './browser.js'
 import { isBlockedAddress } from './egressProxy.js'
 import { AccountError, addSite, createUpgradeLink, describeSite, findSite, INSTALL_SNIPPET, listSites } from './account.js'
@@ -161,6 +161,8 @@ export interface ServerOptions {
   appsAuth?: boolean
   /** Hosted scan_page / diff_scan time budget. Tests set it low; production uses SCAN_PAGE_HOSTED_DEADLINE_MS. */
   scanPageDeadlineMs?: number
+  /** scan_html (in-process) time budget. Tests set it low; production uses SCAN_HTML_DEADLINE_MS. */
+  scanHtmlDeadlineMs?: number
   /** Tests only: opens the browser for diff_scan's live scans. Lets a hosted-mode test reach a local page. */
   openSession?: typeof openSession
 }
@@ -773,7 +775,7 @@ const ALL_TOOLS = [
     },
     {
       name: 'scan_html',
-      description: 'Scan a raw HTML snippet or component markup without serving it — IN-PROCESS by default (jsdom + WebAbility detectors + axe-core): milliseconds, no browser, no network, so it fits inside a tight edit loop. Fragments are auto-wrapped into a document. Returns scan_page\'s shape (issues / summary) with `fix.op` + `fixability` on every finding. jsdom has no layout, so visual-tier rules (contrast, target size, focus ring) are NOT evaluated — the dropped count is reported as `skippedVisual`; pass `engine: "browser"` to run the axe-core headless-browser path for those (slower, axe rules only, returns axe `violations`).',
+      description: 'Scan a raw HTML snippet or component markup without serving it — IN-PROCESS by default (jsdom + WebAbility detectors + axe-core): milliseconds, no browser, no network, so it fits inside a tight edit loop. A snippet is capped at 256 KB, 300 elements and 100 nesting levels, and at 24s per call — past any of those the call is refused with the alternative to use; for a whole page use scan_page. Fragments are auto-wrapped into a document. Returns scan_page\'s shape (issues / summary) with `fix.op` + `fixability` on every finding. jsdom has no layout, so visual-tier rules (contrast, target size, focus ring) are NOT evaluated — the dropped count is reported as `skippedVisual`; pass `engine: "browser"` to run the axe-core headless-browser path for those (slower, axe rules only, returns axe `violations`).',
       inputSchema: {
         type: 'object' as const,
         properties: {
@@ -2497,8 +2499,27 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
     if (tags.includes('wcag2aaa') && !htmlControls.level) htmlControls = { ...htmlControls, level: 'AAA' }
 
     if (engine === 'in-process') {
+      // Cheap pre-scan caps before a byte reaches jsdom: the in-process engine
+      // shares one document and one event loop with every other tool, and its
+      // cost grows superlinearly in element count and nesting depth.
       try {
-        const r = await fastScanHtml(html, { wcagTags: tags, level: scanLevel(htmlControls, tags), judge: judgeFor(opts) })
+        assertScanHtmlWithinCaps(html)
+      } catch (err) {
+        if (err instanceof ScanHtmlLimitError) return toolError(err.message)
+        throw err
+      }
+      const htmlDeadlineMs = opts.scanHtmlDeadlineMs ?? SCAN_HTML_DEADLINE_MS
+      try {
+        const r = await fastScanHtml(html, {
+          wcagTags: tags,
+          level: scanLevel(htmlControls, tags),
+          // The judge must end inside the same budget as the scan (scan_page
+          // caps it the same way): after the deadline the caller is gone, and a
+          // judge still running would hold the one shared jsdom document — the
+          // queue slot and the chain with it.
+          judge: opts.remote ? judgeWithin(judgeFor(opts), startedAt + htmlDeadlineMs - JUDGE_DEADLINE_MARGIN_MS) : judgeFor(opts),
+          deadlineMs: scanBudgetLeft(htmlDeadlineMs),
+        })
         const issues = filterIssues(r.issues, htmlControls)
         const htmlFiltered = isFiltered(htmlControls)
         const shown = htmlFiltered ? recountSummary(issues) : r.summary
@@ -2526,6 +2547,13 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
           ],
         }
       } catch (err) {
+        if (err instanceof ScanHtmlBusyError || err instanceof ScanHtmlLimitError) return toolError(err.message)
+        if (err instanceof DeadlineError) {
+          return toolError(
+            `scan_html did not finish within ${Math.round(htmlDeadlineMs / 1000)}s (in-process jsdom engine), so the call was stopped. ` +
+              'Split the markup into smaller snippets, or use scan_page on the URL (or scan_html with engine:"browser") for a whole page.',
+          )
+        }
         return toolError(`scan_html failed: ${(err as Error).message}`)
       }
     }
