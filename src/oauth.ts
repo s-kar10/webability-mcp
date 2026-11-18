@@ -168,6 +168,39 @@ async function readParams(req: IncomingMessage): Promise<Record<string, string>>
   }
   return Object.fromEntries(new URLSearchParams(raw))
 }
+/** RFC 6749 §2.3.1: a confidential client sends its credentials as
+ * `Authorization: Basic base64(urlencode(id):urlencode(secret))`. We only need
+ * the id — clients here are public and PKCE is the proof, so a secret is never
+ * verified, only tolerated. */
+function basicClientId(req: IncomingMessage): string | undefined {
+  const header = req.headers.authorization
+  if (!header) return undefined
+  const [scheme, encoded] = header.split(' ')
+  if (!scheme || scheme.toLowerCase() !== 'basic' || !encoded) return undefined
+  const decoded = Buffer.from(encoded, 'base64').toString('utf8')
+  const separator = decoded.indexOf(':')
+  if (separator < 0) return undefined
+  const id = decoded.slice(0, separator)
+  // The spec form-encodes each part; some clients send the raw id. Decode when
+  // it parses, keep the raw text when it does not, so a stray `%` never turns
+  // into a thrown error on the token path.
+  try {
+    return decodeURIComponent(id)
+  } catch {
+    return id
+  }
+}
+
+/** RFC 6749 §2.3.1 lets a client put client_id in the body OR in the Basic
+ * header. Accept either; when both appear they must agree, or a client could
+ * redeem its own code while naming someone else's client.
+ * Returns null for a conflict, so the caller can answer invalid_grant. */
+function resolveClientId(req: IncomingMessage, body: Record<string, string>): string | undefined | null {
+  const header = basicClientId(req)
+  const fromBody = body.client_id
+  if (header && fromBody && header !== fromBody) return null
+  return header || fromBody
+}
 
 /** Exact match, except loopback redirects may vary the port (RFC 8252 §7.3 —
  * native clients bind an ephemeral localhost port per run). */
@@ -227,7 +260,7 @@ const AS_METADATA = {
   response_types_supported: ['code'],
   grant_types_supported: ['authorization_code', 'refresh_token'],
   code_challenge_methods_supported: ['S256'],
-  token_endpoint_auth_methods_supported: ['none'],
+  token_endpoint_auth_methods_supported: ['none', 'client_secret_basic', 'client_secret_post'],
   scopes_supported: ['mcp'],
   service_documentation: 'https://www.webability.io/docs/mcp',
 }
@@ -408,11 +441,17 @@ export async function handleOAuth(req: IncomingMessage, res: ServerResponse, url
       json(res, 400, { error: 'invalid_redirect_uri', error_description: 'redirect_uris must be https URLs (or http on localhost)' })
       return true
     }
+    // Clients are public: PKCE is the proof, so a secret is never checked. But
+    // strict clients (GoHighLevel Agent Studio) abort unless registration echoes
+    // the method they asked for and hands back a secret, so echo and mint one.
+    const requested = body?.token_endpoint_auth_method
+    const confidential = requested === 'client_secret_basic' || requested === 'client_secret_post'
     json(res, 201, {
       client_id: mintClientId(uris, typeof body?.client_name === 'string' ? body.client_name : ''),
       client_id_issued_at: Math.floor(Date.now() / 1000),
       redirect_uris: uris,
-      token_endpoint_auth_method: 'none',
+      token_endpoint_auth_method: confidential ? requested : 'none',
+      ...(confidential ? { client_secret: b64url(randomBytes(32)), client_secret_expires_at: 0 } : {}),
       grant_types: ['authorization_code', 'refresh_token'],
       response_types: ['code'],
       client_name: typeof body?.client_name === 'string' ? body.client_name : undefined,
@@ -522,8 +561,13 @@ export async function handleOAuth(req: IncomingMessage, res: ServerResponse, url
 
   if (path === '/token' && req.method === 'POST') {
     const p = await readParams(req)
+    const clientId = resolveClientId(req, p)
+    if (clientId === null) {
+      json(res, 400, { error: 'invalid_grant', error_description: 'client_id in the body does not match the Authorization header' })
+      return true
+    }
     if (p.grant_type === 'refresh_token') {
-      await refreshGrant(p.refresh_token, p.client_id, res, onTokenIssued)
+      await refreshGrant(p.refresh_token, clientId, res, onTokenIssued)
       return true
     }
     if (p.grant_type !== 'authorization_code') {
@@ -540,7 +584,7 @@ export async function handleOAuth(req: IncomingMessage, res: ServerResponse, url
     // first redemption attempt, before validating redirect_uri/client_id/PKCE, so
     // a failed check cannot be retried against the same code within its TTL.
     codes.delete(p.code)
-    if (issued.redirect_uri !== p.redirect_uri || issued.client_id !== p.client_id) {
+    if (issued.redirect_uri !== p.redirect_uri || issued.client_id !== clientId) {
       json(res, 400, { error: 'invalid_grant', error_description: 'redirect_uri or client_id mismatch' })
       return true
     }

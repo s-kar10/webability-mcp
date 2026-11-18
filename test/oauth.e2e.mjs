@@ -136,6 +136,8 @@ try {
   check('AS has endpoints', !!as.authorization_endpoint && !!as.token_endpoint && !!as.registration_endpoint, JSON.stringify(as))
   check('AS supports S256', (as.code_challenge_methods_supported || []).includes('S256'))
   check('AS auth method none', (as.token_endpoint_auth_methods_supported || []).includes('none'))
+  check('AS auth method client_secret_basic', (as.token_endpoint_auth_methods_supported || []).includes('client_secret_basic'))
+  check('AS auth method client_secret_post', (as.token_endpoint_auth_methods_supported || []).includes('client_secret_post'))
 
   // 4. dynamic client registration
   const redirectUri = 'https://claude.ai/api/mcp/auth_callback'
@@ -284,6 +286,54 @@ try {
   const refMissing = await fetch(as.token_endpoint, tokenPost({ grant_type: 'refresh_token' }))
   const refMissingJson = await refMissing.json()
   check('missing refresh token → 400 invalid_request', refMissing.status === 400 && refMissingJson.error === 'invalid_request', `${refMissing.status} ${JSON.stringify(refMissingJson)}`)
+
+  // 7c. confidential clients (RFC 6749 §2.3.1): GoHighLevel Agent Studio and
+  // other strict clients register with client_secret_basic and send client_id
+  // only in the Authorization header. The secret is never checked — PKCE is
+  // the proof — but registration must echo the method and return a secret.
+  const confReg = await (await fetch(as.registration_endpoint, {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ redirect_uris: ['https://studio.gohighlevel.com/mcp/oauth/callback'], client_name: 'GoHighLevel', token_endpoint_auth_method: 'client_secret_basic' }),
+  })).json()
+  check('DCR echoes client_secret_basic', confReg.token_endpoint_auth_method === 'client_secret_basic', JSON.stringify(confReg))
+  check('DCR returns a client_secret for a confidential client', typeof confReg.client_secret === 'string' && confReg.client_secret.length > 10, JSON.stringify(confReg))
+  const confRedirect = 'https://studio.gohighlevel.com/mcp/oauth/callback'
+  const basicHeader = (id, secret) => `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`
+  const confStart = await (await fetch(`${BASE}/authorize/start`, {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ client_id: confReg.client_id, redirect_uri: confRedirect, state: 'conf', code_challenge: challenge, code_challenge_method: 'S256' }),
+  })).json()
+  for (const d of devices.values()) d.approved = true
+  const confDone = await complete(confStart.sid)
+  const confCode = new URL(confDone.headers.get('location')).searchParams.get('code')
+  check('confidential client sign-in yields a code', !!confCode, confDone.status)
+
+  const confTokRes = await fetch(as.token_endpoint, {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-www-form-urlencoded', authorization: basicHeader(confReg.client_id, confReg.client_secret) },
+    body: form({ grant_type: 'authorization_code', code: confCode, redirect_uri: confRedirect, code_verifier: verifier }),
+  })
+  const confTok = await confTokRes.json().catch(() => ({}))
+  check('token with client_id only in the Basic header → 200', confTokRes.status === 200, `${confTokRes.status} ${JSON.stringify(confTok)}`)
+  check('Basic-header exchange returns the user token', confTok.access_token === USER_TOKEN, JSON.stringify(confTok))
+  check('Basic-header exchange returns a refresh token', typeof confTok.refresh_token === 'string' && confTok.refresh_token.length > 0, JSON.stringify(confTok))
+
+  const confRefRes = await fetch(as.token_endpoint, {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-www-form-urlencoded', authorization: basicHeader(confReg.client_id, confReg.client_secret) },
+    body: form({ grant_type: 'refresh_token', refresh_token: confTok.refresh_token }),
+  })
+  const confRef = await confRefRes.json().catch(() => ({}))
+  check('refresh with client_id only in the Basic header → 200', confRefRes.status === 200, `${confRefRes.status} ${JSON.stringify(confRef)}`)
+  check('Basic-header refresh returns the rotated token', confRef.access_token === USER_TOKEN_2, JSON.stringify(confRef))
+
+  const confMismatch = await fetch(as.token_endpoint, {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-www-form-urlencoded', authorization: basicHeader(confReg.client_id, confReg.client_secret) },
+    body: form({ grant_type: 'refresh_token', refresh_token: confRef.refresh_token, client_id: reg.client_id }),
+  })
+  const confMismatchJson = await confMismatch.json().catch(() => ({}))
+  check('body client_id that conflicts with the Basic header → 400 invalid_grant', confMismatch.status === 400 && confMismatchJson.error === 'invalid_grant', `${confMismatch.status} ${JSON.stringify(confMismatchJson)}`)
 
   const reuse = await fetch(as.token_endpoint, {
     method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' },
