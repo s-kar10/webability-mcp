@@ -4,6 +4,7 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js'
 import { CallToolRequestSchema, ErrorCode, ListResourcesRequestSchema, ListToolsRequestSchema, McpError, ReadResourceRequestSchema, type CallToolRequest } from '@modelcontextprotocol/sdk/types.js'
 import { CARD_RESOURCE_URI, CARD_TOOLS, cardExtension, cardResource, cardResourceContents, cardToolMeta, scanCard, verifyCard } from './appCards.js'
 import { resolveAuthToken } from './authToken.js'
+import { STORAGE_STATE_PROPERTY, SESSION_EXPIRED_NOTE, authWallHint, isAuthWall, lateAuthWall, loadStorageState, storageStateRefusal, type StorageState } from './storageState.js'
 import { AI_FIX_FRAMEWORKS, aiFixFramework, detectPageStack, type PageStack } from './siteFramework.js'
 import { resolveVerifyFixArgs, verifyFixTargetUrl, VERIFY_FIX_URL_KEYS } from './verifyFixArgs.js'
 import { resolveGetRulesArgs, ruleIdMatches } from './getRulesArgs.js'
@@ -346,6 +347,8 @@ export interface PageScanOptions {
   widget?: 'blocked' | 'applied'
   /** Bound on the `applied` handshake wait (ms); core's default when unset. */
   widgetAppliedTimeoutMs?: number
+  /** Logged-in scan (local only): Playwright storage state for the browser context. */
+  storageState?: StorageState
 }
 
 /**
@@ -366,14 +369,17 @@ export async function scanPageOnEngine(
   remote: boolean,
   signal?: AbortSignal,
   open: typeof openSession = openSession,
-): Promise<{ result: EngineResult; pointers: Record<string, SourcePointer>; framework?: PageStack }> {
+): Promise<{ result: EngineResult; pointers: Record<string, SourcePointer>; framework?: PageStack; finalUrl?: string }> {
   const url = normalizeUrlArg(rawUrl)
   const viewport = tunnel
     ? VIEWPORT_FOR_TUNNEL(viewportPreset)
     : ((VIEWPORT_SIZES as Record<string, { width: number; height: number }>)[String(viewportPreset || 'desktop')] ?? VIEWPORT_SIZES.desktop)
+  // Logged-in scan (local only): the session rides in the context options, so
+  // the --disable-http2 rebuild in openSession keeps it.
+  const contextOptions = scanOptions.storageState && !remote ? { viewport, storageState: scanOptions.storageState } : { viewport }
   const session = await open({
     remote,
-    contextOptions: { viewport },
+    contextOptions,
     // A tunnel always installs the relay guard; with no tunnel the guard is
     // the hosted SSRF block, so a local run must not install it (localhost).
     // Our own widget is refused there too — see installScanPageGuards.
@@ -393,9 +399,18 @@ export async function scanPageOnEngine(
     // engine:scan bug. A tool error, as before the engine (diff_scan would
     // otherwise mark every baseline finding fixed).
     const scanBug = result.internal_bugs.find((b) => b.tool === 'engine:scan')
+    if (scanBug && !result.blocked) {
+      const late = await lateAuthWall(session.page, url, url)
+      if (late) return { result: { ...result, blocked: { reason: late.reason, signal: 'auth-wall:late-redirect' }, issues: [] } as EngineResult, pointers: {}, finalUrl: late.finalUrl }
+    }
     // The first line only: detail carries the stack (install paths), and the tool returns this text.
     if (scanBug) throw new Error(scanBug.detail.split('\n')[0])
-    if (result.blocked) return { result, pointers: {} }
+    if (!result.blocked) {
+      const late = await lateAuthWall(session.page, url, url)
+      if (late) return { result: { ...result, blocked: { reason: late.reason, signal: 'auth-wall:late-redirect' }, issues: [] } as EngineResult, pointers: {}, finalUrl: late.finalUrl }
+    }
+    const finalUrl: string | undefined = (() => { try { return session.page.url() } catch { return undefined } })()
+    if (result.blocked) return { result, pointers: {}, finalUrl }
     const pointers = await collectSourcePointers(session.page, result.issues.map((i) => i.selector))
     // The SAME function detect_framework calls, read from the page the scan
     // just used, so the two tools cannot disagree.
@@ -405,7 +420,7 @@ export async function scanPageOnEngine(
     } catch {
       framework = undefined
     }
-    return { result, pointers, framework }
+    return { result, pointers, framework, finalUrl }
   } finally {
     await session.close()
   }
@@ -562,7 +577,7 @@ On React ≤18 / Vue dev builds each issue also carries \`source\` (\`{file, lin
 
 ## Tool routing
 - "Scan this page / URL / localhost" → \`scan_page\`
-- "Walk through login → checkout" → \`flow_scan\` with \`autoNavigate\`
+- "Scan these pages of my site as one report" → \`flow_scan\` with \`autoNavigate\` (a URL list; it does not click or log in). Pages behind a login: local MCP + \`storageState\`
 - "What does this WCAG rule check" → \`get_rules\`
 - "Suggest a fix for this issue" → \`detect_framework\` then \`generate_ai_fix\`
 - "Did my fix work?" → \`verify_fix\` (after you edit the code AND serve the change — closes scan → fix → verify)
@@ -607,6 +622,7 @@ const ALL_TOOLS = [
           viewport: { type: 'string', enum: ['desktop', 'tablet', 'mobile'], description: 'Viewport size (default: desktop)' },
           widgetView: { type: 'string', enum: ['source', 'applied'], description: 'Which DOM to measure when the page embeds the WebAbility widget. "source" (default) blocks our widget so the scan sees the site\'s own markup. "applied" waits for the widget to finish patching and measures the visitor\'s view — slower, and reported as `widget.visitorVerified: true` only when the widget confirmed it had finished.' },
           sourceRoot: { type: 'string', description: 'Local project root (local installs only). Issues without a framework `source` pointer get `sourceCandidates[]` — files whose contents match the selector\'s id/class/attribute tokens.' },
+          ...STORAGE_STATE_PROPERTY,
           ...OUTPUT_CONTROL_PROPERTIES,
           ...OFFSET_PROPERTY,
         },
@@ -706,7 +722,7 @@ const ALL_TOOLS = [
     },
     {
       name: 'flow_scan',
-      description: 'Scan a multi-page user journey. Walks startUrl plus the `autoNavigate` URLs sequentially (deterministic — one page fully rendered and scanned before the next), then returns ONE consolidated report with issues deduplicated across pages, each carrying the same fix payload as scan_page. Every requested URL gets an explicit outcome in `pages[]` (scanned / nav_failed / scan_failed / redirected_duplicate / duplicate_request / skipped_cap / blocked — bot-challenge, not a clean page) — a page is never silently dropped. Better than per-page scans for journeys (login → checkout etc). Without `autoNavigate` it scans only startUrl, exactly like scan_page.',
+      description: 'Scan a multi-page user journey. Walks startUrl plus the `autoNavigate` URLs sequentially (deterministic — one page fully rendered and scanned before the next), then returns ONE consolidated report with issues deduplicated across pages, each carrying the same fix payload as scan_page. Every requested URL gets an explicit outcome in `pages[]` (scanned / nav_failed / scan_failed / redirected_duplicate / duplicate_request / skipped_cap / blocked — bot-challenge, not a clean page / auth_redirect — storageState was given but the page is a sign-in page, session likely expired) — a page is never silently dropped. It only visits URLs: it does not click, type or log in. For pages behind a login, pass `storageState` (local MCP only), a session file saved after logging in once. Without `autoNavigate` it scans only startUrl, exactly like scan_page.',
       inputSchema: {
         type: 'object' as const,
         properties: {
@@ -714,6 +730,7 @@ const ALL_TOOLS = [
           maxPages: { type: 'number', description: 'Max pages to scan (default 10; at most 10 on the hosted server)' },
           autoNavigate: { type: 'array', items: { type: 'string' }, description: 'The URLs to walk after startUrl, in order (the MCP server is headless and cannot discover a journey interactively). Omit or pass [] to scan only startUrl as a single page.' },
           sourceRoot: { type: 'string', description: 'Local project root (local installs only) for `sourceCandidates[]` on issues without a framework `source` pointer.' },
+          ...STORAGE_STATE_PROPERTY,
           ...OUTPUT_CONTROL_PROPERTIES,
           ...OFFSET_PROPERTY,
         },
@@ -1114,6 +1131,16 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
   // every tunnelled flow scan fail with a null target and no explanation.
   const tunnel: TunnelTarget | null = tunnelTargetForCall(name, args)
 
+  // Logged-in scans: local only, scan_page / flow_scan only, a path only.
+  // Checked on key presence before anything else, so the hosted server never
+  // reads a path or a cookie (docs/logged-in-scanning.md).
+  const stateRefusal = storageStateRefusal(name, args, Boolean(opts.remote))
+  if (stateRefusal) return toolError(stateRefusal)
+  let storageState: StorageState | undefined
+  if (!opts.remote && typeof args?.storageState === 'string') {
+    try { storageState = loadStorageState(args.storageState).state } catch (e) { return toolError((e as Error).message) }
+  }
+
   // Lite (local stdio): Full tools are advertised as free stubs but not runnable here.
   if (!opts.remote && FULL_ONLY_TOOLS.has(name)) {
     return toolError(liteFullUpgradeMessage(name))
@@ -1272,6 +1299,7 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
         // Only 'applied' is opt-in; anything else (absent, unknown) is the
         // default source view, so a typo never silently measures a patched page.
         ...(args?.widgetView === 'applied' ? { widget: 'applied' as const } : {}),
+        ...(storageState ? { storageState } : {}),
         // Hosted: the judge must finish inside the scan deadline (see judgeWithin).
         judge: opts.remote ? judgeWithin(judgeFor(opts), startedAt + (opts.scanPageDeadlineMs ?? SCAN_PAGE_HOSTED_DEADLINE_MS) - JUDGE_DEADLINE_MARGIN_MS) : judgeFor(opts),
       }
@@ -1290,6 +1318,11 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
         throw err
       }
       const { result, pointers, framework } = scanned
+      // Logged in, but the scan landed on a sign-in page: the session has
+      // expired. Never report the login screen as the app.
+      if (storageState && isAuthWall(result.blocked)) {
+        return toolError(SESSION_EXPIRED_NOTE([`${url} → ${scanned.finalUrl ?? 'sign-in page'}`]))
+      }
 
       // Blocked / bot-challenge guard — the target served a Cloudflare/Akamai/
       // PerimeterX interstitial or an HTTP error instead of the real page, so
@@ -1301,7 +1334,7 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
         const blockedPayload = {
           url,
           blocked: true,
-          reason: b.reason,
+          reason: isAuthWall(b) ? b.reason + authWallHint(Boolean(opts.remote)) : b.reason,
           // Which DOM the (attempted) load was measuring, for shape consistency.
           widget: result.widget,
           ...(b.vendor ? { vendor: b.vendor } : {}),
@@ -1979,7 +2012,7 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
     // explicit per-page outcome so a skipped page always carries a reason.
     type PageOutcome = {
       requested: string
-      status: 'scanned' | 'nav_failed' | 'scan_failed' | 'redirected_duplicate' | 'duplicate_request' | 'skipped_cap' | 'blocked'
+      status: 'scanned' | 'nav_failed' | 'scan_failed' | 'redirected_duplicate' | 'duplicate_request' | 'skipped_cap' | 'blocked' | 'auth_redirect'
       finalUrl?: string
       reason?: string
       issues?: any[]
@@ -1989,9 +2022,10 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
     const outcomes: PageOutcome[] = []
 
     try {
+      const flowContext = { viewport: { width: 1280, height: 720 }, ...(storageState ? { storageState } : {}) }
       const session = await openSession({
         remote: opts.remote,
-        contextOptions: { viewport: { width: 1280, height: 720 } },
+        contextOptions: flowContext,
         setupContext: (context) => (opts.remote ? installSsrfRoute(context, tunnel) : undefined),
       })
       // goto() may swap in a fresh page (HTTP/2 fallback), so re-read after it.
@@ -2038,13 +2072,20 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
           scannedFinalUrls.add(finalUrl)
 
           try {
-            const r = await scan(page, { includeAxe: true, dismissModals: true, mainStatus, level: scanLevel(flowControls), judge: judgeFor(opts) })
+            const r = await scan(page, { includeAxe: true, dismissModals: true, mainStatus, requestedUrl: target, level: scanLevel(flowControls), judge: judgeFor(opts) })
             // Bot-challenge / interstitial guard — scan() sets `blocked` when the
             // DOM is a Cloudflare/PerimeterX/error page, not the real site. Record
             // it as NOT scanned (with the reason) so its empty issue list never
             // gets counted as a clean page.
-            if (r.blocked) {
-              outcomes.push({ requested: target, status: 'blocked', finalUrl, reason: r.blocked.reason })
+            // Core's sign-in-page verdict also covers an SPA that bounces to
+            // its login route client-side, after goto returned.
+            const settledUrl = (() => { try { return page.url() as string } catch { return finalUrl } })()
+            const late = r.blocked ? null : await lateAuthWall(page, target, finalUrl)
+            if (late) r.blocked = { reason: late.reason, signal: 'auth-wall:late-redirect' }
+            if (r.blocked && isAuthWall(r.blocked) && storageState) {
+              outcomes.push({ requested: target, status: 'auth_redirect', finalUrl: settledUrl, reason: `landed on a sign-in page at ${settledUrl}: session likely expired` })
+            } else if (r.blocked) {
+              outcomes.push({ requested: target, status: 'blocked', finalUrl, reason: isAuthWall(r.blocked) ? r.blocked.reason + authWallHint(Boolean(opts.remote)) : r.blocked.reason })
             } else {
               // Framework source pointers, read while this page's DOM is still open.
               const pointers = await collectSourcePointers(page, r.issues.map((i) => i.selector))
@@ -2053,7 +2094,16 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
               scannedCount++
             }
           } catch (err) {
-            outcomes.push({ requested: target, status: 'scan_failed', finalUrl, reason: `scan failed: ${(err as Error).message}` })
+            // A stale session can bounce to the login page mid-scan; core then
+            // refuses the mixed document. Say why, not just "scan failed".
+            const late = await lateAuthWall(page, target, finalUrl)
+            if (late) {
+              outcomes.push(storageState
+                ? { requested: target, status: 'auth_redirect', finalUrl: late.finalUrl, reason: `landed on a sign-in page at ${late.finalUrl}: session likely expired` }
+                : { requested: target, status: 'blocked', finalUrl, reason: late.reason + authWallHint(Boolean(opts.remote)) })
+            } else {
+              outcomes.push({ requested: target, status: 'scan_failed', finalUrl, reason: `scan failed: ${(err as Error).message}` })
+            }
           }
         }
       } finally {
@@ -2079,6 +2129,7 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
 
       const scannedPages = outcomes.filter((o) => o.status === 'scanned')
       const droppedPages = outcomes.filter((o) => o.status !== 'scanned')
+      const authRedirects = outcomes.filter((o) => o.status === 'auth_redirect')
 
       // Dedupe across pages — same type+selector+wcag = one finding, tracking
       // which pages it appeared on. 
@@ -2189,6 +2240,7 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
           {
             type: 'text',
             text:
+              (authRedirects.length > 0 ? SESSION_EXPIRED_NOTE(authRedirects.map((o) => o.requested)) + '\n\n' : '') +
               `# Flow Scan Report\n\n` +
               `Pages requested: ${requested.length}\n` +
               `Pages scanned: ${scannedPages.length}\n` +

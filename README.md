@@ -191,7 +191,7 @@ Filters apply before the 50-item cap, so `minImpact: "serious"` returns every se
 | Tool | Edition | What it does |
 |------|---------|--------------|
 | `scan_page` | Lite + Full | Scan a URL for WCAG accessibility issues (2 engines). `source` pointers on dev builds; `minImpact` / `rules` / `wcag` / `format` output controls |
-| `flow_scan` | Lite + Full | Multi-page journey scan with deduplicated issues across pages |
+| `flow_scan` | Lite + Full | Scan a list of URLs as one report, issues deduplicated across pages. It visits URLs only (no clicks, no login). Pages behind a login: Lite + `storageState` (see below) |
 | `scan_html` | Lite + Full | Scan a raw HTML snippet or fragment in-process (jsdom, ms, no browser); `engine: "browser"` for contrast |
 | `detect_framework` | Lite + Full | Detect Tailwind / MUI / Bootstrap / Next.js / WP / plain CSS |
 | `generate_ai_fix` | Lite + Full | Framework-aware fix alternatives. Auto-extracts brand palette from the live URL on contrast issues. |
@@ -215,13 +215,29 @@ Filters apply before the 50-item cap, so `minImpact: "serious"` returns every se
 - Generating fix suggestions that match the framework you're already using
 - Checking color contrast against the user's actual brand palette (not generic suggestions)
 
+## Pages behind a login (Lite only)
+
+`flow_scan` and `scan_page` cannot log in. To scan pages behind a login, log in once in a real browser and save the session to a file, then pass the file to the local MCP:
+
+```bash
+npx @webability/cli flow https://app.example.com/login --save-storage-state .webability/auth.json
+# log in (SSO and MFA are fine), click through, close the window
+```
+
+> "flow_scan https://app.example.com/dashboard, /settings and /billing with storageState .webability/auth.json"
+
+- The file is a [Playwright storage state](https://playwright.dev/docs/auth) (cookies + localStorage). It is a live session: keep it out of git.
+- Only the local (stdio) server reads it. The hosted server refuses `storageState` and never takes cookies.
+- If the session has expired, the page shows as `auth_redirect` in `pages[]` with a warning, not as a clean scan. Log in again and retry.
+- Apps that keep the session only in sessionStorage are not covered.
+
 ## Examples
 
 In Cursor / Claude Code:
 
 > "Scan localhost:3000 for accessibility issues"
 
-> "Walk login → dashboard → checkout and report unique issues across the flow"
+> "Scan /dashboard, /settings and /billing on localhost:3000 and report unique issues across them"
 
 > "Suggest a fix for the contrast issue on `.btn-primary` on https://example.com — match their brand colors"
 

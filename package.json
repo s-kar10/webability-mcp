@@ -1,7 +1,7 @@
 {
   "name": "@webability/mcp",
   "mcpName": "io.github.snayyar00/webability",
-  "version": "1.10.2",
+  "version": "1.11.0",
   "description": "WebAbility MCP server — WCAG 2.2 / ADA / EAA accessibility scanning that judges uncertain findings itself (issues + summary; what it cannot settle is dropped), framework-aware AI fix suggestions, and brand-palette contrast checks. For Cursor, Claude Code, and other IDEs.",
   "type": "module",
   "bin": {
@@ -41,7 +41,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "@posthog/mcp": "0.17.0",
-    "@webability/core": "1.19.5",
+    "@webability/core": "1.19.6",
     "axe-core": "^4.11.3",
     "jsdom": "^29.0.2",
     "parse5": "^8.0.0",
