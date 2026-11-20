@@ -49,4 +49,4 @@ Only the user can supply actual worked hours, recruit participants and finish ac
 
 The GTM runner completed ten real Framer/GTM loads on November 19. Its warm group reuses a primed browser context; it does not claim every response is a cache hit. See findings.md and the evidence manifest.
 
-[Participant handoff](participant-handoff.md) provides the two-friend assignment. [Framer reset instructions](cases/framer-ground-truth.md) cover the three additional cases.
+[Framer reset instructions](cases/framer-ground-truth.md) cover the three additional cases.

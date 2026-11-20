@@ -37,4 +37,4 @@ Record failures honestly. Do not fill the before/after section until real observ
 ## Before/after results
 
 Pending real participant sessions. On November 19 the owner confirmed they can arrange testers.
-[Participant handoff](participant-handoff.md) contains untested v1-local answer cards and visible WordPress repair steps verified by the agent. These are functional checks, not human usability results.
+Participant instructions are shared privately outside the repository. WordPress repair controls were verified by the agent; these are functional checks, not human usability results.

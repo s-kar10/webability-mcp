@@ -40,7 +40,7 @@ Consent and GTM are being tested separately on Framer; WordPress equivalents and
 
 The local MU plugin adds **Settings → Install lab**, restricted to administrators and protected by WordPress nonces.
 The wrong-slot repair selects **Site-wide header** and **Save installation**. The cache repair uses **Clear page cache**. The CSP repair uses **Allow WebAbility script**, retaining `script-src 'self' https://widget.webability.io` rather than removing the policy.
-These are lab-specific controls, not standard WordPress features. The agent verified all three repairs through Chrome on November 19; human testing remains pending. See [participant handoff](../participant-handoff.md).
+These are lab-specific controls, not standard WordPress features. The agent verified all three repairs through Chrome on November 19; human testing remains pending. Participant instructions are shared privately outside the repository.
 
 Stop without deleting data:
 
