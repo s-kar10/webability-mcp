@@ -1,0 +1,17 @@
+{
+  "participants_recruited": 0,
+  "attempts": [],
+  "note": "No human testing performed. Do not substitute model evaluations for friends/family attempts.",
+  "attempt_fields": [
+    "participant_alias",
+    "case_id",
+    "wording_version",
+    "round",
+    "time_seconds",
+    "independent_success",
+    "confusing_words",
+    "wrong_turns",
+    "repair_verified_by",
+    "prior_exposure"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "run_id": "2026-11-19T22-33-31-512Z-page-03fcd174",
+  "timestamp": "2026-11-19T22:33:31.513Z",
+  "git_commit": "873b6f76e46f781393539656a0e0dd5fc2fa8700",
+  "tracked_dirty": true,
+  "runner_sha256": "fc11680ff9bc1638ea3ed04b82b509a4b4435c8d4efe0395b2712cab8df24ab4",
+  "environment": {
+    "node": "v25.9.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "case_id": "FRAMER-DRAFT-01-REPAIRED",
+  "builder": "Framer",
+  "tested_url": "https://jubilant-organization-752879.framer.app/",
+  "command": [
+    "/Users/sadiqkarjikar/webability/webability-mcp/lab/scripts/capture-page.mjs",
+    "FRAMER-DRAFT-01-REPAIRED",
+    "Framer",
+    "https://jubilant-organization-752879.framer.app/"
+  ],
+  "final_url": "https://jubilant-organization-752879.framer.app/",
+  "http_status": 200,
+  "content_security_policy": null,
+  "lab_cache": null,
+  "exit_code": 0,
+  "duration_ms": 122.56079100000001,
+  "finished_at": "2026-11-19T22:33:31.651Z"
+}

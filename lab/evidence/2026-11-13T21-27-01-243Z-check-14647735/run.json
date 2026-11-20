@@ -1,0 +1,30 @@
+{
+  "run_id": "2026-11-13T21-27-01-243Z-check-14647735",
+  "timestamp": "2026-11-13T21:27:01.244Z",
+  "git_commit": "991c6edfee443599d0803dd69ce6ffa82aeb2d06",
+  "tracked_dirty": false,
+  "runner_sha256": "c600dc16ed03895665fcced75348ebc9f07c389897b7b1ba11c93283d10fe422",
+  "environment": {
+    "node": "v25.9.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "case_id": "WP-CACHE-01-REPAIRED",
+  "builder": "WordPress",
+  "tested_url": "http://127.0.0.1:8099/",
+  "command": [
+    "node",
+    "lab/scripts/check.mjs",
+    "WP-CACHE-01-REPAIRED",
+    "WordPress",
+    "http://127.0.0.1:8099/"
+  ],
+  "started_at": "2026-11-13T21:27:01.265Z",
+  "call_started_at": "2026-11-13T21:27:01.744Z",
+  "call_duration_ms": 1592.814875,
+  "duration_ms": 2070.902584,
+  "finished_at": "2026-11-13T21:27:03.337Z",
+  "exit_code": 0,
+  "response_file": "response.json",
+  "stderr_file": "stderr.txt"
+}

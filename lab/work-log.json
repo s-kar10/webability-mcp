@@ -1,0 +1,9 @@
+{
+  "reported_cumulative_hours": 20,
+  "reported_on": "2026-11-13",
+  "source": "User statement: worked 20 hours so far",
+  "daily_breakdown": [],
+  "estimate_status": "not specified by user",
+  "riipen_entry_status": "not submitted; dates and project access needed",
+  "note": "Tool runtime is not human work time. Do not add this execution duration to the reported total automatically."
+}

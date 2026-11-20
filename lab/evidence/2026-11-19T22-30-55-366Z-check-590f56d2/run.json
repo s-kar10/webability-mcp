@@ -1,0 +1,30 @@
+{
+  "run_id": "2026-11-19T22-30-55-366Z-check-590f56d2",
+  "timestamp": "2026-11-19T22:30:55.372Z",
+  "git_commit": "873b6f76e46f781393539656a0e0dd5fc2fa8700",
+  "tracked_dirty": true,
+  "runner_sha256": "87cfe50d5d01cf8a17814ea2a6b1509103f623c588066547d4334e873e5e2281",
+  "environment": {
+    "node": "v25.9.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "case_id": "WP-CSP-01-UI-REPAIRED",
+  "builder": "WordPress",
+  "tested_url": "http://127.0.0.1:8099/",
+  "command": [
+    "node",
+    "lab/scripts/check.mjs",
+    "WP-CSP-01-UI-REPAIRED",
+    "WordPress",
+    "http://127.0.0.1:8099/"
+  ],
+  "started_at": "2026-11-19T22:30:55.405Z",
+  "call_started_at": "2026-11-19T22:30:56.028Z",
+  "call_duration_ms": 2000.453959,
+  "duration_ms": 2622.6562910000002,
+  "finished_at": "2026-11-19T22:30:58.029Z",
+  "exit_code": 0,
+  "response_file": "response.json",
+  "stderr_file": "stderr.txt"
+}

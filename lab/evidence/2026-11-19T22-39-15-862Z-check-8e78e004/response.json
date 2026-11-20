@@ -1,0 +1,20 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "```json\n{\n  \"url\": \"https://jubilant-organization-752879.framer.app/\",\n  \"finalUrl\": \"https://jubilant-organization-752879.framer.app/\",\n  \"state\": \"present\",\n  \"evidence\": [\n    {\n      \"kind\": \"script\",\n      \"scriptUrl\": \"https://widget.webability.io/widget.min.js\",\n      \"httpStatus\": 200\n    }\n  ]\n}\n```"
+    }
+  ],
+  "structuredContent": {
+    "url": "https://jubilant-organization-752879.framer.app/",
+    "finalUrl": "https://jubilant-organization-752879.framer.app/",
+    "state": "present",
+    "evidence": [
+      {
+        "kind": "script",
+        "scriptUrl": "https://widget.webability.io/widget.min.js",
+        "httpStatus": 200
+      }
+    ]
+  }
+}
