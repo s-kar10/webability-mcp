@@ -31,6 +31,7 @@ import { anonLimitClass, anonLimitMessage, appsAnonLimitMessage, calledTools, cl
 import { APPS_MCP_PATH, MCP_PATH, MCP_PATHS, PUBLIC_URL, SIGN_IN_MCP_PATH, appsChallenge } from './signIn.js'
 import { SERVER_CARD_PATH, getServerCard } from './serverCard.js'
 import { BodyTooLargeError, MCP_MAX_BODY_BYTES, declaredTooLarge, readBodyCapped } from './bodyLimit.js'
+import { createTokenCache } from './tokenCache.js'
 
 const PORT = Number(process.env.PORT || 8080)
 const API_URL = process.env.WEBABILITY_API_URL || process.env.ABILYO_API_URL || 'https://api.webability.io'
@@ -41,7 +42,9 @@ const SHARED_TOKEN = process.env.MCP_AUTH_TOKEN && process.env.MCP_AUTH_TOKEN.le
 
 // Validated-token cache: token → expiry epoch ms. Avoids a /cli/whoami round-trip
 // on every request in the stateless model; short TTL so revocation propagates.
-const tokenCache = new Map<string, number>()
+// Bounded, because every distinct token a caller sends would otherwise add an
+// entry for the life of the process.
+const tokenCache = createTokenCache({ max: 10_000 })
 const TOKEN_TTL_MS = 5 * 60 * 1000
 
 // Tokens the platform refused, by hash. A client retrying one dead token gets
@@ -120,7 +123,7 @@ function retryAfterFrom(res: Response): string {
 async function checkUserToken(token: string): Promise<TokenCheck> {
   if (!token) return { state: 'invalid' }
   const cached = tokenCache.get(token)
-  if (cached && cached > Date.now()) return { state: 'valid' }
+  if (cached !== undefined) return { state: 'valid' }
   try {
     const res = await fetch(`${API_URL}/cli/whoami`, { headers: { Authorization: `Bearer ${token}` } })
     if (res.ok) {

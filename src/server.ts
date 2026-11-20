@@ -34,7 +34,7 @@ import { IMPACT_RANK, INLINE_BUDGET, OFFSET_PROPERTY, OUTPUT_CONTROL_PROPERTIES,
 import { collectSourcePointers, findSourceCandidates, type SourcePointer } from './sourcePointers.js'
 import { collapseRepeats, dropObsoleteParsing, mergeSameElement, nameFamilyKey, recountSummary, scanHeadline, truncationNote, widgetViewNote } from './scanShaping.js'
 import { SCAN_HTML_DEADLINE_MS, ScanHtmlBusyError, ScanHtmlLimitError, assertScanHtmlWithinCaps, fastScanHtml } from './fastScan.js'
-import { openSession } from './browser.js'
+import { openSession, schemeForBareUrl } from './browser.js'
 import { isBlockedAddress } from './egressProxy.js'
 import { AccountError, addSite, createUpgradeLink, describeSite, findSite, INSTALL_SNIPPET, listSites } from './account.js'
 import { ACCOUNT_TOOLS, appsAuthChallenge, appsSignInRequired, signInRequired } from './signIn.js'
@@ -43,14 +43,15 @@ import { ToolRefusal, assertSelectorMatches, readElementColors, scopeAxeRules } 
 /** Every arg that can carry a URL the server will navigate to; the hosted SSRF guard checks all of them. */
 export const HOSTED_URL_ARG_KEYS: string[] = [...new Set(['url', 'startUrl', 'baselineUrl', ...VERIFY_FIX_URL_KEYS])]
 
-/** Bare domains ("webability.io") get https://. Anything that already names a scheme
+/** Bare domains ("webability.io") get https://, a bare local host gets http://
+ *  (a dev server speaks plain HTTP). Anything that already names a scheme
  *  (http:example.com, file://, javascript:) is left alone, so the SSRF guard still judges
  *  and refuses it. "host:8080" is a port, not a scheme. Blank stays blank, so verify_fix
  *  can fall through from an empty `url` to its `pageUrl` alias. */
 export function normalizeUrlArg(raw: string): string {
   const u = raw.trim()
   if (!u) return ''
-  return /^[a-z][a-z0-9+.-]*:(?!\d)/i.test(u) ? u : `https://${u}`
+  return /^[a-z][a-z0-9+.-]*:(?!\d)/i.test(u) ? u : `${schemeForBareUrl(u)}://${u}`
 }
 
 const execFileAsync = promisify(execFile)
@@ -460,7 +461,7 @@ export function tunnelTargetForCall(name: string, args: Record<string, unknown> 
 }
 
 /** Pair a URL with a secret the way the handlers will see them. dispatchTool
- *  normalises URL args (bare domain -> https://...) AFTER it derives the tunnel,
+ *  normalises URL args (bare domain -> https://, bare local host -> http://) AFTER it derives the tunnel,
  *  so the raw value is normalised here too: a scheme-less tunnel URL used to
  *  parse as "not a tunnel" and then be refused as "no tunnel_secret passed". A
  *  secret pasted with a trailing newline is trimmed for the same reason. */

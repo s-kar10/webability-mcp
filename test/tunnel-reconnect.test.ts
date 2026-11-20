@@ -51,12 +51,46 @@ test('the new container not being up yet is retried with growing delays', async 
   const delays: number[] = []
   const seen: boolean[] = []
   await Promise.race([
-    keepTunnel({ open, sleep: async (ms) => void delays.push(ms), onOpened: (_t, r) => seen.push(r) }),
+    keepTunnel({ open, sleep: async (ms) => void delays.push(ms), random: () => 0.5, onOpened: (_t, r) => seen.push(r) }),
     new Promise((r) => setTimeout(r, 100)),
   ])
   assert.deepEqual(seen, [false, true])
   assert.equal(delays.length, 3)
   assert.ok(delays[0] < delays[1] && delays[1] < delays[2], `delays ${delays}`)
+})
+
+test('reconnect delays are jittered, so a fleet of tunnels does not retry in lockstep', async () => {
+  const run = async (random: () => number) => {
+    const { open } = scripted([{ close: RELAY_RESTART_CODE }, { fail: 'ECONNREFUSED' }, { fail: '502' }, { stay: true }])
+    const delays: number[] = []
+    await Promise.race([
+      keepTunnel({ open, sleep: async (ms) => void delays.push(ms), random, onOpened: () => {} }),
+      new Promise((r) => setTimeout(r, 100)),
+    ])
+    return delays
+  }
+  // Equal jitter: half the backoff is fixed, half is random. Two tunnels that
+  // restart together must not wake together.
+  assert.deepEqual(await run(() => 0), [500, 1_000, 2_000])
+  assert.deepEqual(await run(() => 1), [1_000, 2_000, 4_000])
+})
+
+test('onRetry reports the first reconnect attempt too, so the CLI is not silent for the first delay', async () => {
+  const { open } = scripted([{ close: RELAY_RESTART_CODE }, { fail: 'ECONNREFUSED' }, { stay: true }])
+  const retries: Array<{ attempt: number; delayMs: number; error: string }> = []
+  await Promise.race([
+    keepTunnel({
+      open,
+      sleep: noSleep,
+      random: () => 0.5,
+      onRetry: (attempt, delayMs, error) => retries.push({ attempt, delayMs, error }),
+      onOpened: () => {},
+    }),
+    new Promise((r) => setTimeout(r, 100)),
+  ])
+  assert.equal(retries.length, 2)
+  assert.equal(retries[0].attempt, 1, 'the first attempt is reported, not skipped')
+  assert.match(retries[0].error, /relay restarting/)
 })
 
 test('reconnecting gives up after the attempt limit and reports the last error', async () => {

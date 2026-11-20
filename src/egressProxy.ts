@@ -16,12 +16,22 @@ import { connect, isIP, type AddressInfo, type Socket } from 'node:net'
 
 import { withDeadline } from './deadline.js'
 
-/** True if an IP literal is loopback / private / link-local / cloud-metadata / CGNAT. */
+/** True if an IP literal is loopback / private / link-local / cloud-metadata / CGNAT.
+ *  Accepts a bracketed literal (`[::1]`) and both IPv4-mapped IPv6 forms. */
 export function isBlockedAddress(addr: string): boolean {
-  const a = addr.toLowerCase()
+  const bracketed = addr.match(/^\[(.+)\]$/)
+  const a = (bracketed ? bracketed[1] : addr).toLowerCase()
   if (a === '::1' || a === '::' || a.startsWith('fe80') || a.startsWith('fc') || a.startsWith('fd')) return true
   const mapped = a.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/)
-  const ipv4 = mapped ? mapped[1] : a
+  // Node normalises `new URL('http://[::ffff:127.0.0.1]/').hostname` to this hex form.
+  const hexMapped = a.match(/^::ffff:([0-9a-f]{1,4}):([0-9a-f]{1,4})$/)
+  let ipv4 = a
+  if (mapped) ipv4 = mapped[1]
+  else if (hexMapped) {
+    const hi = parseInt(hexMapped[1], 16)
+    const lo = parseInt(hexMapped[2], 16)
+    ipv4 = `${hi >> 8}.${hi & 255}.${lo >> 8}.${lo & 255}`
+  }
   const m = ipv4.match(/^(\d+)\.(\d+)\.\d+\.\d+$/)
   if (m) {
     const o1 = parseInt(m[1], 10)

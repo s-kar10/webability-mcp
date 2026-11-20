@@ -25,8 +25,15 @@ export interface KeepTunnelOptions {
   open: (onClosed: (info: CloseInfo) => void) => Promise<TunnelHandle>
   /** A tunnel is serving. `reconnect` is true after a relay restart: the URL and secret are new. */
   onOpened: (tunnel: TunnelHandle, reconnect: boolean) => void
+  /**
+   * Called before every reconnect attempt, including the first. The first
+   * attempt is the one a user is most likely to be staring at, so it must not
+   * be the silent one.
+   */
   onRetry?: (attempt: number, delayMs: number, error: string) => void
   sleep?: (ms: number) => Promise<void>
+  /** Jitter source for the backoff. Injectable so tests are deterministic. */
+  random?: () => number
   /** Reconnect attempts per restart before giving up. */
   maxAttempts?: number
   baseDelayMs?: number
@@ -41,7 +48,16 @@ const realSleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
  * rejects, unretried: a bad token or flag should fail fast, not back off.
  */
 export async function keepTunnel(opts: KeepTunnelOptions): Promise<TunnelEnd> {
-  const { open, onOpened, onRetry, sleep = realSleep, maxAttempts = 8, baseDelayMs = 1_000, attemptTimeoutMs = 30_000 } = opts
+  const {
+    open,
+    onOpened,
+    onRetry,
+    sleep = realSleep,
+    random = Math.random,
+    maxAttempts = 8,
+    baseDelayMs = 1_000,
+    attemptTimeoutMs = 30_000,
+  } = opts
 
   const serve = async (reconnect: boolean): Promise<CloseInfo> => {
     let closed!: (info: CloseInfo) => void
@@ -55,11 +71,17 @@ export async function keepTunnel(opts: KeepTunnelOptions): Promise<TunnelEnd> {
   let last = await serve(false)
   for (;;) {
     if (last.code !== RELAY_RESTART_CODE) return { reason: 'closed', code: last.code, message: last.reason }
-    let error = ''
+    // Seeded with the close reason: the first attempt has no failed open to
+    // report, and an empty message is what made the first retry silent.
+    let error = last.reason
     let next: CloseInfo | null = null
     for (let attempt = 1; attempt <= maxAttempts && !next; attempt++) {
-      const delay = Math.min(baseDelayMs * 2 ** (attempt - 1), MAX_DELAY_MS)
-      if (attempt > 1) onRetry?.(attempt, delay, error)
+      // Equal jitter: half the backoff is fixed, half is random. The relay
+      // restarts every agent at once, so without jitter every CLI in the fleet
+      // wakes on the same millisecond and hammers the new container together.
+      const ceiling = Math.min(baseDelayMs * 2 ** (attempt - 1), MAX_DELAY_MS)
+      const delay = ceiling / 2 + random() * (ceiling / 2)
+      onRetry?.(attempt, delay, error)
       await sleep(delay)
       try {
         next = await serve(true)

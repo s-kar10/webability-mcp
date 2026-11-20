@@ -150,9 +150,22 @@ export function isHttp2ProtocolError(err: unknown): boolean {
   return /ERR_HTTP2_PROTOCOL_ERROR/.test((err as Error)?.message ?? '')
 }
 
+/**
+ * Scheme for a URL typed without one. A local dev server speaks plain HTTP, so
+ * a bare local host gets http:// — the README prompts say "Scan localhost:3000"
+ * and https:// there fails with an SSL error. Every other bare host gets https://.
+ */
+export function schemeForBareUrl(raw: string): 'http' | 'https' {
+  const authority = raw.split(/[/?#]/, 1)[0].toLowerCase()
+  const host = authority.replace(/:\d+$/, '')
+  return host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0' || host === '[::1]' || host.endsWith('.localhost')
+    ? 'http'
+    : 'https'
+}
+
 /** Scan targets may arrive without a scheme (core scan() used to add one). */
 export function normalizeScanUrl(url: string): string {
-  return /^https?:\/\//i.test(url) ? url : `https://${url}`
+  return /^https?:\/\//i.test(url) ? url : `${schemeForBareUrl(url)}://${url}`
 }
 
 /** One egress proxy per hosted process, started on first use. */

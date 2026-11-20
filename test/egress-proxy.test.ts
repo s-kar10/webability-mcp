@@ -53,6 +53,15 @@ test('isBlockedAddress: loopback, private, link-local/metadata, CGNAT, v6 local 
   for (const a of ['93.184.215.14', '8.8.8.8', '172.32.0.1', '2606:4700::1111']) assert.equal(isBlockedAddress(a), false, a)
 })
 
+test('isBlockedAddress: hex-form IPv4-mapped IPv6 and bracketed literals are blocked', () => {
+  // Node normalises `new URL('http://[::ffff:127.0.0.1]/').hostname` to the hex form.
+  for (const a of ['::ffff:7f00:1', '::ffff:a9fe:a9fe', '::ffff:a00:1', '::ffff:c0a8:101', '[::ffff:7f00:1]', '[::1]']) {
+    assert.equal(isBlockedAddress(a), true, a)
+  }
+  for (const a of ['::ffff:127.0.0.1', '127.0.0.1', '10.1.2.3', '::1']) assert.equal(isBlockedAddress(a), true, a)
+  for (const a of ['::ffff:808:808', '8.8.8.8', '2606:4700:4700::1111']) assert.equal(isBlockedAddress(a), false, a)
+})
+
 test('default check: a plain-HTTP request to loopback is refused (403) and never reaches the origin', async () => {
   const o = await listen()
   let hits = 0
