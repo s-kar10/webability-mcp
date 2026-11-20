@@ -1,0 +1,28 @@
+{
+  "run_id": "2026-11-19T22-31-40-981Z-page-8445f663",
+  "timestamp": "2026-11-19T22:31:40.988Z",
+  "git_commit": "873b6f76e46f781393539656a0e0dd5fc2fa8700",
+  "tracked_dirty": true,
+  "runner_sha256": "fc11680ff9bc1638ea3ed04b82b509a4b4435c8d4efe0395b2712cab8df24ab4",
+  "environment": {
+    "node": "v25.9.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "case_id": "WP-CSP-01-UI-REPAIRED",
+  "builder": "WordPress",
+  "tested_url": "http://127.0.0.1:8099/",
+  "command": [
+    "/Users/sadiqkarjikar/webability/webability-mcp/lab/scripts/capture-page.mjs",
+    "WP-CSP-01-UI-REPAIRED",
+    "WordPress",
+    "http://127.0.0.1:8099/"
+  ],
+  "final_url": "http://127.0.0.1:8099/",
+  "http_status": 200,
+  "content_security_policy": "script-src 'self' https://widget.webability.io",
+  "lab_cache": null,
+  "exit_code": 0,
+  "duration_ms": 124.253166,
+  "finished_at": "2026-11-19T22:31:41.142Z"
+}

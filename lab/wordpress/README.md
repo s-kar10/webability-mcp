@@ -34,7 +34,13 @@ Other scenario names: `wrong-slot`, `cached`. Each change preserves exact option
 - **cached:** primes a real full-page cache while installation is absent, then enables the install option without clearing the cached response. The served HTML remains old and `X-Install-Lab-Cache: HIT` documents it. This is a minimal lab cache, not a claim about a third-party caching product.
 - **healthy again:** disables/purges only the named lab cache and restores the head embed. This is the repair and reset path for all three cases.
 
-Consent and GTM remain pending real accounts; draft-theme behavior remains planned. Do not use these CLI repair commands as non-technical usability answers. A safe owner-facing settings workflow still needs preparation and human testing.
+Consent and GTM are being tested separately on Framer; WordPress equivalents and draft-theme behavior remain pending. Do not use these CLI repair commands as non-technical usability answers.
+
+## Owner repair controls
+
+The local MU plugin adds **Settings → Install lab**, restricted to administrators and protected by WordPress nonces.
+The wrong-slot repair selects **Site-wide header** and **Save installation**. The cache repair uses **Clear page cache**. The CSP repair uses **Allow WebAbility script**, retaining `script-src 'self' https://widget.webability.io` rather than removing the policy.
+These are lab-specific controls, not standard WordPress features. The agent verified all three repairs through Chrome on November 19; human testing remains pending. See [participant handoff](../participant-handoff.md).
 
 Stop without deleting data:
 

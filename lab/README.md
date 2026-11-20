@@ -9,7 +9,7 @@ It does not change the detection implementation. Baseline: maintainer-reviewed b
 - [Failure/scoring protocol](cases/protocol.md)
 - [Owner wording and participant protocol](owner-guidance.md)
 - [Account access checklist](setup.md)
-- [Actual hours record](work-log.json)
+- Actual hours: user will maintain the Riipen work log
 - [November 13 update](updates/2026-11-13.md)
 - [November 20 checklist](updates/2026-11-20.md)
 - [Local WordPress runbook](wordpress/README.md)
@@ -47,4 +47,6 @@ Only the user can supply actual worked hours, recruit participants and finish ac
 
 ## Implementation boundary
 
-The GTM runner is syntax-checked but has not been validated on a real container because no GTM account exists yet. Its warm group reuses a primed browser context; it does not claim every response is a cache hit.
+The GTM runner completed ten real Framer/GTM loads on November 19. Its warm group reuses a primed browser context; it does not claim every response is a cache hit. See findings.md and the evidence manifest.
+
+[Participant handoff](participant-handoff.md) provides the two-friend assignment. [Framer reset instructions](cases/framer-ground-truth.md) cover the three additional cases.

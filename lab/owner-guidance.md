@@ -20,7 +20,9 @@ A person unable to locate a setting is a wording failure to record, not a reason
 - Shopify: verify exact live-theme/custom-code navigation in the user's dev account before filling in steps. Draft theme is a native scenario; compare live URL versus explicitly identified preview.
 - Wix: verify eligibility for custom code first. HTML embeds can be iframes; iframe placement must be labelled and not treated as a successful site-wide install. Do not provide paid-feature navigation as if available on a free account.
 - WordPress: the local lab deliberately uses a named MU plugin for installation and a minimal full-page cache. The corresponding owner setting is lab-specific, not a claim about all WordPress sites. For usability, prepare visible safe controls or a real relevant plugin workflow before testing; CLI commands are not a non-technical repair path.
-- Framer: verify published custom-code support in the account and document actual settings before filling in steps. If unavailable, mark access-blocked.
+- Framer unpublished change: “The script was not observed on the published page.” Next step: “In Framer, check Settings → Code for the saved install code, then use Publish → Update to put it on the live site.” This path was exercised, but the wording remains untested by participants.
+- Framer/GTM: “The script was not observed on the live page; an unpublished tag is one possible cause.” Next step: “In Tag Manager, check that the live version contains WebAbility install lab; if your intended tag is only in the workspace, use Submit → Publish, then check the page again.”
+- Framer/Cookiebot: “The script is waiting for Preferences consent on this page.” Next step: “On the site’s cookie banner, enable Preferences and choose Allow selection to test the permitted state; verify that this category matches your intended policy.” Do not present intended consent withholding as an installation mistake.
 
 ## Participant protocol
 
@@ -34,4 +36,5 @@ Record failures honestly. Do not fill the before/after section until real observ
 
 ## Before/after results
 
-Pending real participant sessions. Recruitment and availability are not yet confirmed.
+Pending real participant sessions. On November 19 the owner confirmed they can arrange testers.
+[Participant handoff](participant-handoff.md) contains untested v1-local answer cards and visible WordPress repair steps verified by the agent. These are functional checks, not human usability results.
