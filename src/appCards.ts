@@ -18,7 +18,8 @@ export const CARD_RESOURCE_URI = 'ui://webability/result-card.html'
 export const CARD_MIME_TYPE = 'text/html;profile=mcp-app'
 export const CARD_TOOLS: ReadonlySet<string> = new Set(['scan_page', 'verify_fix'])
 
-const REPORT_PAGE = 'https://www.webability.io/website-accessibility-checker'
+// Public scan entry: /scan?url= starts the scan itself (the marketing checker only prefills the box).
+const REPORT_PAGE = 'https://app.webability.io/scan'
 const TOP_ISSUES = 6
 /** Example selectors a collapsed top-issue row shows. */
 const TOP_EXAMPLES = 3

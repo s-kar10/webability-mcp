@@ -75,7 +75,7 @@ for (const remote of [false, true]) {
     for (const [where, meta] of [['list', (card as any)._meta], ['read', item._meta]] as const) {
       assert.equal(meta?.ui?.prefersBorder, true, `${where}: prefersBorder`)
       assert.deepEqual(meta?.ui?.csp, { connectDomains: [], resourceDomains: [] }, `${where}: empty CSP declared`)
-      assert.deepEqual(meta?.['openai/widgetCSP'], { connect_domains: [], resource_domains: [], redirect_domains: ['https://www.webability.io'] }, `${where}: ChatGPT CSP mirror`)
+      assert.deepEqual(meta?.['openai/widgetCSP'], { connect_domains: [], resource_domains: [], redirect_domains: ['https://app.webability.io'] }, `${where}: ChatGPT CSP mirror`)
       assert.equal(meta?.['openai/widgetPrefersBorder'], true, `${where}: ChatGPT border mirror`)
       assert.match(String(meta?.['openai/widgetDescription']), /Do not repeat/, `${where}: model told the card shows the result`)
     }
@@ -132,7 +132,7 @@ test('scanCard is compact: counts, top 6 issues, report link, no raw HTML', () =
   assert.equal(card.issuesTotal, 10)
   assert.equal(card.topIssues.length, 6)
   assert.deepEqual(card.topIssues[0], { type: 'missing_alt', wcag: '1.1.1', impact: 'critical', selector: 'img:nth-of-type(1)', message: 'Image 1 has no alt text' })
-  assert.equal(card.reportUrl, 'https://www.webability.io/website-accessibility-checker?url=https%3A%2F%2Fuw.test%2Fbefore.html')
+  assert.equal(card.reportUrl, 'https://app.webability.io/scan?url=https%3A%2F%2Fuw.test%2Fbefore.html')
   assert.ok(!JSON.stringify(card).includes('<img'), 'no raw page HTML in structuredContent')
 })
 
