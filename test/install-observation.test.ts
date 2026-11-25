@@ -37,3 +37,24 @@ for (const scenario of ['present', 'blocked', 'error', 'absent', '404', 'client-
     if (scenario.includes('consent')) assert.equal(requested, false)
   })
 }
+
+// Real customers paste the tag without crossorigin, and the script host sends
+// no CORS header. Chromium mutes window 'error' details for such scripts, so
+// the uncaught exception must still reach the observation.
+test('browser install observation: error-no-cors', async () => {
+  const observe = (url: string) => observeInstall(url, { setupContext: async (context) => {
+    await context.route('**/*', async (route: { request(): { url(): string }; fulfill(o: object): Promise<unknown> }) => {
+      if (route.request().url() === SCRIPT) {
+        return route.fulfill({ status: 200, contentType: 'application/javascript', body: 'throw new Error("widget failure")' })
+      }
+      return route.fulfill({ status: 200, contentType: 'text/html', body: `<script src="${SCRIPT}"></script>` })
+    })
+  } })
+
+  const result = await checkInstall(SITE, { observe })
+
+  assert.equal(result.state, 'error', JSON.stringify(result))
+  const evidence = result.evidence.find((e) => e.kind === 'script_error')
+  assert.equal(evidence?.kind, 'script_error', JSON.stringify(result))
+  assert.equal((evidence as { scriptUrl: string }).scriptUrl, SCRIPT)
+})

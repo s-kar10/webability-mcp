@@ -1,4 +1,4 @@
-import type { BrowserContext, Request } from 'playwright'
+import type { BrowserContext, Page, Request } from 'playwright'
 import { openSession, type OpenSessionOptions } from './browser.js'
 import type { InstallObservation } from './installCheck.js'
 
@@ -15,15 +15,27 @@ const INIT = `(() => {
   });
 })()`
 
+/** A URL in a stack frame, without the trailing `:line:column` the frame appends. */
+const STACK_FRAME_URL = /https?:\/\/[^\s()]+/
+
+function scriptUrlFromStack(stack: string | undefined): string | undefined {
+  const found = stack?.match(STACK_FRAME_URL)?.[0]
+  // A frame always carries :line:column after the URL; a port alone is not a frame.
+  if (!found || !/^https?:\/\/[^/]+\/./.test(found)) return undefined
+  try { return new URL(found.replace(/(?::\d+){1,2}$/, '')).href } catch { return undefined }
+}
+
 /** Top-level document only. No consent interaction or policy bypass. */
 export async function observeInstall(url: string, options: OpenSessionOptions = {}): Promise<InstallObservation> {
   let requests: InstallObservation['requests'] = []
+  let uncaught: InstallObservation['runtimeErrors'] = []
   const session = await openSession({
     ...options,
     setupContext: async (context: BrowserContext) => {
       await options.setupContext?.(context)
       // Reset when the shared opener retries in a fresh context.
       requests = []
+      uncaught = []
       await context.addInitScript(INIT)
       context.on('request', (request) => {
         try {
@@ -46,6 +58,14 @@ export async function observeInstall(url: string, options: OpenSessionOptions = 
         } catch { /* Context closure cannot supply usable evidence. */ }
       }
       context.on('requestfinished', (r) => { void record(r, false) })
+      // window 'error' is muted for cross-origin scripts without CORS ("Script error."),
+      // so the page-level exception is the only record of a broken install.
+      context.on('page', (page: Page) => {
+        page.on('pageerror', (error: Error) => {
+          const scriptUrl = scriptUrlFromStack(error.stack)
+          if (scriptUrl) uncaught.push({ scriptUrl, message: error.message })
+        })
+      })
       context.on('requestfailed', (r) => { void record(r, true) })
     },
   })
@@ -64,7 +84,14 @@ export async function observeInstall(url: string, options: OpenSessionOptions = 
         attributes: Object.fromEntries(['data-cookieconsent', 'data-cookiecategory', 'data-consent'].filter(k => s.hasAttribute(k)).map(k => [k, s.getAttribute(k)]))
       })) };
     })()`)
-    return { ...dom, finalUrl: session.page.url(), requests, observationDurationMs: Date.now() - started }
+    const runtimeErrors = [...dom.runtimeErrors]
+    for (const e of uncaught) {
+      // The window listener already reported this exception (same script, same text).
+      if (!e.message || runtimeErrors.some((r) => r.scriptUrl === e.scriptUrl &&
+        (r.message.includes(e.message) || e.message.includes(r.message)))) continue
+      runtimeErrors.push(e)
+    }
+    return { ...dom, runtimeErrors, finalUrl: session.page.url(), requests, observationDurationMs: Date.now() - started }
   } finally {
     await session.close()
   }
