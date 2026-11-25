@@ -1,5 +1,5 @@
 {
-  "review": "Reviewed selected local WordPress and public Framer/Wix diagnostic output; no credentials, cookies, account screens or participant identities. Raw copied bytes preserved. Account screenshots and full Shopify/Wix page captures remain private.",
+  "review": "Reviewed selected local WordPress and public Framer/Wix diagnostic output; no credentials, cookies, account screens or participant identities. Raw copied bytes preserved. Account screenshots and full Shopify/Wix page captures remain private. November 24 Toronto revalidation (November 25 UTC) includes repository test logs and public-site checks; generated test identifiers are fixture data, not account credentials.",
   "files": [
     {
       "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/build.stderr.txt",
@@ -690,6 +690,321 @@
       "file": "evidence/2026-11-20T12-39-49-894Z-check-ddc22235/run.json",
       "sha256": "31d1fb1eedbffdd216ba42401fbfbf098cf94d5db8d6bca6d6bb1f26c76f96de",
       "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/build.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/typecheck.stdout.txt",
+      "sha256": "cfa0a294ffce5a5e790e5b6041b71c807df04c698a4554453270724ed4a9e71f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/test.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/build.stdout.txt",
+      "sha256": "cb246f0fe5f71e166895b7b15ada899b45313f94545d828a9ce2085ca81f3393",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/typecheck.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/run.json",
+      "sha256": "0c5d151ed5ec218e1bd68cc655e729b6043edef72e1d9f19b9c2c977e558e517",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/test.stdout.txt",
+      "sha256": "04c3dd25ebf9ea7086123effaf5ddc67b8f63617f1ff262b6fef86cedd98980c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-52-173Z-check-e89105e4/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-52-173Z-check-e89105e4/response.json",
+      "sha256": "5509498f2a31c936f4f781a43c887c5771e68083dfba6c5b3cb373aa725a2b07",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-52-173Z-check-e89105e4/run.json",
+      "sha256": "d6232e2aefefdbc6f37d7407ab87920be2503506a0752cf4da178094a3a1db3a",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-53-447Z-check-041b132e/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-53-447Z-check-041b132e/response.json",
+      "sha256": "c140f3c36ac3267b33b2bd043d319b59ad1b5b8c36d3154cd7ba5ab09a56d6b7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-53-447Z-check-041b132e/run.json",
+      "sha256": "beb69824bb23df8db0298009a86149075a7b0031bae3901033962c541ca06edc",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-05-387Z-wp-config-1ca3d016/page.html",
+      "sha256": "7dde8b81a64e994b9747f0ef4953e31641ccf61919541318efaca3937a2fc9f1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-05-387Z-wp-config-1ca3d016/headers.json",
+      "sha256": "8380b3649bd1639c76a82661e7d7b41ab1eac5249828969ccd975dacfcd3162c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-05-387Z-wp-config-1ca3d016/run.json",
+      "sha256": "8623607fd7cd8e5c5dbafbe3740ed3f040c4fc4c2e4ebc61863462a18c8a367c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-13-858Z-check-ed05371f/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-13-858Z-check-ed05371f/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-13-858Z-check-ed05371f/run.json",
+      "sha256": "609ff424bdd01a9ec884c260c5c3143f7b87cbf88bde2d65b7c31d5b2c0b9b6c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-16-700Z-wp-config-03c57294/page.html",
+      "sha256": "e691426f059bd73dc5acbd91798ca29b0c357333bf446a0d586b3d766ff1faad",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-16-700Z-wp-config-03c57294/headers.json",
+      "sha256": "b0f2bdaacbe23b850a00d4a17a158246f3b6175baa08c9390e5a12de751c4c7e",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-16-700Z-wp-config-03c57294/run.json",
+      "sha256": "6d0621b9d87a7b36f92a712b00d697e1bad5090b6b40413dd68ca66b050359f9",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-20-904Z-check-22f80981/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-20-904Z-check-22f80981/response.json",
+      "sha256": "05e4a8bd0506e2c568ac050331f816783813e3d3dbc1f8fa28c61ba803d01869",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-20-904Z-check-22f80981/run.json",
+      "sha256": "57f4f7eebd26953bbf76f2d2d62a38bbda73034f0c5c47cb2c73dfe758c4ea99",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-23-110Z-wp-config-700c828c/page.html",
+      "sha256": "7dde8b81a64e994b9747f0ef4953e31641ccf61919541318efaca3937a2fc9f1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-23-110Z-wp-config-700c828c/headers.json",
+      "sha256": "da7b11c469ff154dc123c89f7b13f0d4c37326f8f97be3eb26e502b449ef2200",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-23-110Z-wp-config-700c828c/run.json",
+      "sha256": "54b08f4dd7ad521c5801ade9479cc67a4793e6c5ccb0e9b704c044439000795b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-26-357Z-check-a6237f0d/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-26-357Z-check-a6237f0d/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-26-357Z-check-a6237f0d/run.json",
+      "sha256": "99b88ec9831294dfd8847bbc2fb3bfeb5a356904f9e407de291f5224dbdba75f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-29-123Z-wp-config-03589234/page.html",
+      "sha256": "7dde8b81a64e994b9747f0ef4953e31641ccf61919541318efaca3937a2fc9f1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-29-123Z-wp-config-03589234/headers.json",
+      "sha256": "0c9cc9a824698075c5e7334a101e0ad9dbafcf01b2cf2a299f1fcbf9b0151ab5",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-29-123Z-wp-config-03589234/run.json",
+      "sha256": "515dd57daaf473daea0e24d14df2968069eb155215c01f5be18087e223da2af8",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-32-023Z-check-61f0df51/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-32-023Z-check-61f0df51/response.json",
+      "sha256": "4cde593e3f1c1dc66aa528ea2a38414385ae9d725ea7517292639e437fb508b2",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-32-023Z-check-61f0df51/run.json",
+      "sha256": "805c81226b4d7805d89c02f619b3fb4e36a3b077537a85c9919f33ec18ec1e01",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-34-012Z-wp-config-f07b3a89/page.html",
+      "sha256": "7dde8b81a64e994b9747f0ef4953e31641ccf61919541318efaca3937a2fc9f1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-34-012Z-wp-config-f07b3a89/headers.json",
+      "sha256": "b9025c1faba2afacc93e03de53fd3cfd1b2bf301d4fbe2cbcdf70e030e87e4f7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-34-012Z-wp-config-f07b3a89/run.json",
+      "sha256": "02a44d186ec029401de05950db98765d3db37c66960323010216da1043b647ff",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-36-934Z-check-8b04f2b9/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-36-934Z-check-8b04f2b9/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-36-934Z-check-8b04f2b9/run.json",
+      "sha256": "7b2c98aa19dd33c910e9b67a931bac97b8ce9454f2a8fe6f5ad8cb28a3db5ce4",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-39-093Z-wp-config-bcb1c167/prime-headers.json",
+      "sha256": "49e5b9051ff8d9cdb2bab40e065cf57b1f825504ff600c9ecc1c62f5e20dbdbd",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-39-093Z-wp-config-bcb1c167/page.html",
+      "sha256": "a3c4bcba008f424ac6fa1e7de6bc94b3f017a6dcf50e25bbf69c6062fcbf39fc",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-39-093Z-wp-config-bcb1c167/primed-page.html",
+      "sha256": "a3c4bcba008f424ac6fa1e7de6bc94b3f017a6dcf50e25bbf69c6062fcbf39fc",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-39-093Z-wp-config-bcb1c167/headers.json",
+      "sha256": "e26d7cefb0c83c892bedd0c17a48661f81b8e5a72a269bc6228d8a198528dbf6",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-39-093Z-wp-config-bcb1c167/run.json",
+      "sha256": "fa61f26e9c21dfe9f48ba82ff9d45d44fe1a0b181295d8791778085a28e6cd37",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-43-435Z-check-c05cde4b/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-43-435Z-check-c05cde4b/response.json",
+      "sha256": "e6a7e100a35a3f4cd293ba16c4a22787f1b544a5fe3ab86381898e65a07d7009",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-43-435Z-check-c05cde4b/run.json",
+      "sha256": "41999d7b2a093b4842f53bc598887c6cdf0e9ce8e7aa015a56549e5688f7ddeb",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-45-500Z-wp-config-49d05fbc/page.html",
+      "sha256": "7dde8b81a64e994b9747f0ef4953e31641ccf61919541318efaca3937a2fc9f1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-45-500Z-wp-config-49d05fbc/headers.json",
+      "sha256": "c6889fa308d67b0f1f7d14b5cee7b6e22ab8017db7565ab965cbc8cea2e04a65",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-45-500Z-wp-config-49d05fbc/run.json",
+      "sha256": "bb23ed2d0f5f025a9c754602763a31f652640cafd375303bb687b7184e658f9e",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-48-448Z-check-57dc6dc7/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-48-448Z-check-57dc6dc7/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-48-448Z-check-57dc6dc7/run.json",
+      "sha256": "6e2d67a9ff99b9c557d8822138b6eb84ce5f1b5803a0c55b43b5600130605683",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-50-679Z-wp-config-48f35208/page.html",
+      "sha256": "7dde8b81a64e994b9747f0ef4953e31641ccf61919541318efaca3937a2fc9f1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-50-679Z-wp-config-48f35208/headers.json",
+      "sha256": "e6d2da4ceb5ffdb678d8f63aac264c223324ea868e013b1f39b86bfd9e03b733",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-50-679Z-wp-config-48f35208/run.json",
+      "sha256": "dd4ef7b0ec3236bb75ad5f4a245f1c11d2fd8a119d554a97cb2356cf995a3185",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-12-02-029Z-smoke-a86fa404/tools.json",
+      "sha256": "0bdd3828a52cfccbe8825fdd924186116c2955ac33ba133b92920afe3f2f88bf",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-12-02-029Z-smoke-a86fa404/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-12-02-029Z-smoke-a86fa404/run.json",
+      "sha256": "e31d226dd34427a1f77b1023cd1278496e1c354ca514d0ead13c0a4c39a2bdf0",
+      "redactions": []
     }
   ],
   "excluded_runs": [
@@ -708,6 +1023,10 @@
     {
       "run_id": "2026-11-19T22-35-55-748Z-check-c08378bb",
       "reason": "Wix initial custom-code save failed; setup miss retained privately; later persisted embed control passed."
+    },
+    {
+      "run_id": "2026-11-25T03-12-25-230Z-check-8efac8cc",
+      "reason": "Fresh check reached password gate, not storefront. Retained privately; not_installed is not a storefront diagnosis."
     }
   ]
 }

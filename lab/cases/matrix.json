@@ -116,7 +116,9 @@
     "explanation_score": null,
     "score_reason": null,
     "wording_version": "v1-draft",
-    "recording": null
+    "recording": null,
+    "latest_control_run": "2026-11-25T03-10-52-173Z-check-e89105e4",
+    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
   },
   {
     "case_id": "WIX-CSP-01",
@@ -133,7 +135,9 @@
     "explanation_score": null,
     "score_reason": null,
     "wording_version": "v1-draft",
-    "recording": null
+    "recording": null,
+    "latest_control_run": "2026-11-25T03-10-52-173Z-check-e89105e4",
+    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
   },
   {
     "case_id": "WIX-CONSENT-01",
@@ -150,7 +154,9 @@
     "explanation_score": null,
     "score_reason": null,
     "wording_version": "v1-draft",
-    "recording": null
+    "recording": null,
+    "latest_control_run": "2026-11-25T03-10-52-173Z-check-e89105e4",
+    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
   },
   {
     "case_id": "WIX-GTM-01",
@@ -167,7 +173,9 @@
     "explanation_score": null,
     "score_reason": null,
     "wording_version": "v1-draft",
-    "recording": null
+    "recording": null,
+    "latest_control_run": "2026-11-25T03-10-52-173Z-check-e89105e4",
+    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
   },
   {
     "case_id": "WIX-DRAFT-01",
@@ -184,7 +192,9 @@
     "explanation_score": null,
     "score_reason": null,
     "wording_version": "v1-draft",
-    "recording": null
+    "recording": null,
+    "latest_control_run": "2026-11-25T03-10-52-173Z-check-e89105e4",
+    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
   },
   {
     "case_id": "WIX-CACHE-01",
@@ -201,7 +211,9 @@
     "explanation_score": null,
     "score_reason": null,
     "wording_version": "v1-draft",
-    "recording": null
+    "recording": null,
+    "latest_control_run": "2026-11-25T03-10-52-173Z-check-e89105e4",
+    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
   },
   {
     "case_id": "WP-SLOT-01",
@@ -210,10 +222,10 @@
     "status": "reproduced",
     "reason": "Real local WordPress; broken state and repair observed.",
     "tested_url": "http://127.0.0.1:8099/",
-    "control_run": "2026-11-19T22-17-21-139Z-check-1e098957",
-    "broken_run": "2026-11-19T22-17-27-068Z-check-9004e2ae",
-    "repair_run": "2026-11-19T22-18-04-981Z-check-86e3bb06",
-    "ground_truth_file": "evidence/2026-11-19T22-17-24-197Z-wp-config-0db8a867/run.json",
+    "control_run": "2026-11-25T03-11-13-858Z-check-ed05371f",
+    "broken_run": "2026-11-25T03-11-20-904Z-check-22f80981",
+    "repair_run": "2026-11-25T03-11-26-357Z-check-a6237f0d",
+    "ground_truth_file": "evidence/2026-11-25T03-11-16-700Z-wp-config-03c57294/run.json",
     "state_score": "right",
     "explanation_score": "unknown",
     "score_reason": "Served HTML displays escaped code, with no executable embed. State is right; the tool does not identify the placement mistake.",
@@ -224,7 +236,16 @@
       "broken_run": "2026-11-13T21-26-35-413Z-check-bf2bf623",
       "repair_run": "2026-11-13T21-26-40-464Z-check-703b5e56",
       "ground_truth_file": "evidence/2026-11-13T21-26-31-373Z-wp-config-b96e65e8/run.json"
-    }
+    },
+    "revalidation_history": [
+      {
+        "control_run": "2026-11-19T22-17-21-139Z-check-1e098957",
+        "broken_run": "2026-11-19T22-17-27-068Z-check-9004e2ae",
+        "repair_run": "2026-11-19T22-18-04-981Z-check-86e3bb06",
+        "ground_truth_file": "evidence/2026-11-19T22-17-24-197Z-wp-config-0db8a867/run.json"
+      }
+    ],
+    "revalidation_status": "Full control/broken/repair rerun on baseline 99e66db including Sid fix 74b254c"
   },
   {
     "case_id": "WP-CSP-01",
@@ -233,10 +254,10 @@
     "status": "reproduced",
     "reason": "Real local WordPress; broken state and repair observed.",
     "tested_url": "http://127.0.0.1:8099/",
-    "control_run": "2026-11-19T22-17-21-139Z-check-1e098957",
-    "broken_run": "2026-11-19T22-18-54-093Z-check-21d7f840",
-    "repair_run": "2026-11-19T22-30-55-366Z-check-590f56d2",
-    "ground_truth_file": "evidence/2026-11-19T22-18-50-938Z-wp-config-a39faca1/run.json",
+    "control_run": "2026-11-25T03-11-13-858Z-check-ed05371f",
+    "broken_run": "2026-11-25T03-11-32-023Z-check-61f0df51",
+    "repair_run": "2026-11-25T03-11-36-934Z-check-8b04f2b9",
+    "ground_truth_file": "evidence/2026-11-25T03-11-29-123Z-wp-config-03589234/run.json",
     "state_score": "right",
     "explanation_score": "right",
     "score_reason": "Enforced response header and browser violation identify the same blocked script; no non-technical owner repair guidance returned yet.",
@@ -247,7 +268,16 @@
       "broken_run": "2026-11-13T21-26-45-658Z-check-f567a618",
       "repair_run": "2026-11-13T21-26-50-295Z-check-775cdca1",
       "ground_truth_file": "evidence/2026-11-13T21-26-42-779Z-wp-config-7ea0e73e/run.json"
-    }
+    },
+    "revalidation_history": [
+      {
+        "control_run": "2026-11-19T22-17-21-139Z-check-1e098957",
+        "broken_run": "2026-11-19T22-18-54-093Z-check-21d7f840",
+        "repair_run": "2026-11-19T22-30-55-366Z-check-590f56d2",
+        "ground_truth_file": "evidence/2026-11-19T22-18-50-938Z-wp-config-a39faca1/run.json"
+      }
+    ],
+    "revalidation_status": "Full control/broken/repair rerun on baseline 99e66db including Sid fix 74b254c"
   },
   {
     "case_id": "WP-CONSENT-01",
@@ -307,10 +337,10 @@
     "status": "reproduced",
     "reason": "Real local WordPress; broken state and repair observed.",
     "tested_url": "http://127.0.0.1:8099/",
-    "control_run": "2026-11-19T22-17-21-139Z-check-1e098957",
-    "broken_run": "2026-11-19T22-18-11-588Z-check-ffa02431",
-    "repair_run": "2026-11-19T22-18-48-591Z-check-c03c03b7",
-    "ground_truth_file": "evidence/2026-11-19T22-18-07-540Z-wp-config-f1a3eabc/run.json",
+    "control_run": "2026-11-25T03-11-13-858Z-check-ed05371f",
+    "broken_run": "2026-11-25T03-11-43-435Z-check-c05cde4b",
+    "repair_run": "2026-11-25T03-11-48-448Z-check-57dc6dc7",
+    "ground_truth_file": "evidence/2026-11-25T03-11-39-093Z-wp-config-bcb1c167/run.json",
     "state_score": "right",
     "explanation_score": "unknown",
     "score_reason": "Cache primed without embed, install option then enabled, response remains a cache HIT without embed. State is right; stale-cache cause is not identifiable from absence alone.",
@@ -321,7 +351,16 @@
       "broken_run": "2026-11-13T21-26-56-461Z-check-00cd4a7f",
       "repair_run": "2026-11-13T21-27-01-243Z-check-14647735",
       "ground_truth_file": "evidence/2026-11-13T21-26-52-592Z-wp-config-cdef4b2e/run.json"
-    }
+    },
+    "revalidation_history": [
+      {
+        "control_run": "2026-11-19T22-17-21-139Z-check-1e098957",
+        "broken_run": "2026-11-19T22-18-11-588Z-check-ffa02431",
+        "repair_run": "2026-11-19T22-18-48-591Z-check-c03c03b7",
+        "ground_truth_file": "evidence/2026-11-19T22-18-07-540Z-wp-config-f1a3eabc/run.json"
+      }
+    ],
+    "revalidation_status": "Full control/broken/repair rerun on baseline 99e66db including Sid fix 74b254c"
   },
   {
     "case_id": "FRAMER-SLOT-01",
@@ -338,7 +377,9 @@
     "explanation_score": null,
     "score_reason": null,
     "wording_version": "v1-draft",
-    "recording": null
+    "recording": null,
+    "latest_control_run": "2026-11-25T03-10-53-447Z-check-041b132e",
+    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
   },
   {
     "case_id": "FRAMER-CSP-01",
@@ -355,7 +396,9 @@
     "explanation_score": null,
     "score_reason": null,
     "wording_version": "v1-draft",
-    "recording": null
+    "recording": null,
+    "latest_control_run": "2026-11-25T03-10-53-447Z-check-041b132e",
+    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
   },
   {
     "case_id": "FRAMER-CONSENT-01",
@@ -373,7 +416,9 @@
     "score_reason": "Real Cookiebot preferences gate and consent evidence agree; rollback restores the control, not a general consent-policy repair.",
     "wording_version": "v1-draft",
     "recording": null,
-    "repair_kind": "rollback of deliberately added preferences gating; Cookiebot retained"
+    "repair_kind": "rollback of deliberately added preferences gating; Cookiebot retained",
+    "latest_control_run": "2026-11-25T03-10-53-447Z-check-041b132e",
+    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
   },
   {
     "case_id": "FRAMER-GTM-01",
@@ -393,7 +438,9 @@
     "recording": null,
     "intermediate_repair_runs": [
       "2026-11-19T22-38-32-230Z-check-9084a123"
-    ]
+    ],
+    "latest_control_run": "2026-11-25T03-10-53-447Z-check-041b132e",
+    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
   },
   {
     "case_id": "FRAMER-DRAFT-01",
@@ -410,7 +457,9 @@
     "explanation_score": "unknown",
     "score_reason": "Absence is correct; public observation alone does not establish hidden unpublished configuration.",
     "wording_version": "v1-draft",
-    "recording": null
+    "recording": null,
+    "latest_control_run": "2026-11-25T03-10-53-447Z-check-041b132e",
+    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
   },
   {
     "case_id": "FRAMER-CACHE-01",
@@ -427,6 +476,8 @@
     "explanation_score": null,
     "score_reason": null,
     "wording_version": "v1-draft",
-    "recording": null
+    "recording": null,
+    "latest_control_run": "2026-11-25T03-10-53-447Z-check-041b132e",
+    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
   }
 ]

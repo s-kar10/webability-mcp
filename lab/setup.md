@@ -13,7 +13,3 @@ No paid plans or upgrades were purchased. User completed signup, credentials and
 | Riipen | User will log hours personally. | No invented dates/durations or submitted hours. |
 
 Cookiebot's [official free-subscription instructions](https://support.cookiebot.com/hc/en-us/articles/360003807613-How-can-I-get-a-Free-subscription) say signup begins with a 14-day trial and eligible single small domains can choose Free after it ends. The switch disables Premium features and requires confirmation. This account has one small domain, but the eventual Free transition has not been observed. Keep it without payment details and choose Free when offered; if unavailable, stop rather than upgrade.
-
-## Access note for Sid (draft, not sent)
-
-The accounts now exist. Wix and Framer accept the real script on the observed free sites, and WordPress controls work locally. Shopify's development-store password gate prevents the current URL-only tool from inspecting the storefront. I have not bypassed it or bought a plan. Can you provide eligible storefront test access or accept this documented coverage gap? Cookiebot is on its automatic no-cost trial; the permanent Free transition is still pending.

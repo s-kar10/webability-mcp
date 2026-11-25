@@ -1,7 +1,7 @@
 # Owner guidance — v1, untested drafts
 
 These are manually authored candidate answers, NOT text currently returned by check_install.
-No participants have tested them. Do not infer hidden dashboard state from an absent script.
+These technical drafts are separate from personal participant records, which are kept outside the repository. Do not infer hidden dashboard state from an absent script.
 
 | Failure | One sentence | One next step |
 |---|---|---|
@@ -23,18 +23,3 @@ A person unable to locate a setting is a wording failure to record, not a reason
 - Framer unpublished change: “The script was not observed on the published page.” Next step: “In Framer, check Settings → Code for the saved install code, then use Publish → Update to put it on the live site.” This path was exercised, but the wording remains untested by participants.
 - Framer/GTM: “The script was not observed on the live page; an unpublished tag is one possible cause.” Next step: “In Tag Manager, check that the live version contains WebAbility install lab; if your intended tag is only in the workspace, use Submit → Publish, then check the page again.”
 - Framer/Cookiebot: “The script is waiting for Preferences consent on this page.” Next step: “On the site’s cookie banner, enable Preferences and choose Allow selection to test the permitted state; verify that this category matches your intended policy.” Do not present intended consent withholding as an installation mistake.
-
-## Participant protocol
-
-Recruit 2–3 consenting non-technical friends/family; identify them only as P1/P2/P3 in public notes.
-Use disposable lab accounts with no production data. Assign two cases per person, allowing five minutes each.
-Provide only the broken page, safe lab access, and the exact answer. No hints, screen sharing help, or live coaching during the attempt.
-Record completion, time, wrong turns and confusing words in participant-results.json. Verify the repair independently with check_install and configuration evidence.
-Revise only after recording the first attempt; preserve v1 text, add v2 and a reason. Reset the case and retest.
-Prefer a different participant; if repeated, mark prior exposure. Report successes/attempts and distinct participants, not a population success rate.
-Record failures honestly. Do not fill the before/after section until real observations exist.
-
-## Before/after results
-
-Pending real participant sessions. On November 19 the owner confirmed they can arrange testers.
-Participant instructions are shared privately outside the repository. WordPress repair controls were verified by the agent; these are functional checks, not human usability results.

@@ -38,3 +38,13 @@ The successful GTM tool rerun took 2433.40 ms including server startup. The imme
 ### Remaining gaps
 
 Shopify password gate prevents storefront scoring. Wix has a healthy control but no broken case yet. Cookiebot permanent Free status is pending after its default trial. Participant testing, wording revisions and recordings/six-case live demo remain incomplete. Six reproduced cases do not imply completion of all 24 matrix cells or meaningful failure coverage on four builders.
+
+## November 24 revalidation (Toronto)
+
+Integrated Sid’s existing detector fixes through 74b254c into the lab branch at merge 99e66db. No independently authored detector changes. Full suite: **575 passed, 0 failed, 0 skipped**; typecheck and build passed. Built stdio server initialized, listed 21 tools and included check_install. Raw IDs use November 25 UTC, not a different local work date.
+
+On this baseline, WordPress wrong-slot/CSP/cache returned not_installed/blocked/not_installed, followed by present for every repair. State scores remain three right; cause explanations remain one right and two unknown. The final local configuration is healthy. Wix and Framer public controls returned present. Their calls overlapped repository testing; these durations are not a standalone latency benchmark.
+
+The Shopify check again ended at /password; storefront state remains unknown. Chrome dashboard tools were unavailable in the execution session despite user authorization. Consequently no Wix broken configuration, Framer broken-state rerun, Cookiebot subscription change, consent-preserving network proof or final-configuration GTM timing is claimed. November 19–20 results remain historical, not current-baseline revalidation.
+
+See [revalidation index](cases/revalidation-2026-11-24.json) for run IDs and pending items. Technical evidence remains in the repository; personal participant records and communication/recording drafts are now delivered outside Git. Recordings and the full four-builder milestone remain incomplete.

@@ -1,0 +1,24 @@
+{
+  "run_id": "2026-11-25T03-12-02-029Z-smoke-a86fa404",
+  "timestamp": "2026-11-25T03:12:02.029Z",
+  "git_commit": "99e66db328301d99aef3b96d03818ef16d36eeaf",
+  "tracked_dirty": false,
+  "runner_sha256": "a634f9d732411858008e3bc321dd6f0ea2ef645885c87879ce19a1acd2cf6384",
+  "environment": {
+    "node": "v25.9.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "case_id": "MCP-STARTUP",
+  "builder": "repository",
+  "command": [
+    "node",
+    "lab/scripts/smoke.mjs"
+  ],
+  "started_at": "2026-11-25T03:12:02.028Z",
+  "finished_at": "2026-11-25T03:12:02.272Z",
+  "duration_ms": 221.75841699999998,
+  "exit_code": 0,
+  "response_file": "tools.json",
+  "stderr_file": "stderr.txt"
+}

@@ -1,6 +1,6 @@
-# Case matrix — November 20
+# Case matrix — November 24
 
-Six failures reproduced across WordPress and Framer; six Shopify cells access-blocked and twelve cells planned. Wix has a verified healthy control. Scores reflect manual evidence review, not participant success. Framer draft is an unpublished-change equivalent. Consent repair is a lab rollback.
+Six failures historically reproduced across WordPress and Framer; six Shopify cells access-blocked and twelve cells planned. Wix has a verified healthy control. Scores reflect manual evidence review, not participant success. Framer draft is an unpublished-change equivalent. Consent repair is a lab rollback.
 
 | Case | Builder | Failure | Status | State | Explanation |
 |---|---|---|---|---|---|
@@ -30,3 +30,5 @@ Six failures reproduced across WordPress and Framer; six Shopify cells access-bl
 | FRAMER-CACHE-01 | Framer | Old cached page | planned | — | — |
 
 [Full run references and scoring reasons](matrix.json). [Framer ground truth and reset instructions](framer-ground-truth.md).
+
+November 24 revalidation: the three WordPress cases have new control/broken/repair runs on Sid’s latest fixes. Wix and Framer public controls pass, but the three Framer broken-case reruns remain pending dashboard access. Original evidence is retained.

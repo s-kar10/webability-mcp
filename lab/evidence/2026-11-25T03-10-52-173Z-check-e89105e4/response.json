@@ -1,0 +1,20 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "```json\n{\n  \"url\": \"https://sadiqkarjikar10.wixsite.com/sadiq-install-lab\",\n  \"finalUrl\": \"https://sadiqkarjikar10.wixsite.com/sadiq-install-lab\",\n  \"state\": \"present\",\n  \"evidence\": [\n    {\n      \"kind\": \"script\",\n      \"scriptUrl\": \"https://widget.webability.io/widget.min.js\",\n      \"httpStatus\": 200\n    }\n  ]\n}\n```"
+    }
+  ],
+  "structuredContent": {
+    "url": "https://sadiqkarjikar10.wixsite.com/sadiq-install-lab",
+    "finalUrl": "https://sadiqkarjikar10.wixsite.com/sadiq-install-lab",
+    "state": "present",
+    "evidence": [
+      {
+        "kind": "script",
+        "scriptUrl": "https://widget.webability.io/widget.min.js",
+        "httpStatus": 200
+      }
+    ]
+  }
+}

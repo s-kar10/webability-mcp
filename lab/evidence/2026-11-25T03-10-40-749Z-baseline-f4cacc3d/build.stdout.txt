@@ -1,0 +1,20 @@
+
+> @webability/mcp@1.10.1 build
+> tsup src/index.ts src/http.ts src/tunnel-cli.ts --format esm --dts --minify --clean
+
+CLI Building entry: src/http.ts, src/index.ts, src/tunnel-cli.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+ESM dist/chunk-T6C2QCQX.js 163.03 KB
+ESM dist/index.js          233.00 B
+ESM dist/http.js           23.17 KB
+ESM dist/tunnel-cli.js     5.81 KB
+ESM ⚡️ Build success in 140ms
+DTS Build start
+DTS ⚡️ Build success in 2229ms
+DTS dist/http.d.ts       20.00 B
+DTS dist/index.d.ts      20.00 B
+DTS dist/tunnel-cli.d.ts 20.00 B
