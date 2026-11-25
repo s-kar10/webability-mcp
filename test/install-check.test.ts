@@ -61,6 +61,19 @@ test('check_install: blocked includes the enforced policy and blocked script as 
   })
 })
 
+// Only a directive that governs script loading can block the embed. A
+// connect-src violation for the same URL leaves a loaded script present.
+test('check_install: non-script CSP directive does not block the embed', async () => {
+  const result = await checkInstall(URL, { observe: observer(observation({
+    scriptElements: [{ src: SCRIPT }],
+    requests: [{ url: SCRIPT, status: 200 }],
+    policyViolations: [{ blockedUrl: SCRIPT, directive: 'connect-src', policy: "connect-src 'self'", disposition: 'enforce' }],
+  })) })
+
+  assert.equal(result.state, 'present', JSON.stringify(result))
+  assert.deepEqual(result.evidence, [{ kind: 'script', scriptUrl: SCRIPT, httpStatus: 200 }])
+})
+
 test('check_install: error includes the attributable script exception as evidence', async () => {
   const message = 'Error: widget initialization failed'
   const result = await checkInstall(URL, { observe: observer(observation({
@@ -144,4 +157,16 @@ test('check_install: dashboard and legacy embed hosts are recognized', async () 
   for (const src of ['https://widget.webability.io.evil.test/widget.min.js', 'https://widget.access-widget.com/other.js']) {
     assert.equal((await checkInstall(URL, { observe: observer(observation({ scriptElements: [{ src }], requests: [{ url: src, status: 200 }] })) })).state, 'not_installed', src)
   }
+})
+
+// The DOM keeps the fragment on src; the network request drops it. Both are
+// the same script, so a request proves the tag loaded.
+test('check_install: consent tag src with a fragment matches a fragmentless request', async () => {
+  const result = await checkInstall(URL, { observe: observer(observation({
+    scriptElements: [{ src: `${SCRIPT}#x`, type: 'text/plain', attributes: { 'data-cookieconsent': 'marketing' } }],
+    requests: [{ url: SCRIPT, status: 200 }],
+  })) })
+
+  assert.equal(result.state, 'present', JSON.stringify(result))
+  assert.deepEqual(result.evidence, [{ kind: 'script', scriptUrl: SCRIPT, httpStatus: 200 }])
 })
