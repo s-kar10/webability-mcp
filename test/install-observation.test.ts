@@ -3,6 +3,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { checkInstall } from '../src/installCheck.ts'
 import { observeInstall } from '../src/installObservation.ts'
+import type { Route } from 'playwright'
 
 const SITE = 'https://site.example/'
 const SCRIPT = 'https://enhancer.webability.io/widget.min.js'
@@ -57,4 +58,59 @@ test('browser install observation: error-no-cors', async () => {
   const evidence = result.evidence.find((e) => e.kind === 'script_error')
   assert.equal(evidence?.kind, 'script_error', JSON.stringify(result))
   assert.equal((evidence as { scriptUrl: string }).scriptUrl, SCRIPT)
+})
+
+// Context-wide listeners also see popups: an embed loaded only by a popup the
+// page opened is not evidence that the inspected page loads it.
+test('browser install observation: popup embed is not the inspected page', async () => {
+  const POPUP = 'https://site.example/popup'
+  let popupRequested = false
+  const observe = (url: string) => observeInstall(url, { setupContext: async (context) => {
+    await context.route('**/*', async (route: Route) => {
+      const requestUrl = route.request().url()
+      if (requestUrl === SCRIPT) {
+        popupRequested = true
+        return route.fulfill({ status: 200, contentType: 'application/javascript', body: 'window.widgetLoaded = true' })
+      }
+      if (requestUrl === POPUP) {
+        return route.fulfill({ status: 200, contentType: 'text/html', body: `<script src="${SCRIPT}"></script>` })
+      }
+      return route.fulfill({ status: 200, contentType: 'text/html', body: `<p>No embed</p><script>window.open('${POPUP}')</script>` })
+    })
+  } })
+
+  const result = await checkInstall(SITE, { observe })
+
+  // The popup did load the embed, so an empty result means the filter worked.
+  assert.equal(popupRequested, true)
+  assert.equal(result.state, 'not_installed', JSON.stringify(result))
+  assert.equal(result.evidence[0].kind, 'absence')
+})
+
+// A client-side redirect loads a new document during the wait, so the observed
+// document is not the one that was navigated to.
+test('browser install observation: client redirect during the window interrupts', async () => {
+  const OTHER = 'https://site.example/other'
+  const observe = (url: string) => observeInstall(url, { setupContext: async (context) => {
+    await context.route('**/*', async (route: Route) => {
+      const requestUrl = route.request().url()
+      if (requestUrl === OTHER) return route.fulfill({ status: 503, contentType: 'text/html', body: '<p>Unavailable</p>' })
+      return route.fulfill({ status: 200, contentType: 'text/html',
+        body: `<p>No embed</p><script>setTimeout(() => { location.href = '${OTHER}' }, 100)</script>` })
+    })
+  } })
+
+  await assert.rejects(checkInstall(SITE, { observe }), /interrupted by navigation/)
+})
+
+// Same-document history changes are not new documents and must not interrupt.
+test('browser install observation: pushState during the window is not a navigation', async () => {
+  const observe = (url: string) => observeInstall(url, { setupContext: async (context) => {
+    await context.route('**/*', async (route: Route) => route.fulfill({ status: 200, contentType: 'text/html',
+      body: `<p>No embed</p><script>setTimeout(() => history.pushState({}, '', '/pushed'), 100)</script>` }))
+  } })
+
+  const result = await checkInstall(SITE, { observe })
+
+  assert.equal(result.state, 'not_installed', JSON.stringify(result))
 })

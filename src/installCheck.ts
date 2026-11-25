@@ -58,7 +58,8 @@ export async function checkInstall(url: string, deps: InstallCheckDependencies):
   const consent: InstallEvidence[] = o.scriptElements
     .filter((s) => isInstallScript(s.src) && s.type?.trim().toLowerCase() === 'text/plain' &&
       Object.keys(s.attributes ?? {}).some((k) => ['data-cookieconsent', 'data-cookiecategory', 'data-consent'].includes(k)) &&
-      !o.requests.some((r) => r.url === s.src))
+      // The DOM keeps a `#fragment` on src; the network request never carries it.
+      !o.requests.some((r) => r.url.split('#')[0] === s.src.split('#')[0]))
     .map((s) => ({ kind: 'consent', scriptUrl: s.src, type: s.type!, attributes: s.attributes! }))
   if (policies.length || consent.length) return result('blocked', [...policies, ...consent])
   const errors: InstallEvidence[] = o.runtimeErrors.filter((e) => isInstallScript(e.scriptUrl))

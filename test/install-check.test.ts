@@ -145,3 +145,15 @@ test('check_install: dashboard and legacy embed hosts are recognized', async () 
     assert.equal((await checkInstall(URL, { observe: observer(observation({ scriptElements: [{ src }], requests: [{ url: src, status: 200 }] })) })).state, 'not_installed', src)
   }
 })
+
+// The DOM keeps the fragment on src; the network request drops it. Both are
+// the same script, so a request proves the tag loaded.
+test('check_install: consent tag src with a fragment matches a fragmentless request', async () => {
+  const result = await checkInstall(URL, { observe: observer(observation({
+    scriptElements: [{ src: `${SCRIPT}#x`, type: 'text/plain', attributes: { 'data-cookieconsent': 'marketing' } }],
+    requests: [{ url: SCRIPT, status: 200 }],
+  })) })
+
+  assert.equal(result.state, 'present', JSON.stringify(result))
+  assert.deepEqual(result.evidence, [{ kind: 'script', scriptUrl: SCRIPT, httpStatus: 200 }])
+})
