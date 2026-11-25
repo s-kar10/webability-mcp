@@ -49,11 +49,24 @@ export function isInstallScript(raw: string): boolean {
   } catch { return false }
 }
 
+/**
+ * A script load is blocked only by a script-governing directive: `script-src`,
+ * `script-src-elem`, or `default-src` when the same policy declares neither.
+ * A `connect-src` or `img-src` violation about the embed URL is not evidence.
+ */
+function blocksScript(p: InstallObservation['policyViolations'][number]): boolean {
+  const directive = p.directive.trim().toLowerCase()
+  if (directive === 'script-src' || directive === 'script-src-elem') return true
+  if (directive !== 'default-src') return false
+  const declared = p.policy.split(';').map((part) => part.trim().split(/\s+/)[0]?.toLowerCase())
+  return !declared.includes('script-src') && !declared.includes('script-src-elem')
+}
+
 export async function checkInstall(url: string, deps: InstallCheckDependencies): Promise<InstallCheckResult> {
   const o = await deps.observe(url)
   const result = (state: InstallState, evidence: InstallEvidence[]): InstallCheckResult => ({ url, finalUrl: o.finalUrl, state, evidence })
   const policies: InstallEvidence[] = o.policyViolations
-    .filter((p) => p.disposition === 'enforce' && isInstallScript(p.blockedUrl))
+    .filter((p) => p.disposition === 'enforce' && isInstallScript(p.blockedUrl) && blocksScript(p))
     .map(({ blockedUrl, directive, policy }) => ({ kind: 'security_policy', blockedUrl, directive, policy }))
   const consent: InstallEvidence[] = o.scriptElements
     .filter((s) => isInstallScript(s.src) && s.type?.trim().toLowerCase() === 'text/plain' &&

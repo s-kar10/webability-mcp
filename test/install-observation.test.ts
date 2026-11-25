@@ -1,5 +1,7 @@
 process.env.WEBABILITY_SCAN_TELEMETRY = 'off'
 import assert from 'node:assert/strict'
+import { createServer, Server } from 'node:http'
+import { AddressInfo } from 'node:net'
 import { test } from 'node:test'
 import { checkInstall } from '../src/installCheck.ts'
 import { observeInstall } from '../src/installObservation.ts'
@@ -7,7 +9,14 @@ import type { Route } from 'playwright'
 
 const SITE = 'https://site.example/'
 const SCRIPT = 'https://enhancer.webability.io/widget.min.js'
-// Real Chromium, deterministic routed responses: no live CDN or external site.
+
+function listen(handler: Parameters<typeof createServer>[1]): Promise<{ server: Server; port: number }> {
+  const { promise, resolve } = Promise.withResolvers<{ server: Server; port: number }>()
+  const server = createServer(handler)
+  server.listen(0, '127.0.0.1', () => resolve({ server, port: (server.address() as AddressInfo).port }))
+  return promise
+}
+
 for (const scenario of ['present', 'blocked', 'error', 'absent', '404', 'client-block', 'consent', 'data-src-consent', 'navigation-error']) {
   test(`browser install observation: ${scenario}`, async () => {
     let requested = false
@@ -58,6 +67,60 @@ test('browser install observation: error-no-cors', async () => {
   const evidence = result.evidence.find((e) => e.kind === 'script_error')
   assert.equal(evidence?.kind, 'script_error', JSON.stringify(result))
   assert.equal((evidence as { scriptUrl: string }).scriptUrl, SCRIPT)
+})
+
+// An exception message can itself carry a URL. Only stack-frame URLs identify
+// the script that threw, so a message URL must not win the attribution.
+test('browser install observation: URL in the error message is not the script', async () => {
+  const observe = (url: string) => observeInstall(url, { setupContext: async (context) => {
+    await context.route('**/*', async (route: Route) => {
+      if (route.request().url() === SCRIPT) {
+        return route.fulfill({ status: 200, contentType: 'application/javascript',
+          body: 'throw new Error("Failed to load https://api.example/config")' })
+      }
+      return route.fulfill({ status: 200, contentType: 'text/html', body: `<script src="${SCRIPT}"></script>` })
+    })
+  } })
+
+  const result = await checkInstall(SITE, { observe })
+
+  assert.equal(result.state, 'error', JSON.stringify(result))
+  const errorUrls = result.evidence.flatMap((e) => e.kind === 'script_error' ? [e.scriptUrl] : [])
+  assert.deepEqual(errorUrls, [SCRIPT], JSON.stringify(result))
+})
+
+// The embed host redirects to another host. Blink attributes a module script's
+// exception to the POST-redirect URL, so the frame URL is not the request the
+// page recorded; without the chain mapping the exception is dropped and a
+// broken embed reads "present". Playwright does not route redirect hops
+// (see ssrf-redirect.test.ts), so this needs two real origins.
+test('browser install observation: redirect to another host keeps the exception', async () => {
+  const target = await listen((_req, res) => {
+    res.writeHead(200, { 'content-type': 'application/javascript', 'access-control-allow-origin': '*' })
+    res.end('throw new Error("widget failure")')
+  })
+  const source = await listen((req, res) => {
+    if (req.url === '/widget.min.js') {
+      res.writeHead(302, { location: `http://localhost:${target.port}/widget.min.js` })
+      res.end()
+      return
+    }
+    res.writeHead(200, { 'content-type': 'text/html' })
+    res.end('<script type="module" src="/widget.min.js"></script>')
+  })
+  try {
+    const originalUrl = `http://127.0.0.1:${source.port}/widget.min.js`
+    const observation = await observeInstall(`http://127.0.0.1:${source.port}/`)
+
+    // One exception, reported against the URL the page asked for. The message
+    // text comes from whichever listener saw it first; the mapping is the point.
+    assert.deepEqual(observation.runtimeErrors.map((e) => e.scriptUrl), [originalUrl], JSON.stringify(observation))
+    assert.ok(observation.runtimeErrors[0].message.includes('widget failure'))
+    assert.deepEqual(observation.requests, [{ url: originalUrl, status: 200 }])
+  } finally {
+    source.server.close()
+    target.server.close()
+  }
 })
 
 // Context-wide listeners also see popups: an embed loaded only by a popup the

@@ -15,14 +15,20 @@ const INIT = `(() => {
   });
 })()`
 
-/** A URL in a stack frame, without the trailing `:line:column` the frame appends. */
-const STACK_FRAME_URL = /https?:\/\/[^\s()]+/
+/**
+ * A V8 stack frame line: `    at fn (URL:line:col)` or `    at URL:line:col`.
+ * Scoped to the line so a URL inside the error message never counts as a frame.
+ */
+const STACK_FRAME_URL = /^\s+at\s+(?:.*?\()?(https?:\/\/[^\s()]+):\d+:\d+\)?$/
 
 function scriptUrlFromStack(stack: string | undefined): string | undefined {
-  const found = stack?.match(STACK_FRAME_URL)?.[0]
-  // A frame always carries :line:column after the URL; a port alone is not a frame.
-  if (!found || !/^https?:\/\/[^/]+\/./.test(found)) return undefined
-  try { return new URL(found.replace(/(?::\d+){1,2}$/, '')).href } catch { return undefined }
+  for (const line of stack?.split('\n') ?? []) {
+    const found = line.match(STACK_FRAME_URL)?.[1]
+    // A frame URL names a file: a bare host with a port is not one.
+    if (!found || !/^https?:\/\/[^/]+\/./.test(found)) continue
+    try { return new URL(found).href } catch { /* Malformed frame; try the next. */ }
+  }
+  return undefined
 }
 
 /** Overridable so tests can prove the deadline without waiting out the default. */
@@ -38,6 +44,10 @@ export async function observeInstall(url: string, options: ObserveInstallOptions
   const { deadlineMs = DEFAULT_OBSERVATION_DEADLINE_MS, ...sessionOptions } = options
   let requests: InstallObservation['requests'] = []
   let uncaught: InstallObservation['runtimeErrors'] = []
+  // Terminal URL of a redirect chain -> the URL the page asked for. A script that
+  // redirects to another embed host still executes at its terminal URL, so the
+  // exception names that one and has to map back to the recorded request.
+  let chainOriginals = new Map<string, string>()
   const session = await openSession({
     ...sessionOptions,
     setupContext: async (context: BrowserContext) => {
@@ -45,6 +55,7 @@ export async function observeInstall(url: string, options: ObserveInstallOptions
       // Reset when the shared opener retries in a fresh context.
       requests = []
       uncaught = []
+      chainOriginals = new Map()
       // Listeners are context-wide, so a popup the page opens reports too.
       // Only the session's own page is evidence about this page.
       let inspected: Page | undefined
@@ -56,7 +67,11 @@ export async function observeInstall(url: string, options: ObserveInstallOptions
       }
       await context.addInitScript(INIT)
       context.on('request', (request) => {
-        if (isInspectedScript(request) && !request.redirectedFrom()) requests.push({ url: request.url() })
+        if (!isInspectedScript(request)) return
+        let original = request
+        while (original.redirectedFrom()) original = original.redirectedFrom()!
+        chainOriginals.set(request.url(), original.url())
+        if (!request.redirectedFrom()) requests.push({ url: request.url() })
       })
       const record = async (request: Request, failed: boolean) => {
         try {
@@ -78,10 +93,11 @@ export async function observeInstall(url: string, options: ObserveInstallOptions
         if (inspected) return
         inspected = page
         page.on('pageerror', (error: Error) => {
-          const scriptUrl = scriptUrlFromStack(error.stack)
+          const frameUrl = scriptUrlFromStack(error.stack)
           // Child-frame exceptions surface on the Page too. Only a script the
           // inspected document itself requested is evidence about this page.
-          if (scriptUrl && requests.some((r) => r.url === scriptUrl)) uncaught.push({ scriptUrl, message: error.message })
+          const scriptUrl = frameUrl && chainOriginals.get(frameUrl)
+          if (scriptUrl) uncaught.push({ scriptUrl, message: error.message })
         })
       })
       context.on('requestfailed', (r) => { void record(r, true) })
@@ -137,13 +153,14 @@ export async function observeInstall(url: string, options: ObserveInstallOptions
         });
       }) };
     })()`)
-    const runtimeErrors = [...dom.runtimeErrors]
-    for (const e of uncaught) {
-      // The window listener already reported this exception (same script, same text).
-      if (!e.message || runtimeErrors.some((r) => r.scriptUrl === e.scriptUrl &&
-        (r.message.includes(e.message) || e.message.includes(r.message)))) continue
-      runtimeErrors.push(e)
-    }
+    // A redirected script reports its terminal URL (module scripts do even for
+    // window 'error'), so both sources map back to the recorded request. An
+    // unmapped URL is not a script this page requested: not evidence here.
+    const runtimeErrors = [...dom.runtimeErrors, ...uncaught].flatMap((e) => {
+      const scriptUrl = chainOriginals.get(e.scriptUrl)
+      return scriptUrl ? [{ scriptUrl, message: e.message }] : []
+    }).filter((e, index, all) => all.findIndex((o) => o.scriptUrl === e.scriptUrl &&
+      (o.message.includes(e.message) || e.message.includes(o.message))) === index)
     return { ...dom, runtimeErrors, finalUrl: session.page.url(), requests, observationDurationMs: Date.now() - started }
   }
 }
