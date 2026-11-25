@@ -25,14 +25,23 @@ function scriptUrlFromStack(stack: string | undefined): string | undefined {
   try { return new URL(found.replace(/(?::\d+){1,2}$/, '')).href } catch { return undefined }
 }
 
+/** Overridable so tests can prove the deadline without waiting out the default. */
+const DEFAULT_OBSERVATION_DEADLINE_MS = 30000
+
+export interface ObserveInstallOptions extends OpenSessionOptions {
+  /** Overall cap on the observation. Exceeding it rejects and always closes the session. */
+  deadlineMs?: number
+}
+
 /** Top-level document only. No consent interaction or policy bypass. */
-export async function observeInstall(url: string, options: OpenSessionOptions = {}): Promise<InstallObservation> {
+export async function observeInstall(url: string, options: ObserveInstallOptions = {}): Promise<InstallObservation> {
+  const { deadlineMs = DEFAULT_OBSERVATION_DEADLINE_MS, ...sessionOptions } = options
   let requests: InstallObservation['requests'] = []
   let uncaught: InstallObservation['runtimeErrors'] = []
   const session = await openSession({
-    ...options,
+    ...sessionOptions,
     setupContext: async (context: BrowserContext) => {
-      await options.setupContext?.(context)
+      await sessionOptions.setupContext?.(context)
       // Reset when the shared opener retries in a fresh context.
       requests = []
       uncaught = []
@@ -70,13 +79,18 @@ export async function observeInstall(url: string, options: OpenSessionOptions = 
         inspected = page
         page.on('pageerror', (error: Error) => {
           const scriptUrl = scriptUrlFromStack(error.stack)
-          if (scriptUrl) uncaught.push({ scriptUrl, message: error.message })
+          // Child-frame exceptions surface on the Page too. Only a script the
+          // inspected document itself requested is evidence about this page.
+          if (scriptUrl && requests.some((r) => r.url === scriptUrl)) uncaught.push({ scriptUrl, message: error.message })
         })
       })
       context.on('requestfailed', (r) => { void record(r, true) })
     },
   })
-  const started = Date.now()
+  let deadlineTimer: NodeJS.Timeout | undefined
+  const deadline = new Promise<never>((_, reject) => {
+    deadlineTimer = setTimeout(() => reject(new Error(`Install observation exceeded the ${deadlineMs}ms deadline`)), deadlineMs)
+  })
   // A client-side redirect replaces the document during the wait, and the init
   // script reruns in the new one, so its own guard cannot see the swap. The
   // page's main-frame DOMContentLoaded is one new-document signal per document;
@@ -86,6 +100,16 @@ export async function observeInstall(url: string, options: OpenSessionOptions = 
   const countDocument = () => { documentLoads++ }
   countedPage.on('domcontentloaded', countDocument)
   try {
+    // A page can block the event loop after load, so the DOM read would never
+    // settle. The deadline bounds the whole observation, not just navigation.
+    return await Promise.race([inspect(), deadline])
+  } finally {
+    clearTimeout(deadlineTimer)
+    await session.close()
+  }
+
+  async function inspect(): Promise<InstallObservation> {
+    const started = Date.now()
     const response = await session.goto(url, { waitUntil: 'load', timeout: 20000 })
     if (!response || response.status() >= 400) throw new Error(`Page navigation failed: HTTP ${response?.status() ?? 'unknown'}`)
     // The shared opener retries in a fresh browser: the first load is that page's.
@@ -101,11 +125,17 @@ export async function observeInstall(url: string, options: OpenSessionOptions = 
     const dom = await session.page.evaluate(`(() => {
       const o = window.__webabilityInstallObservation;
       if (!o) throw new Error('Install observation was interrupted by navigation');
-      return { ...o, scriptElements: Array.from(document.querySelectorAll('script[src], script[data-src]')).map(s => ({
-        src: new URL(s.getAttribute('src') || s.getAttribute('data-src'), document.baseURI).href,
-        type: s.getAttribute('type') || '',
-        attributes: Object.fromEntries(['data-cookieconsent', 'data-cookiecategory', 'data-consent'].filter(k => s.hasAttribute(k)).map(k => [k, s.getAttribute(k)]))
-      })) };
+      return { ...o, scriptElements: Array.from(document.querySelectorAll('script[src], script[data-src]')).flatMap(s => {
+        const type = s.getAttribute('type') || '';
+        const attributes = Object.fromEntries(['data-cookieconsent', 'data-cookiecategory', 'data-consent'].filter(k => s.hasAttribute(k)).map(k => [k, s.getAttribute(k)]));
+        // src and data-src are separate candidates (consent managers keep a
+        // placeholder in src). One malformed URL skips that candidate only.
+        return ['src', 'data-src'].flatMap(name => {
+          const raw = s.getAttribute(name);
+          if (!raw) return [];
+          try { return [{ src: new URL(raw, document.baseURI).href, type, attributes }] } catch { return [] }
+        });
+      }) };
     })()`)
     const runtimeErrors = [...dom.runtimeErrors]
     for (const e of uncaught) {
@@ -115,7 +145,5 @@ export async function observeInstall(url: string, options: OpenSessionOptions = 
       runtimeErrors.push(e)
     }
     return { ...dom, runtimeErrors, finalUrl: session.page.url(), requests, observationDurationMs: Date.now() - started }
-  } finally {
-    await session.close()
   }
 }

@@ -114,3 +114,78 @@ test('browser install observation: pushState during the window is not a navigati
 
   assert.equal(result.state, 'not_installed', JSON.stringify(result))
 })
+
+// A page that starts an infinite loop after load blocks the DOM read; the
+// overall deadline must reject and still free the browser.
+test('browser install observation: hung page hits the observation deadline', async () => {
+  const observe = (url: string) => observeInstall(url, { deadlineMs: 3000, setupContext: async (context) => {
+    await context.route('**/*', async (route: Route) => route.fulfill({ status: 200, contentType: 'text/html',
+      body: `<p>No embed</p><script>setTimeout(() => { while (true) {} }, 10)</script>` }))
+  } })
+
+  const started = Date.now()
+  await assert.rejects(checkInstall(SITE, { observe }), /observation exceeded/i)
+  assert.ok(Date.now() - started < 15000, `took ${Date.now() - started}ms`)
+})
+
+// Playwright reports child-frame exceptions on the Page too. An iframe that
+// loads the embed is not the inspected document loading it.
+test('browser install observation: child frame exception is not the inspected document', async () => {
+  const FRAME = 'https://site.example/frame'
+  const observe = (url: string) => observeInstall(url, { setupContext: async (context) => {
+    await context.route('**/*', async (route: Route) => {
+      const requestUrl = route.request().url()
+      if (requestUrl === SCRIPT) {
+        return route.fulfill({ status: 200, contentType: 'application/javascript', body: 'throw new Error("frame failure")' })
+      }
+      if (requestUrl === FRAME) {
+        return route.fulfill({ status: 200, contentType: 'text/html', body: `<script src="${SCRIPT}"></script>` })
+      }
+      return route.fulfill({ status: 200, contentType: 'text/html', body: `<p>No embed</p><iframe src="${FRAME}"></iframe>` })
+    })
+  } })
+
+  const result = await checkInstall(SITE, { observe })
+
+  assert.equal(result.state, 'not_installed', JSON.stringify(result))
+  assert.equal(result.evidence[0].kind, 'absence')
+})
+
+// Real consent managers keep a placeholder in src (about:blank) and hold the
+// real embed in data-src. Both are candidates; the consent tag is blocked.
+test('browser install observation: consent tag with placeholder src keeps data-src', async () => {
+  let requested = false
+  const observe = (url: string) => observeInstall(url, { setupContext: async (context) => {
+    await context.route('**/*', async (route: Route) => {
+      if (route.request().url() === SCRIPT) {
+        requested = true
+        return route.fulfill({ status: 200, contentType: 'application/javascript', body: 'window.widgetLoaded = true' })
+      }
+      return route.fulfill({ status: 200, contentType: 'text/html',
+        body: `<script type="text/plain" data-cookieconsent="marketing" src="about:blank" data-src="${SCRIPT}"></script>` })
+    })
+  } })
+
+  const result = await checkInstall(SITE, { observe })
+
+  assert.equal(requested, false)
+  assert.equal(result.state, 'blocked', JSON.stringify(result))
+  assert.equal(result.evidence[0].kind, 'consent')
+})
+
+// One malformed URL must not abort the whole observation.
+test('browser install observation: malformed data-src does not abort the observation', async () => {
+  const observe = (url: string) => observeInstall(url, { setupContext: async (context) => {
+    await context.route('**/*', async (route: Route) => {
+      if (route.request().url() === SCRIPT) {
+        return route.fulfill({ status: 200, contentType: 'application/javascript', body: 'window.widgetLoaded = true' })
+      }
+      return route.fulfill({ status: 200, contentType: 'text/html',
+        body: `<script src="${SCRIPT}"></script><script data-src="https://"></script>` })
+    })
+  } })
+
+  const result = await checkInstall(SITE, { observe })
+
+  assert.equal(result.state, 'present', JSON.stringify(result))
+})
