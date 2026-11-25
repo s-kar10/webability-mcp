@@ -1,6 +1,6 @@
 import type { BrowserContext, Page, Request } from 'playwright'
 import { openSession, type OpenSessionOptions } from './browser.js'
-import type { InstallObservation } from './installCheck.js'
+import { isInstallScript, type InstallObservation } from './installCheck.js'
 
 // Runs before page scripts. DOM types are deliberately confined to browser code.
 const INIT = `(() => {
@@ -19,16 +19,32 @@ const INIT = `(() => {
  * A V8 stack frame line: `    at fn (URL:line:col)` or `    at URL:line:col`.
  * Scoped to the line so a URL inside the error message never counts as a frame.
  */
-const STACK_FRAME_URL = /^\s+at\s+(?:.*?\()?(https?:\/\/[^\s()]+):\d+:\d+\)?$/
+const STACK_FRAME_URL = /^\s+at\s+(.+):(\d+):(\d+)\)?\s*$/
 
-function scriptUrlFromStack(stack: string | undefined): string | undefined {
+/**
+ * The URL a frame names, or undefined for a frame that names no file.
+ * A parenthesised URL keeps its own parentheses, so the tail is matched
+ * greedily and the column pair taken from the end.
+ */
+export function scriptUrlFromStack(stack: string | undefined): string | undefined {
   for (const line of stack?.split('\n') ?? []) {
-    const found = line.match(STACK_FRAME_URL)?.[1]
+    const prefix = line.match(STACK_FRAME_URL)?.[1]
+    if (!prefix) continue
+    const candidate = /^https?:\/\//.test(prefix) ? prefix : prefix.slice(prefix.lastIndexOf(' (') + 2)
     // A frame URL names a file: a bare host with a port is not one.
-    if (!found || !/^https?:\/\/[^/]+\/./.test(found)) continue
-    try { return new URL(found).href } catch { /* Malformed frame; try the next. */ }
+    if (!/^https?:\/\/[^/]+\/./.test(candidate)) continue
+    try { return new URL(candidate).href } catch { /* Malformed frame; try the next. */ }
   }
   return undefined
+}
+
+/**
+ * URLs a redirecting script is evidence under. A script that executes at a
+ * recognized embed URL is that embed, so the classifier has to see the terminal
+ * URL; a hop to any other host is a different script.
+ */
+export function recordedScriptUrls(requestUrl: string, originalUrl: string): string[] {
+  return requestUrl !== originalUrl && isInstallScript(requestUrl) ? [originalUrl, requestUrl] : [originalUrl]
 }
 
 /** Overridable so tests can prove the deadline without waiting out the default. */
@@ -70,8 +86,12 @@ export async function observeInstall(url: string, options: ObserveInstallOptions
         if (!isInspectedScript(request)) return
         let original = request
         while (original.redirectedFrom()) original = original.redirectedFrom()!
-        chainOriginals.set(request.url(), original.url())
-        if (!request.redirectedFrom()) requests.push({ url: request.url() })
+        // A recognized terminal URL is evidence under itself; a hop to any other
+        // host only says which page request the chain started from.
+        chainOriginals.set(request.url(), isInstallScript(request.url()) ? request.url() : original.url())
+        for (const url of recordedScriptUrls(request.url(), original.url())) {
+          if (!requests.some((r) => r.url === url)) requests.push({ url })
+        }
       })
       const record = async (request: Request, failed: boolean) => {
         try {
@@ -81,9 +101,12 @@ export async function observeInstall(url: string, options: ObserveInstallOptions
           const response = await request.response()
           // Only terminal requests: a 200 response alone is not a completed download.
           if (request.redirectedTo()) return
-          const entry = requests.find((r) => r.url === original.url() && r.status === undefined && !r.failure)
-          if (entry) Object.assign(entry, { ...(response ? { status: response.status() } : {}),
-            ...(failed ? { failure: request.failure()?.errorText ?? 'Script request failed' } : {}) })
+          const outcome = { ...(response ? { status: response.status() } : {}),
+            ...(failed ? { failure: request.failure()?.errorText ?? 'Script request failed' } : {}) }
+          for (const url of recordedScriptUrls(request.url(), original.url())) {
+            const entry = requests.find((r) => r.url === url && r.status === undefined && !r.failure)
+            if (entry) Object.assign(entry, outcome)
+          }
         } catch { /* Context closure cannot supply usable evidence. */ }
       }
       context.on('requestfinished', (r) => { void record(r, false) })

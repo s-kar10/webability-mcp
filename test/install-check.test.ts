@@ -170,3 +170,15 @@ test('check_install: consent tag src with a fragment matches a fragmentless requ
   assert.equal(result.state, 'present', JSON.stringify(result))
   assert.deepEqual(result.evidence, [{ kind: 'script', scriptUrl: SCRIPT, httpStatus: 200 }])
 })
+
+// A first-party loader that redirects to the embed is a present install: the
+// terminal request is the recognized one, not the URL the page asked for.
+test('check_install: redirect from a first-party loader to the embed is present', async () => {
+  const result = await checkInstall(URL, { observe: observer(observation({
+    scriptElements: [{ src: 'https://site.example/embed.js' }],
+    requests: [{ url: 'https://site.example/embed.js', status: 200 }, { url: SCRIPT, status: 200 }],
+  })) })
+
+  assert.equal(result.state, 'present', JSON.stringify(result))
+  assert.deepEqual(result.evidence, [{ kind: 'script', scriptUrl: SCRIPT, httpStatus: 200 }])
+})

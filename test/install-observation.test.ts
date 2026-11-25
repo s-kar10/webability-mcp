@@ -4,7 +4,7 @@ import { createServer, Server } from 'node:http'
 import { AddressInfo } from 'node:net'
 import { test } from 'node:test'
 import { checkInstall } from '../src/installCheck.ts'
-import { observeInstall } from '../src/installObservation.ts'
+import { observeInstall, recordedScriptUrls, scriptUrlFromStack } from '../src/installObservation.ts'
 import type { Route } from 'playwright'
 
 const SITE = 'https://site.example/'
@@ -251,4 +251,40 @@ test('browser install observation: malformed data-src does not abort the observa
   const result = await checkInstall(SITE, { observe })
 
   assert.equal(result.state, 'present', JSON.stringify(result))
+})
+
+// A frame URL can carry parentheses, for example a cache-busting `?v=(2)`.
+// Dropping them loses the only record of a broken cross-origin install.
+test('browser install observation: stack frames keep a URL that contains parentheses', () => {
+  const expected = 'https://enhancer.webability.io/widget.min.js?v=(2)'
+
+  for (const stack of [
+    `Error: widget failure\n    at ${expected}:1:7`,
+    `Error: widget failure\n    at load (${expected}:1:7)`,
+  ]) {
+    assert.equal(scriptUrlFromStack(stack), expected, stack)
+  }
+})
+
+// The line has to be a frame, and the URL has to name a file.
+test('browser install observation: stack parsing ignores a message URL and a bare host', () => {
+  for (const stack of [
+    'Error: failed to load https://enhancer.webability.io/widget.min.js:1:7',
+    '    at https://enhancer.webability.io:1:7',
+  ]) {
+    assert.equal(scriptUrlFromStack(stack), undefined, stack)
+  }
+})
+
+// A first-party loader that redirects to the embed executes at the terminal URL.
+// The terminal request is the evidence, so the classifier can see it.
+test('browser install observation: a redirect to the embed records both URLs', () => {
+  assert.deepEqual(recordedScriptUrls(SCRIPT, 'https://site.example/embed.js'),
+    ['https://site.example/embed.js', SCRIPT])
+})
+
+// A hop to an unrelated host is a different script, not evidence about this one.
+test('browser install observation: a redirect to an unrecognized host records only the original', () => {
+  assert.deepEqual(recordedScriptUrls('http://127.0.0.1:9/widget.min.js', 'http://127.0.0.1:8/widget.min.js'),
+    ['http://127.0.0.1:8/widget.min.js'])
 })
