@@ -41,7 +41,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "@posthog/mcp": "0.17.0",
-    "@webability/core": "1.20.0",
+    "@webability/core": "1.21.0",
     "axe-core": "^4.11.3",
     "jsdom": "^29.0.2",
     "parse5": "^8.0.0",
