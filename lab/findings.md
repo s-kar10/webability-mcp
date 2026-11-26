@@ -60,3 +60,5 @@ See [revalidation and reset notes](cases/revalidation-2026-11-26.md). No detecto
 
 Corrected ten-load run `2026-11-26T23-32-04-348Z-gtm-4e0c76f0`: fresh request median 283.73 ms, maximum 311.27 ms; warm median 103.09 ms, maximum 110.63 ms. All 10 observed; none exceeded 10 seconds. Each sample observed for 30 seconds. These are navigation-to-widget-request timings, not total check_install duration or a guarantee for other GTM configurations.
 Framer unpublished-change rerun also completed: not_installed before publishing, present/HTTP 200 after publishing; see current revalidation notes.
+
+Consent repair network proof completed November 26: after granting Preferences via the real Cookiebot banner, Chrome Network showed HTTP 200 for widget.min.js and its bootstrap. Fresh MCP still reports blocked because its browser has no consent; this is expected. See the manual UI observation in current revalidation notes.

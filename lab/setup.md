@@ -13,3 +13,5 @@ No paid plans or upgrades were purchased. User completed signup, credentials and
 | Riipen | Work log handled separately with the user. | Personal hours and communications remain outside this repository. |
 
 Cookiebot's [official free-subscription instructions](https://support.cookiebot.com/hc/en-us/articles/360003807613-How-can-I-get-a-Free-subscription) say signup begins with a 14-day trial and eligible single small domains can choose Free after it ends. The switch disables Premium features and requires confirmation. This account has one small domain, but the eventual Free transition has not been observed. Keep it without payment details and choose Free when offered; if unavailable, stop rather than upgrade.
+
+Final November 26 deployment: Framer uses real Cookiebot with the widget gated on Preferences. Chrome Network verified HTTP 200 after permission; fresh MCP remains blocked/consent as expected. GTM version 2 remains published but is no longer embedded until the timing bootstrap is restored. Cookiebot dashboard shows seven trial days; only paid subscription options were offered, none selected.

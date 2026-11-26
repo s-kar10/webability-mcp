@@ -60,7 +60,7 @@ Stable broken-state/cause scores: right/unknown. Public absence does not reveal 
 
 ## Remaining limits
 
-Shopify admin/theme editing is accessible, but the public store remains password-gated in existing checks. No gate bypass or paid plan is claimed. Consent-preserving network proof, additional owner-guidance trials, recordings and the six-case demo remain unfinished. Four accounts do not establish four-builder failure coverage.
+Shopify admin/theme editing is accessible, but the public store remains password-gated in existing checks. No gate bypass or paid plan is claimed. Additional owner-guidance trials, recordings and the six-case demo remain unfinished. Four accounts do not establish four-builder failure coverage.
 
 ## GTM timing methodology correction
 
@@ -74,3 +74,22 @@ Corrected ten-load run `2026-11-26T23-32-04-348Z-gtm-4e0c76f0`: fresh request me
 ## Framer unpublished-change rerun
 
 Published a comment-only custom-code entry, then restored the working GTM bootstrap and clicked Save without Publish. The public check returned not_installed (`2026-11-26T23-45-59-354Z-check-d9a0d753`, 2755.66 ms including MCP startup). Clicked Publish → Update; Framer confirmed the website was updated. Repair returned present with HTTP 200 (`2026-11-26T23-46-20-394Z-check-750e276a`, 2594.56 ms including startup). Scores: state right, cause unknown; a public inspection cannot prove unpublished editor state. This is an unpublished-change equivalent, not a Shopify draft theme. Reset by publishing the comment-only entry and saving the bootstrap without publishing again. Final deployment is the working GTM-only bootstrap, version 2.
+
+
+## Consent repair verified in Chrome (November 26, approximately 23:49 UTC)
+
+Published the real Cookiebot + preferences-gated widget snippet shown above. Withdrew existing consent and reloaded. Opened Chrome DevTools Network and filtered `widget.webability.io`: the visible counter was `0 / 458 requests`. Opened cookie settings → Change your consent, enabled only Preferences, and clicked Allow selection. The same Network panel then showed:
+
+```text
+https://widget.webability.io/widget.min.js                         200 OK
+https://widget.webability.io/v/2026-11-24/widget-bootstrap.e4b395fe.widget.min.js  200 OK
+2 / 468 requests
+```
+
+This is a manually transcribed excerpt of browser accessibility output, not an exported HAR or a check_install result. DOM inspection also showed the widget script changed to `text/javascript`. No policy/category change or bypass was used. The real banner granted permission.
+
+A separate fresh MCP invocation `2026-11-26T23-50-01-551Z-check-82feb5c9` still correctly returned blocked/consent (3012.67 ms including startup), since it has no access to Chrome's consent. Do not claim an MCP post-consent success: the URL-only tool starts its own browser context.
+
+Final Framer deployment is now Cookiebot + preferences-gated widget, replacing the earlier GTM-only deployment. GTM version 2 remains published but is not embedded in this final deployment; restore the recorded bootstrap before repeating GTM timing or draft tests.
+
+Cookiebot's Manage subscription UI showed Premium Lite (€7/month), Next and a skip-trial checkbox, with no Free option. Returned to dashboard without continuing. Seven trial days remain as observed November 26; permanent Free status remains unverified.
