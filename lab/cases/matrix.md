@@ -1,6 +1,6 @@
-# Case matrix — November 24
+# Case matrix — November 26
 
-Six failures historically reproduced across WordPress and Framer; six Shopify cells access-blocked and twelve cells planned. Wix has a verified healthy control. Scores reflect manual evidence review, not participant success. Framer draft is an unpublished-change equivalent. Consent repair is a lab rollback.
+Seven distinct failures reproduced across WordPress, Framer and Wix. Six Shopify cells remain access-blocked; eleven cells remain planned. Results span dated runs; see the revalidation notes for current versus historical evidence. Scores are evidence review, not participant success.
 
 | Case | Builder | Failure | Status | State | Explanation |
 |---|---|---|---|---|---|
@@ -11,7 +11,7 @@ Six failures historically reproduced across WordPress and Framer; six Shopify ce
 | SHOP-DRAFT-01 | Shopify | Draft theme or unpublished equivalent | access-blocked | — | — |
 | SHOP-CACHE-01 | Shopify | Old cached page | access-blocked | — | — |
 | WIX-SLOT-01 | Wix | Wrong code slot | planned | — | — |
-| WIX-CSP-01 | Wix | Enforced Content-Security-Policy | planned | — | — |
+| WIX-CSP-01 | Wix | Enforced Content-Security-Policy | reproduced | right | right |
 | WIX-CONSENT-01 | Wix | Real Cookiebot consent block | planned | — | — |
 | WIX-GTM-01 | Wix | Unpublished GTM tag | planned | — | — |
 | WIX-DRAFT-01 | Wix | Draft theme or unpublished equivalent | planned | — | — |
@@ -29,6 +29,5 @@ Six failures historically reproduced across WordPress and Framer; six Shopify ce
 | FRAMER-DRAFT-01 | Framer | Draft theme or unpublished equivalent | reproduced | right | unknown |
 | FRAMER-CACHE-01 | Framer | Old cached page | planned | — | — |
 
-[Full run references and scoring reasons](matrix.json). [Framer ground truth and reset instructions](framer-ground-truth.md).
-
-November 24 revalidation: the three WordPress cases have new control/broken/repair runs on Sid’s latest fixes. Wix and Framer public controls pass, but the three Framer broken-case reruns remain pending dashboard access. Original evidence is retained.
+[Run references](matrix.json). [November 26 revalidation and reset steps](revalidation-2026-11-26.md).
+Framer consent and GTM were repeated. GTM rerun models a saved tag absent from the live version, not a second never-published tag. Draft-change rerun also completed: saved-but-unpublished code returned not_installed, publishing restored present/HTTP 200.

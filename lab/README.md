@@ -9,6 +9,7 @@ It does not change the detection implementation. Latest revalidation incorporate
 - [Failure/scoring protocol](cases/protocol.md)
 - [Technical owner-wording drafts](owner-guidance.md)
 - [Account access checklist](setup.md)
+- [November 26 real-builder revalidation and reset steps](cases/revalidation-2026-11-26.md)
 - Actual hours: user will maintain the Riipen work log
 - Personal handoffs, participant records, recording scripts and update drafts are delivered privately outside Git.
 - [Local WordPress runbook](wordpress/README.md)
@@ -33,6 +34,10 @@ Baseline proof is explicitly repository/unit/browser-fixture evidence, not real 
 
 ## Implementation boundary
 
-The GTM runner completed ten real Framer/GTM loads on November 19. Its warm group reuses a primed browser context; it does not claim every response is a cache hit. See findings.md and the evidence manifest.
+The GTM runner completed ten real Framer/GTM loads on November 19. The November 26 runner correction uses a new page per warm load in a shared primed browser context, preventing prior-page event overlap. It does not claim every response is a cache hit. See findings.md and the evidence manifest.
 
 [Framer reset instructions](cases/framer-ground-truth.md) cover the three additional cases.
+
+
+Corrected ten-load run `2026-11-26T23-32-04-348Z-gtm-4e0c76f0`: fresh request median 283.73 ms, maximum 311.27 ms; warm median 103.09 ms, maximum 110.63 ms. All 10 observed; none exceeded 10 seconds. Each sample observed for 30 seconds. These are navigation-to-widget-request timings, not total check_install duration or a guarantee for other GTM configurations.
+Framer unpublished-change rerun also completed: not_installed before publishing, present/HTTP 200 after publishing; see current revalidation notes.

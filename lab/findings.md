@@ -27,7 +27,7 @@ Accounts now exist; this supersedes the earlier pending-account note above. See 
 
 Six broken cases across real WordPress and Framer: **6 right / 0 wrong / 0 unknown** for observed installation state; **2 right / 0 wrong / 4 unknown** for explanatory cause. The latter scores assess whether the evidence supports the cause, not whether a non-technical owner can fix it. Wrong slot, stale cache, unpublished GTM and unpublished Framer changes cannot be uniquely explained from public absence. The consent case's repair run is a deliberate-config rollback; allowed-consent release was inspected in the browser DOM only.
 
-WordPress owner controls were exercised by the agent for all three repairs, each followed by present. No participant outcomes exist. Two friends are available; attempts and revised wording remain pending.
+WordPress owner controls were exercised by the agent for all three repairs, each followed by present. At this stage no participant outcomes had been reported. Later, the user reported two friends independently completed the WordPress wrong-slot repair in about 2–3 minutes each, without hints. Other participant cases and revised-wording retests remain pending.
 
 ### GTM timing, November 19
 
@@ -48,3 +48,15 @@ On this baseline, WordPress wrong-slot/CSP/cache returned not_installed/blocked/
 The Shopify check again ended at /password; storefront state remains unknown. Chrome dashboard tools were unavailable in the execution session despite user authorization. Consequently no Wix broken configuration, Framer broken-state rerun, Cookiebot subscription change, consent-preserving network proof or final-configuration GTM timing is claimed. November 19–20 results remain historical, not current-baseline revalidation.
 
 See [revalidation index](cases/revalidation-2026-11-24.json) for run IDs and pending items. Technical evidence remains in the repository; personal participant records and communication/recording drafts are now delivered outside Git. Recordings and the full four-builder milestone remain incomplete.
+
+## November 25–26 continuation
+
+Wix now has a real enforced-meta-CSP failure and verified narrow-origin repair: present → blocked → present. The blocked response includes the actual policy and directive. This brings historical distinct broken cases to seven across three builders, with state scores 7 right / 0 wrong / 0 unknown and cause scores 3 right / 0 wrong / 4 unknown. These aggregate scores cover stable cases across different dated baselines; they exclude deployment transitions.
+
+Framer consent returned blocked on the current baseline. Chrome confirmed the real Cookiebot Preferences choice changes the tag to executable JavaScript, but consent-preserving HTTP-success evidence is still outstanding. The subsequent GTM-only deployment returned present, not_installed under empty live version 1, and present after restoring version 2. An immediate check during the transition still saw present and is retained without calling it a detector miss. This is a live-version rollback equivalent, not another never-published tag.
+
+See [revalidation and reset notes](cases/revalidation-2026-11-26.md). No detector code changed. Participant trials and recordings remain separate unfinished deliverables.
+
+
+Corrected ten-load run `2026-11-26T23-32-04-348Z-gtm-4e0c76f0`: fresh request median 283.73 ms, maximum 311.27 ms; warm median 103.09 ms, maximum 110.63 ms. All 10 observed; none exceeded 10 seconds. Each sample observed for 30 seconds. These are navigation-to-widget-request timings, not total check_install duration or a guarantee for other GTM configurations.
+Framer unpublished-change rerun also completed: not_installed before publishing, present/HTTP 200 after publishing; see current revalidation notes.

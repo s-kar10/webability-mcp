@@ -37,7 +37,7 @@ The banner displayed Preferences off. Fresh tool check returned blocked with `ki
 
 The preferences category is a deliberate lab assignment, not a claim about the widget's appropriate legal category. Consent withholding can be intended behavior. Owner guidance must ask the owner to verify their intended policy, not universally disable consent.
 
-Control rollback: retained Cookiebot and replaced the deliberately gated widget tag with the original direct embed. A fresh-context tool call returned present (`ddc22235`). This is a rollback of the test configuration, not proof that a consent-preserving repair was validated by the tool. Current Framer deployment is Cookiebot plus direct widget; GTM remains published but is no longer embedded on this page. For a future consent test, restore the gated snippet and use a fresh browser consent state. Do not call a previously consented browser a fresh visitor.
+Control rollback: retained Cookiebot and replaced the deliberately gated widget tag with the original direct embed. A fresh-context tool call returned present (`ddc22235`). This is a rollback of the test configuration, not proof that a consent-preserving repair was validated by the tool. At the end of November 20, Framer deployed Cookiebot plus the direct widget. This is superseded by the November 26 GTM-only deployment; see [current revalidation notes](revalidation-2026-11-26.md). For a future consent test, restore the gated snippet and use a fresh browser consent state. Do not call a previously consented browser a fresh visitor.
 
 The first November 20 publish attempt showed a network error. Reloading verified saved code, and a second Publish → Update succeeded. No failed publication was scored as a reproduced consent case.
 

@@ -1,0 +1,51 @@
+{
+  "run_id": "2026-11-26T23-26-21-327Z-gtm-f418d0dd",
+  "timestamp": "2026-11-26T23:26:21.330Z",
+  "git_commit": "3ed45a4c2153f302dd9be40dc827c810f93b7be5",
+  "tracked_dirty": false,
+  "runner_sha256": "c2a45a3d34328cde650afcdd0f6e8df1a30e26fb538c9129a53d5e6d1fc65c63",
+  "environment": {
+    "node": "v25.9.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "case_id": "FRAMER-GTM-20261126",
+  "builder": "Framer",
+  "tested_url": "https://jubilant-organization-752879.framer.app/",
+  "container_id": "GTM-PJH29G6Z",
+  "published_version": "2",
+  "trigger": "All Pages / Page View",
+  "consent_state": "No CMP in this deployment",
+  "command": [
+    "node",
+    "lab/scripts/gtm-timing.mjs",
+    "FRAMER-GTM-20261126",
+    "Framer",
+    "https://jubilant-organization-752879.framer.app/",
+    "GTM-PJH29G6Z",
+    "2",
+    "All Pages / Page View",
+    "No CMP in this deployment"
+  ],
+  "observation_window_ms": 30000,
+  "exit_code": 0,
+  "summary": {
+    "fresh": {
+      "attempts": 5,
+      "observed": 5,
+      "unknown": 0,
+      "median_ms": 324.45412500000384,
+      "maximum_ms": 551.156332999999,
+      "observed_over_10s": 0
+    },
+    "warm": {
+      "attempts": 5,
+      "observed": 5,
+      "unknown": 0,
+      "median_ms": 65.29616699999315,
+      "maximum_ms": 71.67324999999255,
+      "observed_over_10s": 0
+    }
+  },
+  "note": "Request/finish times are runner monotonic milliseconds since navigation command; insertion times use page performance time origin. No consent clicks performed. Pair with check.mjs runs for tool duration."
+}

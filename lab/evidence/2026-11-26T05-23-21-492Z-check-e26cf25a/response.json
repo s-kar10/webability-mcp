@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "```json\n{\n  \"url\": \"https://jubilant-organization-752879.framer.app/\",\n  \"finalUrl\": \"https://jubilant-organization-752879.framer.app/\",\n  \"state\": \"blocked\",\n  \"evidence\": [\n    {\n      \"kind\": \"consent\",\n      \"scriptUrl\": \"https://widget.webability.io/widget.min.js\",\n      \"type\": \"text/plain\",\n      \"attributes\": {\n        \"data-cookieconsent\": \"preferences\"\n      }\n    }\n  ]\n}\n```"
+    }
+  ],
+  "structuredContent": {
+    "url": "https://jubilant-organization-752879.framer.app/",
+    "finalUrl": "https://jubilant-organization-752879.framer.app/",
+    "state": "blocked",
+    "evidence": [
+      {
+        "kind": "consent",
+        "scriptUrl": "https://widget.webability.io/widget.min.js",
+        "type": "text/plain",
+        "attributes": {
+          "data-cookieconsent": "preferences"
+        }
+      }
+    ]
+  }
+}

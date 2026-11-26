@@ -45,7 +45,12 @@ try{
  try{
   const page=await c.newPage();await page.goto(url,{waitUntil:'load',timeout:30000})
   await e.save('warm-prime.json',{url,finished_at:new Date().toISOString(),note:'Unscored priming navigation; no consent interactions performed'})
-  for(let i=6;i<=10;i++)await sample(page,'warm',i)
+  await page.close()
+  // Reuse cache/cookies, but not a page that can still emit prior-navigation events.
+  for(let i=6;i<=10;i++){
+   const warmPage=await c.newPage()
+   try{await sample(warmPage,'warm',i)}finally{await warmPage.close()}
+  }
  }finally{await c.close()}
 }catch(error){
  await e.save('error.txt',String(error));process.exitCode=1

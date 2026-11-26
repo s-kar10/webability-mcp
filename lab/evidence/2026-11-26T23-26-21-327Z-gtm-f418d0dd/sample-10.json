@@ -1,0 +1,217 @@
+{
+  "index": 10,
+  "cache": "warm",
+  "started_at": "2026-11-26T23:30:52.583Z",
+  "finished_at": "2026-11-26T23:31:22.591Z",
+  "duration_ms": 30007.567166999972,
+  "error": null,
+  "gtm_request_ms": 48.897999999986496,
+  "widget_request_ms": 71.67324999999255,
+  "widget_completed_ms": 71.7669589999714,
+  "widget_insertion_ms": 69.19999998807907,
+  "events": [
+    {
+      "event": "failed",
+      "url": "https://events.framer.com/anonymous",
+      "ms": 43.494499999971595,
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "event": "failed",
+      "url": "https://events.framer.com/anonymous",
+      "ms": 44.04249999998137,
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "event": "request",
+      "url": "https://events.framer.com/script?v=2",
+      "ms": 45.35866699996404
+    },
+    {
+      "event": "finished",
+      "url": "https://events.framer.com/script?v=2",
+      "original_url": "https://events.framer.com/script?v=2",
+      "ms": 45.403541999985464
+    },
+    {
+      "event": "request",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/rolldown-runtime.Bi-D_2cA.mjs",
+      "ms": 45.417459000018425
+    },
+    {
+      "event": "finished",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/rolldown-runtime.Bi-D_2cA.mjs",
+      "original_url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/rolldown-runtime.Bi-D_2cA.mjs",
+      "ms": 46.39170899998862
+    },
+    {
+      "event": "request",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/react.Dxe_2v0O.mjs",
+      "ms": 46.41645899997093
+    },
+    {
+      "event": "finished",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/react.Dxe_2v0O.mjs",
+      "original_url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/react.Dxe_2v0O.mjs",
+      "ms": 46.460749999969266
+    },
+    {
+      "event": "request",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/framer.C_lHnsjN.mjs",
+      "ms": 46.476374999969266
+    },
+    {
+      "event": "finished",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/framer.C_lHnsjN.mjs",
+      "original_url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/framer.C_lHnsjN.mjs",
+      "ms": 46.506999999983236
+    },
+    {
+      "event": "request",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/motion.DYjC_Hbv.mjs",
+      "ms": 46.51979200000642
+    },
+    {
+      "event": "finished",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/motion.DYjC_Hbv.mjs",
+      "original_url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/motion.DYjC_Hbv.mjs",
+      "ms": 46.55004200001713
+    },
+    {
+      "event": "request",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/njw4cXL_c4G1Dc3jx4-ipHrYnwlwm1AHb69j1dGl8pU.CpzP4Rk6.mjs",
+      "ms": 46.56370900000911
+    },
+    {
+      "event": "finished",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/njw4cXL_c4G1Dc3jx4-ipHrYnwlwm1AHb69j1dGl8pU.CpzP4Rk6.mjs",
+      "original_url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/njw4cXL_c4G1Dc3jx4-ipHrYnwlwm1AHb69j1dGl8pU.CpzP4Rk6.mjs",
+      "ms": 46.60241699998733
+    },
+    {
+      "event": "request",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/shared-lib.BROEsLNw.mjs",
+      "ms": 46.615541999985
+    },
+    {
+      "event": "finished",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/shared-lib.BROEsLNw.mjs",
+      "original_url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/shared-lib.BROEsLNw.mjs",
+      "ms": 46.64566699997522
+    },
+    {
+      "event": "request",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/script_main.6N5gMR_K.mjs",
+      "ms": 46.68016699998407
+    },
+    {
+      "event": "finished",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/script_main.6N5gMR_K.mjs",
+      "original_url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/script_main.6N5gMR_K.mjs",
+      "ms": 46.711249999993015
+    },
+    {
+      "event": "request",
+      "url": "https://framer.com/edit/init.mjs",
+      "ms": 48.56491700001061
+    },
+    {
+      "event": "finished",
+      "url": "https://framer.com/edit/init.mjs",
+      "original_url": "https://framer.com/edit/init.mjs",
+      "ms": 48.87454200000502
+    },
+    {
+      "event": "request",
+      "url": "https://www.googletagmanager.com/gtm.js?id=GTM-PJH29G6Z",
+      "ms": 48.897999999986496
+    },
+    {
+      "event": "finished",
+      "url": "https://www.googletagmanager.com/gtm.js?id=GTM-PJH29G6Z",
+      "original_url": "https://www.googletagmanager.com/gtm.js?id=GTM-PJH29G6Z",
+      "ms": 48.930125000013504
+    },
+    {
+      "event": "request",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/PX9hIOIVM.XEL1yEVF.mjs",
+      "ms": 53.65566699998453
+    },
+    {
+      "event": "finished",
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/PX9hIOIVM.XEL1yEVF.mjs",
+      "original_url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/PX9hIOIVM.XEL1yEVF.mjs",
+      "ms": 53.82687499996973
+    },
+    {
+      "event": "request",
+      "url": "https://app.framerstatic.com/chunk-RYY4FSEL.mjs",
+      "ms": 59.44012499996461
+    },
+    {
+      "event": "finished",
+      "url": "https://app.framerstatic.com/chunk-RYY4FSEL.mjs",
+      "original_url": "https://app.framerstatic.com/chunk-RYY4FSEL.mjs",
+      "ms": 59.60208400001284
+    },
+    {
+      "event": "request",
+      "url": "https://app.framerstatic.com/EditButton-OB4AEFGD.mjs",
+      "ms": 63.56049999996321
+    },
+    {
+      "event": "finished",
+      "url": "https://app.framerstatic.com/EditButton-OB4AEFGD.mjs",
+      "original_url": "https://app.framerstatic.com/EditButton-OB4AEFGD.mjs",
+      "ms": 63.67179200000828
+    },
+    {
+      "event": "request",
+      "url": "https://widget.webability.io/widget.min.js",
+      "ms": 71.67324999999255
+    },
+    {
+      "event": "finished",
+      "url": "https://widget.webability.io/widget.min.js",
+      "original_url": "https://widget.webability.io/widget.min.js",
+      "ms": 71.7669589999714
+    },
+    {
+      "event": "request",
+      "url": "https://widget.webability.io/v/2026-11-24/widget-bootstrap.e4b395fe.widget.min.js",
+      "ms": 72.85962499998277
+    },
+    {
+      "event": "finished",
+      "url": "https://widget.webability.io/v/2026-11-24/widget-bootstrap.e4b395fe.widget.min.js",
+      "original_url": "https://widget.webability.io/v/2026-11-24/widget-bootstrap.e4b395fe.widget.min.js",
+      "ms": 72.94783399999142
+    }
+  ],
+  "insertions": [
+    {
+      "url": "https://www.googletagmanager.com/gtm.js?id=GTM-PJH29G6Z",
+      "ms": 44.099999994039536
+    },
+    {
+      "url": "https://events.framer.com/script?v=2",
+      "ms": 45.5
+    },
+    {
+      "url": "https://events.framer.com/script?v=2",
+      "ms": 45.5
+    },
+    {
+      "url": "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/script_main.6N5gMR_K.mjs",
+      "ms": 46.099999994039536
+    },
+    {
+      "url": "https://widget.webability.io/widget.min.js",
+      "ms": 69.19999998807907
+    },
+    {
+      "url": "https://widget.webability.io/v/2026-11-24/widget-bootstrap.e4b395fe.widget.min.js",
+      "ms": 70.40000000596046
+    }
+  ]
+}

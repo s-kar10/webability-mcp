@@ -124,20 +124,20 @@
     "case_id": "WIX-CSP-01",
     "builder": "Wix",
     "failure": "Enforced Content-Security-Policy",
-    "status": "planned",
-    "reason": "Free published site and site-wide embed verified present; this failure is not reproduced.",
+    "status": "reproduced",
+    "reason": "Actual enforced meta CSP in Wix Head custom code; exact widget origin added for repair.",
     "tested_url": "https://sadiqkarjikar10.wixsite.com/sadiq-install-lab",
-    "control_run": "2026-11-19T22-40-23-233Z-check-1c7677c2",
-    "broken_run": null,
-    "repair_run": null,
-    "ground_truth_file": null,
-    "state_score": null,
-    "explanation_score": null,
-    "score_reason": null,
-    "wording_version": "v1-draft",
+    "control_run": "2026-11-25T21-31-12-031Z-check-101f1f12",
+    "broken_run": "2026-11-26T05-25-15-220Z-check-9a8e47bf",
+    "repair_run": "2026-11-26T05-25-42-661Z-check-71a1bc15",
+    "ground_truth_file": "cases/revalidation-2026-11-26.md",
+    "state_score": "right",
+    "explanation_score": "right",
+    "score_reason": "Blocked evidence names the actual script, script-src-elem directive and enforced policy. Repaired run reports HTTP 200.",
+    "wording_version": "v2-wix-csp-draft",
     "recording": null,
-    "latest_control_run": "2026-11-25T03-10-52-173Z-check-e89105e4",
-    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
+    "latest_control_run": "2026-11-25T21-31-12-031Z-check-101f1f12",
+    "revalidation_status": "November 26: enforced meta CSP and narrow-origin repair verified."
   },
   {
     "case_id": "WIX-CONSENT-01",
@@ -417,8 +417,9 @@
     "wording_version": "v1-draft",
     "recording": null,
     "repair_kind": "rollback of deliberately added preferences gating; Cookiebot retained",
-    "latest_control_run": "2026-11-25T03-10-53-447Z-check-041b132e",
-    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
+    "latest_control_run": "2026-11-25T21-32-18-614Z-check-a6b823d0",
+    "revalidation_status": "November 26 blocked result verified; real Preferences choice releases DOM tag. Consent-preserving HTTP-success capture pending. Current deployment is GTM-only.",
+    "latest_broken_run": "2026-11-26T05-23-21-492Z-check-e26cf25a"
   },
   {
     "case_id": "FRAMER-GTM-01",
@@ -439,8 +440,10 @@
     "intermediate_repair_runs": [
       "2026-11-19T22-38-32-230Z-check-9084a123"
     ],
-    "latest_control_run": "2026-11-25T03-10-53-447Z-check-041b132e",
-    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
+    "latest_control_run": "2026-11-26T05-26-42-990Z-check-9cf5ba08",
+    "revalidation_status": "November 26 live-version rollback equivalent verified; historical original never-published-tag run retained.",
+    "latest_broken_run": "2026-11-26T05-27-48-351Z-check-6a243be3",
+    "latest_repair_run": "2026-11-26T05-28-23-843Z-check-f43eeaae"
   },
   {
     "case_id": "FRAMER-DRAFT-01",
@@ -459,7 +462,16 @@
     "wording_version": "v1-draft",
     "recording": null,
     "latest_control_run": "2026-11-25T03-10-53-447Z-check-041b132e",
-    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access."
+    "revalidation_status": "Current public control verified; individual failure configuration awaits browser dashboard access.",
+    "latest_revalidation": {
+      "date": "2026-11-26",
+      "broken_run": "2026-11-26T23-45-59-354Z-check-d9a0d753",
+      "repair_run": "2026-11-26T23-46-20-394Z-check-750e276a",
+      "ground_truth_file": "cases/revalidation-2026-11-26.md",
+      "state_score": "right",
+      "explanation_score": "unknown",
+      "reason": "Saved GTM embed remained unpublished; public absence cannot reveal editor state. Publishing restored HTTP 200."
+    }
   },
   {
     "case_id": "FRAMER-CACHE-01",

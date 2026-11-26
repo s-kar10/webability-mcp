@@ -1,0 +1,21 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "```json\n{\n  \"url\": \"https://sadiqkarjikar10.wixsite.com/sadiq-install-lab\",\n  \"finalUrl\": \"https://sadiqkarjikar10.wixsite.com/sadiq-install-lab\",\n  \"state\": \"blocked\",\n  \"evidence\": [\n    {\n      \"kind\": \"security_policy\",\n      \"blockedUrl\": \"https://widget.webability.io/widget.min.js\",\n      \"directive\": \"script-src-elem\",\n      \"policy\": \"script-src 'self'\"\n    }\n  ]\n}\n```"
+    }
+  ],
+  "structuredContent": {
+    "url": "https://sadiqkarjikar10.wixsite.com/sadiq-install-lab",
+    "finalUrl": "https://sadiqkarjikar10.wixsite.com/sadiq-install-lab",
+    "state": "blocked",
+    "evidence": [
+      {
+        "kind": "security_policy",
+        "blockedUrl": "https://widget.webability.io/widget.min.js",
+        "directive": "script-src-elem",
+        "policy": "script-src 'self'"
+      }
+    ]
+  }
+}

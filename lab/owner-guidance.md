@@ -23,3 +23,11 @@ A person unable to locate a setting is a wording failure to record, not a reason
 - Framer unpublished change: “The script was not observed on the published page.” Next step: “In Framer, check Settings → Code for the saved install code, then use Publish → Update to put it on the live site.” This path was exercised, but the wording remains untested by participants.
 - Framer/GTM: “The script was not observed on the live page; an unpublished tag is one possible cause.” Next step: “In Tag Manager, check that the live version contains WebAbility install lab; if your intended tag is only in the workspace, use Submit → Publish, then check the page again.”
 - Framer/Cookiebot: “The script is waiting for Preferences consent on this page.” Next step: “On the site’s cookie banner, enable Preferences and choose Allow selection to test the permitted state; verify that this category matches your intended policy.” Do not present intended consent withholding as an installation mistake.
+
+## Wix CSP — v2 candidate, November 26
+
+Sentence: “Your website's security policy blocked the WebAbility script.”
+
+Next step for this specific lab: “In Wix, open Settings → Custom Code, use the menu beside WebAbility lab baseline → Edit Settings, and add `https://widget.webability.io` after `'self'` in the `script-src` line; click Apply, then check the page again.”
+
+This path and narrow policy repair were exercised on the real free account. It is untested wording, not a claim that a non-technical owner can safely edit an arbitrary production policy. Do not remove the policy or broaden it to a wildcard.
