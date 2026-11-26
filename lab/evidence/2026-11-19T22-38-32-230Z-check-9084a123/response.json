@@ -1,0 +1,24 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "```json\n{\n  \"url\": \"https://jubilant-organization-752879.framer.app/\",\n  \"finalUrl\": \"https://jubilant-organization-752879.framer.app/\",\n  \"state\": \"not_installed\",\n  \"evidence\": [\n    {\n      \"kind\": \"absence\",\n      \"inspectedScriptUrls\": [\n        \"https://www.googletagmanager.com/gtm.js?id=GTM-PJH29G6Z\",\n        \"https://events.framer.com/script?v=2\",\n        \"https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/script_main.Cp9Us-Of.mjs\"\n      ],\n      \"observationDurationMs\": 1352\n    }\n  ]\n}\n```"
+    }
+  ],
+  "structuredContent": {
+    "url": "https://jubilant-organization-752879.framer.app/",
+    "finalUrl": "https://jubilant-organization-752879.framer.app/",
+    "state": "not_installed",
+    "evidence": [
+      {
+        "kind": "absence",
+        "inspectedScriptUrls": [
+          "https://www.googletagmanager.com/gtm.js?id=GTM-PJH29G6Z",
+          "https://events.framer.com/script?v=2",
+          "https://framerusercontent.com/sites/5JCqhtxnsXggpIMI27GxIj/script_main.Cp9Us-Of.mjs"
+        ],
+        "observationDurationMs": 1352
+      }
+    ]
+  }
+}

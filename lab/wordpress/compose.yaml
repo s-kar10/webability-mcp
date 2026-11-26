@@ -1,0 +1,34 @@
+name: webability-install-lab
+services:
+  db:
+    image: mariadb:11.4
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: ${DB_PASSWORD:?Run setup first}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Run setup first}
+    volumes:
+      - database:/var/lib/mysql
+  wordpress:
+    image: wordpress:6-php8.3-apache
+    ports:
+      - '127.0.0.1:8099:80'
+    environment: &wp_env
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: wordpress
+    volumes: &wp_volumes
+      - site:/var/www/html
+      - ./lab-plugin.php:/var/www/html/wp-content/mu-plugins/install-lab.php:ro
+    depends_on:
+      - db
+  cli:
+    image: wordpress:cli-php8.3
+    user: '33:33'
+    environment: *wp_env
+    volumes: *wp_volumes
+    profiles: ['tools']
+volumes:
+  database:
+  site:

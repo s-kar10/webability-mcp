@@ -1,0 +1,23 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "```json\n{\n  \"url\": \"http://127.0.0.1:8099/\",\n  \"finalUrl\": \"http://127.0.0.1:8099/\",\n  \"state\": \"not_installed\",\n  \"evidence\": [\n    {\n      \"kind\": \"absence\",\n      \"inspectedScriptUrls\": [\n        \"http://127.0.0.1:8099/wp-includes/js/wp-emoji-release.min.js?ver=7.1.5\",\n        \"http://127.0.0.1:8099/wp-includes/js/dist/script-modules/block-library/navigation/view.min.js?ver=1bf28ded04f9f188bdcb\"\n      ],\n      \"observationDurationMs\": 1089\n    }\n  ]\n}\n```"
+    }
+  ],
+  "structuredContent": {
+    "url": "http://127.0.0.1:8099/",
+    "finalUrl": "http://127.0.0.1:8099/",
+    "state": "not_installed",
+    "evidence": [
+      {
+        "kind": "absence",
+        "inspectedScriptUrls": [
+          "http://127.0.0.1:8099/wp-includes/js/wp-emoji-release.min.js?ver=7.1.5",
+          "http://127.0.0.1:8099/wp-includes/js/dist/script-modules/block-library/navigation/view.min.js?ver=1bf28ded04f9f188bdcb"
+        ],
+        "observationDurationMs": 1089
+      }
+    ]
+  }
+}

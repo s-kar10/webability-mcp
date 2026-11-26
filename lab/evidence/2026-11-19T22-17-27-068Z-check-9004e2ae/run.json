@@ -1,0 +1,30 @@
+{
+  "run_id": "2026-11-19T22-17-27-068Z-check-9004e2ae",
+  "timestamp": "2026-11-19T22:17:27.069Z",
+  "git_commit": "873b6f76e46f781393539656a0e0dd5fc2fa8700",
+  "tracked_dirty": true,
+  "runner_sha256": "87cfe50d5d01cf8a17814ea2a6b1509103f623c588066547d4334e873e5e2281",
+  "environment": {
+    "node": "v25.9.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "case_id": "WP-SLOT-01",
+  "builder": "WordPress",
+  "tested_url": "http://127.0.0.1:8099/",
+  "command": [
+    "node",
+    "lab/scripts/check.mjs",
+    "WP-SLOT-01",
+    "WordPress",
+    "http://127.0.0.1:8099/"
+  ],
+  "started_at": "2026-11-19T22:17:27.087Z",
+  "call_started_at": "2026-11-19T22:17:27.551Z",
+  "call_duration_ms": 1400.9242920000002,
+  "duration_ms": 1864.925291,
+  "finished_at": "2026-11-19T22:17:28.952Z",
+  "exit_code": 0,
+  "response_file": "response.json",
+  "stderr_file": "stderr.txt"
+}

@@ -1,0 +1,29 @@
+{
+  "run_id": "2026-11-13T21-25-38-341Z-check-97671f6e",
+  "timestamp": "2026-11-13T21:25:38.343Z",
+  "git_commit": "991c6edfee443599d0803dd69ce6ffa82aeb2d06",
+  "tracked_dirty": false,
+  "environment": {
+    "node": "v25.9.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "case_id": "WP-CONTROL-01",
+  "builder": "WordPress",
+  "tested_url": "http://127.0.0.1:8099/",
+  "command": [
+    "node",
+    "lab/scripts/check.mjs",
+    "WP-CONTROL-01",
+    "WordPress",
+    "http://127.0.0.1:8099/"
+  ],
+  "started_at": "2026-11-13T21:25:38.359Z",
+  "call_started_at": "2026-11-13T21:25:38.857Z",
+  "call_duration_ms": 1969.5162090000001,
+  "duration_ms": 2467.0658329999997,
+  "finished_at": "2026-11-13T21:25:40.827Z",
+  "exit_code": 0,
+  "response_file": "response.json",
+  "stderr_file": "stderr.txt"
+}

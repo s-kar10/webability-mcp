@@ -1,0 +1,30 @@
+{
+  "run_id": "2026-11-26T05-28-23-843Z-check-f43eeaae",
+  "timestamp": "2026-11-26T05:28:23.849Z",
+  "git_commit": "3ed45a4c2153f302dd9be40dc827c810f93b7be5",
+  "tracked_dirty": false,
+  "runner_sha256": "87cfe50d5d01cf8a17814ea2a6b1509103f623c588066547d4334e873e5e2281",
+  "environment": {
+    "node": "v25.9.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "case_id": "FRAMER-GTM-01-REPAIRED-20261126",
+  "builder": "Framer",
+  "tested_url": "https://jubilant-organization-752879.framer.app/",
+  "command": [
+    "node",
+    "lab/scripts/check.mjs",
+    "FRAMER-GTM-01-REPAIRED-20261126",
+    "Framer",
+    "https://jubilant-organization-752879.framer.app/"
+  ],
+  "started_at": "2026-11-26T05:28:23.885Z",
+  "call_started_at": "2026-11-26T05:28:24.429Z",
+  "call_duration_ms": 2319.251916,
+  "duration_ms": 2862.091958,
+  "finished_at": "2026-11-26T05:28:26.748Z",
+  "exit_code": 0,
+  "response_file": "response.json",
+  "stderr_file": "stderr.txt"
+}

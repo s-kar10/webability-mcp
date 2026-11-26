@@ -1,0 +1,954 @@
+{
+  "tools": [
+    {
+      "name": "check_install",
+      "title": "Check the WebAbility installation",
+      "description": "Check whether the WebAbility embed script is present, blocked by an enforced security policy or consent manager, failing with an error, or not installed, with evidence. This is not an accessibility-conformance check. Local HTTP(S) URLs are accepted locally; hosted calls retain the standard private-address restrictions.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Website URL to inspect (HTTP or HTTPS; bare domains default to HTTPS)."
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "annotations": {
+        "title": "Check the WebAbility installation",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "scan_page",
+      "title": "Scan a page for accessibility issues",
+      "description": "Scan a web page for WCAG accessibility issues. Works on any URL — deployed sites, localhost, staging. Returns `issues` (violations the scanner stands behind; findings the engines cannot decide are settled by the AI judge — a violation with a fix, or a pass recorded in `judged[]` with its reason — and anything unsettled is dropped, never listed for review) and a `summary`. On React ≤18 / Vue dev builds each issue carries `source` ({file, line, column, component}) read from the live component tree. Every issue carries a structured `fix.op` (add-attribute | set-attribute | remove-attribute | add-element | remove-element | add-text-content | suggest) with `fix.attribute` / `fix.value` when known, and a `fixability` tier (mechanical = apply as given; contextual = op known, value needs judgment; visual = needs rendered output, propose only).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL to scan (e.g. https://webability.io or http://localhost:3000)"
+          },
+          "rootSelector": {
+            "type": "string",
+            "description": "CSS selector to limit scan scope (optional)"
+          },
+          "viewport": {
+            "type": "string",
+            "enum": [
+              "desktop",
+              "tablet",
+              "mobile"
+            ],
+            "description": "Viewport size (default: desktop)"
+          },
+          "sourceRoot": {
+            "type": "string",
+            "description": "Local project root (local installs only). Issues without a framework `source` pointer get `sourceCandidates[]` — files whose contents match the selector's id/class/attribute tokens."
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "A",
+              "AA",
+              "AAA"
+            ],
+            "description": "Highest WCAG conformance level to report. Default \"AA\" — Level AAA criteria are not reported. Pass \"AAA\" to include them (naming one AAA criterion in `wcag`, e.g. \"3.2.5\", also includes it)."
+          },
+          "minImpact": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "serious",
+              "moderate",
+              "minor"
+            ],
+            "description": "Only findings at this severity or above (critical > serious > moderate > minor)"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Only these rule ids (WebAbility type such as \"missing_alt\" or axe rule id such as \"image-alt\"). See get_rules."
+          },
+          "wcag": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Only these WCAG criteria. A prefix selects the whole guideline (\"1.4\") or principle (\"2\")."
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "json",
+              "compact"
+            ],
+            "description": "\"compact\" prints one line per element with rule metadata once. \"json\" returns every field (html, fix values, source). Default: JSON when it fits inline (under ~24k chars), otherwise compact plus a JSON summary of every count."
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "annotations": {
+        "title": "Scan a page for accessibility issues",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "_meta": {
+        "ui": {
+          "resourceUri": "ui://webability/result-card.html"
+        }
+      }
+    },
+    {
+      "name": "verify_fix",
+      "title": "Verify an accessibility fix",
+      "description": "Re-scan a specific element after applying an accessibility fix and confirm the violation is gone. After you edit the code and serve it (deployed, staging, or http://localhost:3000), call this with the URL and the selector you fixed to get a machine-checked verified: true|false (DOM engines only — visual_audit findings are out of scope). Pass the WCAG criterion (e.g. \"1.1.1\") or axe rule id (e.g. \"color-contrast\") to check just that criterion; omit it to require the element be clean of ALL violations. A blocked page (bot-challenge / HTTP error) is reported as unverified, never a pass — verification fails closed. verified: true is only returned when the selector matched at least one element AND the criterion is one the DOM engines check; if the selector matches no element the result is verified: false with reason \"not-found\" (\"selector matched no elements\"), a criterion outside the coverage set returns reason \"not-verifiable\" (\"not checked by any WebAbility tool\"); a finding in scope that only the AI judge can settle, when the judge did not run or gave no verdict, also returns \"not-verifiable\", and shadow-DOM (>>>) / iframe selectors return \"unsupported-selector\" — pass the element's current selector, or re-run scan_page if your fix removed the element. Pair with scan_page → generate_ai_fix → verify_fix for a full find-fix-verify cycle.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL now serving the fix (deployed, staging, or http://localhost:3000). Also accepted as `page` or `pageUrl`."
+          },
+          "selector": {
+            "type": "string",
+            "description": "CSS selector of the element you fixed — use the `selector` from the original scan_page issue"
+          },
+          "wcag": {
+            "type": "string",
+            "description": "Optional: WCAG criterion (e.g. \"1.1.1\", \"1.4.3\") or axe rule id (e.g. \"color-contrast\") to verify specifically. Omit to require the element be free of ALL violations."
+          },
+          "viewport": {
+            "type": "string",
+            "enum": [
+              "desktop",
+              "tablet",
+              "mobile"
+            ],
+            "description": "Viewport size (default: desktop). Use the same viewport the issue was found at."
+          }
+        },
+        "required": [
+          "url",
+          "selector"
+        ]
+      },
+      "annotations": {
+        "title": "Verify an accessibility fix",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "_meta": {
+        "ui": {
+          "resourceUri": "ui://webability/result-card.html"
+        }
+      }
+    },
+    {
+      "name": "diff_scan",
+      "title": "Compare two accessibility scans",
+      "description": "Compare two scans of the same page and report what changed: `fixed[]` (in the baseline, gone now), `new[]` (regressions — not in the baseline, present now), `remaining[]` (still there). Page-level complement to verify_fix (one element). Baseline is a scan_history id (`baselineId`, local installs) or a live scan of `baselineUrl`; current is `url` (scanned live now) or another history id (`currentId`). Findings are matched by issue id (rule + element), so a changed class/id on a fixed element reads as fixed AND new — check `new[]` before calling it a regression. Typical loop: scan_page → edit → diff_scan(baselineId=<that scan id>, url=<same url>) → confirm new[] is empty.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL to scan now as the CURRENT side (deployed, staging, or http://localhost:3000). Omit when passing currentId."
+          },
+          "baselineId": {
+            "type": "string",
+            "description": "scan_history id of the BASELINE scan (local installs only)"
+          },
+          "baselineUrl": {
+            "type": "string",
+            "description": "Scan this URL live as the baseline (e.g. production) — use when there is no stored baseline"
+          },
+          "currentId": {
+            "type": "string",
+            "description": "scan_history id to use as the CURRENT side instead of scanning `url`"
+          },
+          "rootSelector": {
+            "type": "string",
+            "description": "CSS selector to limit live scans to (optional)"
+          },
+          "viewport": {
+            "type": "string",
+            "enum": [
+              "desktop",
+              "tablet",
+              "mobile"
+            ],
+            "description": "Viewport for live scans (default: desktop). Use the same viewport the baseline used."
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "A",
+              "AA",
+              "AAA"
+            ],
+            "description": "Highest WCAG conformance level to report. Default \"AA\" — Level AAA criteria are not reported. Pass \"AAA\" to include them (naming one AAA criterion in `wcag`, e.g. \"3.2.5\", also includes it)."
+          },
+          "minImpact": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "serious",
+              "moderate",
+              "minor"
+            ],
+            "description": "Only findings at this severity or above (critical > serious > moderate > minor)"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Only these rule ids (WebAbility type such as \"missing_alt\" or axe rule id such as \"image-alt\"). See get_rules."
+          },
+          "wcag": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Only these WCAG criteria. A prefix selects the whole guideline (\"1.4\") or principle (\"2\")."
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "json",
+              "compact"
+            ],
+            "description": "\"compact\" prints one line per element with rule metadata once. \"json\" returns every field (html, fix values, source). Default: JSON when it fits inline (under ~24k chars), otherwise compact plus a JSON summary of every count."
+          }
+        }
+      },
+      "annotations": {
+        "title": "Compare two accessibility scans",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "start_audit",
+      "title": "Start a full accessibility audit",
+      "description": "[Full — FREE with a WebAbility account. Not runnable in Lite. Connect hosted MCP at https://mcp.webability.io/mcp (dashboard or Smithery: webability/accessibility), authenticate, then call `start_audit`.] Kick off a FULL accessibility audit deliverable for a URL — a persistent, timestamped artifact, not an inline scan. Runs the server-side pipeline (axe + advanced checks + mobile viewports + annotated screenshots + optional agent spot-check) and produces a downloadable report and a formatted Excel workbook (Cover / Status / Barriers / ADA context sheets) stored durably. Returns immediately with an audit `id`; poll `get_audit` for progress and, when complete, download URLs. Use this when someone needs a durable artifact to attach as evidence of testing effort for a compliance officer or legal response — for iterating on code, use scan_page + verify_fix instead. Needs a free WebAbility account (sign in by connecting https://mcp.webability.io/mcp/auth, or run `webability login`). Set includeAgent:true to add the slower agentic manual-audit pass. To audit a local dev server, open a tunnel (`webability-tunnel --port 3000`) and pass its URL as `url` with the printed secret as `tunnel_secret`; keep the tunnel open until get_audit reports complete (about 5 minutes) — the pipeline loads the page several times.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL to audit (a public/staging URL the server can reach, or a webability-tunnel URL — not localhost)"
+          },
+          "includeAgent": {
+            "type": "boolean",
+            "description": "Also run the agentic manual-audit pass (keyboard/focus/modal exploration). Slower. Default false."
+          },
+          "tunnel_secret": {
+            "type": "string",
+            "description": "Secret printed by `webability-tunnel`. Required when `url` is a tunnel URL; the URL alone will be refused by the relay. Ignored otherwise."
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "annotations": {
+        "title": "Start a full accessibility audit",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "add_site",
+      "title": "Add a site to the account",
+      "description": "Add a website to the signed-in WebAbility account. The site gets the full widget for its first 30 days and a first scan. Returns the site id and plan tier. Next: put the get_install_snippet tag on the site, and use create_upgrade_link to get a payment link for the WebAbility Pro plan. Needs a free WebAbility account (an AI agent can sign itself up with \"Sign in with AgentID\").",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The site to add, for example https://shop.example.com. One domain per site."
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "annotations": {
+        "title": "Add a site to the account",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_sites",
+      "title": "List the account sites and plans",
+      "description": "List the sites on the signed-in WebAbility account with each site id, plan tier and the date the current plan ends. Use it to check that a payment activated WebAbility Pro on a site. Needs a free WebAbility account.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "title": "List the account sites and plans",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_install_snippet",
+      "title": "Get the widget install tag",
+      "description": "Get the one-line script tag that installs the WebAbility accessibility widget. Put it in the <head> or before </body> of every page of a site added with add_site. The widget finds the site by its domain, so the same tag works on every site. No account needed.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "title": "Get the widget install tag",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "create_upgrade_link",
+      "title": "Get a WebAbility Pro payment link",
+      "description": "Get a Stripe Checkout link that puts one site on the WebAbility Pro plan (the widget subscription). Give the link to the human who pays (your owner). When they pay, the plan activates on that site automatically; check with list_sites. You never handle card details. The site must be on the account (add_site first). Needs a free WebAbility account.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "domain": {
+            "type": "string",
+            "description": "The site to upgrade, as added with add_site (for example shop.example.com)"
+          },
+          "billing_interval": {
+            "type": "string",
+            "enum": [
+              "monthly",
+              "yearly"
+            ],
+            "description": "Billing period. Default monthly."
+          }
+        },
+        "required": [
+          "domain"
+        ]
+      },
+      "annotations": {
+        "title": "Get a WebAbility Pro payment link",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_audit",
+      "title": "Get audit status and report",
+      "description": "[Full — FREE with a WebAbility account. Not runnable in Lite. Connect hosted MCP at https://mcp.webability.io/mcp (dashboard or Smithery: webability/accessibility), authenticate, then call `get_audit`.] Check an audit started with start_audit: returns overall status, per-step progress (scan → viewports → screenshots → agent → excel → publish), and — once complete — a severity summary plus short-lived download URLs for the report (JSON) and the Excel workbook. Poll every ~15s while status is pending/running. Only the account that started an audit can read it. Free with a WebAbility account.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "The audit id returned by start_audit"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "annotations": {
+        "title": "Get audit status and report",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "flow_scan",
+      "title": "Scan a multi-page user flow",
+      "description": "Scan a multi-page user journey. Walks startUrl plus the `autoNavigate` URLs sequentially (deterministic — one page fully rendered and scanned before the next), then returns ONE consolidated report with issues deduplicated across pages, each carrying the same fix payload as scan_page. Every requested URL gets an explicit outcome in `pages[]` (scanned / nav_failed / scan_failed / redirected_duplicate / duplicate_request / skipped_cap / blocked — bot-challenge, not a clean page) — a page is never silently dropped. Better than per-page scans for journeys (login → checkout etc). Without `autoNavigate` it scans only startUrl, exactly like scan_page.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "startUrl": {
+            "type": "string",
+            "description": "Starting URL of the journey"
+          },
+          "maxPages": {
+            "type": "number",
+            "description": "Max pages to scan (default 10; at most 10 on the hosted server)"
+          },
+          "autoNavigate": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The URLs to walk after startUrl, in order (the MCP server is headless and cannot discover a journey interactively). Omit or pass [] to scan only startUrl as a single page."
+          },
+          "sourceRoot": {
+            "type": "string",
+            "description": "Local project root (local installs only) for `sourceCandidates[]` on issues without a framework `source` pointer."
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "A",
+              "AA",
+              "AAA"
+            ],
+            "description": "Highest WCAG conformance level to report. Default \"AA\" — Level AAA criteria are not reported. Pass \"AAA\" to include them (naming one AAA criterion in `wcag`, e.g. \"3.2.5\", also includes it)."
+          },
+          "minImpact": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "serious",
+              "moderate",
+              "minor"
+            ],
+            "description": "Only findings at this severity or above (critical > serious > moderate > minor)"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Only these rule ids (WebAbility type such as \"missing_alt\" or axe rule id such as \"image-alt\"). See get_rules."
+          },
+          "wcag": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Only these WCAG criteria. A prefix selects the whole guideline (\"1.4\") or principle (\"2\")."
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "json",
+              "compact"
+            ],
+            "description": "\"compact\" prints one line per element with rule metadata once. \"json\" returns every field (html, fix values, source). Default: JSON when it fits inline (under ~24k chars), otherwise compact plus a JSON summary of every count."
+          }
+        },
+        "required": [
+          "startUrl"
+        ]
+      },
+      "annotations": {
+        "title": "Scan a multi-page user flow",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "detect_framework",
+      "title": "Detect the site framework",
+      "description": "Detect a page's stack as two separate fields: `framework` — the application framework, CMS or site builder (e.g. nextjs, nuxt, sveltekit, vitepress, astro, gatsby, wordpress, shopify, mediawiki, vue, react; \"unknown\" when no signal) — and `cssToolkit` (tailwind, bootstrap, mui, plain-css). Lists the evidence it used and the value to pass as generate_ai_fix `framework`. scan_page reports the same two fields from the same detection.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL to inspect"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "annotations": {
+        "title": "Detect the site framework",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "generate_ai_fix",
+      "title": "Suggest a framework-aware fix",
+      "description": "Generate framework-aware fix alternatives for a specific accessibility issue. For color contrast issues, returns 3 alternatives (minimal, brand-aligned, high contrast); brand palette is auto-extracted from the live URL using our scanner if `brandColors` is omitted. For label/ARIA issues, returns 1-2 alternatives. Each alternative includes ready-to-paste code for the detected framework.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "issue": {
+            "type": [
+              "object",
+              "string"
+            ],
+            "description": "Issue object from scan_page (with selector, wcag, impact, message, fix.currentValue), or a plain-text issue description"
+          },
+          "html": {
+            "type": "string",
+            "description": "The element's outerHTML — send at most ~600 chars"
+          },
+          "context": {
+            "type": "string",
+            "description": "Parent element outerHTML for context (~400 chars)"
+          },
+          "url": {
+            "type": "string",
+            "description": "Page URL — also used to auto-extract brand palette for contrast issues if `brandColors` is not provided."
+          },
+          "framework": {
+            "type": "string",
+            "enum": [
+              "tailwind",
+              "bootstrap",
+              "mui",
+              "wordpress",
+              "nextjs",
+              "plain-css"
+            ],
+            "description": "CSS framework — use detect_framework first"
+          },
+          "brandColors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Brand palette for brand-aligned suggestions. If omitted on a contrast issue with a `url`, auto-extracted via the scanner."
+          }
+        },
+        "required": [
+          "issue",
+          "html",
+          "framework"
+        ]
+      },
+      "annotations": {
+        "title": "Suggest a framework-aware fix",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "visual_audit",
+      "title": "Visual accessibility audit",
+      "description": "[Full — FREE with a WebAbility account. Not runnable in Lite. Connect hosted MCP at https://mcp.webability.io/mcp (dashboard or Smithery: webability/accessibility), authenticate, then call `visual_audit`.] Pixel-level accessibility audit using Claude vision. Catches issues that DOM scanners miss: icon contrast (1.4.11), focus visibility (2.4.7), \"looks like a button but isn't\" (4.1.2), text rendered as images (1.4.5), visual hierarchy mismatches. Takes a URL, opens it in a headless browser, screenshots, and runs vision-based detection. Complements scan_page — run both for full coverage. Sign in with a free WebAbility account for vision and full audits (sign in by connecting https://mcp.webability.io/mcp/auth, or run `webability login`). Fair-use rate limits apply.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL to audit visually"
+          },
+          "viewport": {
+            "type": "string",
+            "enum": [
+              "desktop",
+              "tablet",
+              "mobile"
+            ],
+            "description": "Viewport size (default: desktop)"
+          },
+          "fullPage": {
+            "type": "boolean",
+            "description": "Capture full scrolled page instead of just viewport (default: false)"
+          },
+          "brandColors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Brand hex colors for context-aware filtering"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "annotations": {
+        "title": "Visual accessibility audit",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "find_source",
+      "title": "Find the source file for a selector",
+      "description": "Find source files in the local project that contain a given CSS selector. Maps DOM selectors back to source code so you can edit the right file. Searches React/Vue/Svelte/HTML/PHP/Astro files.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string",
+            "description": "CSS selector from a scan issue"
+          },
+          "rootDir": {
+            "type": "string",
+            "description": "Project root to search (defaults to cwd)"
+          }
+        },
+        "required": [
+          "selector"
+        ]
+      },
+      "annotations": {
+        "title": "Find the source file for a selector",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "scan_html",
+      "title": "Scan an HTML snippet",
+      "description": "Scan a raw HTML snippet or component markup without serving it — IN-PROCESS by default (jsdom + WebAbility detectors + axe-core): milliseconds, no browser, no network, so it fits inside a tight edit loop. Fragments are auto-wrapped into a document. Returns scan_page's shape (issues / summary) with `fix.op` + `fixability` on every finding. jsdom has no layout, so visual-tier rules (contrast, target size, focus ring) are NOT evaluated — the dropped count is reported as `skippedVisual`; pass `engine: \"browser\"` to run the axe-core headless-browser path for those (slower, axe rules only, returns axe `violations`).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "html": {
+            "type": "string",
+            "description": "HTML content to test — a full document or a fragment"
+          },
+          "engine": {
+            "type": "string",
+            "enum": [
+              "in-process",
+              "browser"
+            ],
+            "description": "\"in-process\" (default): jsdom, ms, structural rules. \"browser\": headless Chromium + axe-core, includes contrast."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "WCAG tags to check (default [\"wcag2a\",\"wcag2aa\",\"wcag21aa\",\"wcag22aa\"])"
+          },
+          "width": {
+            "type": "number",
+            "description": "Viewport width (browser engine only, default 1280)"
+          },
+          "height": {
+            "type": "number",
+            "description": "Viewport height (browser engine only, default 800)"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "A",
+              "AA",
+              "AAA"
+            ],
+            "description": "Highest WCAG conformance level to report. Default \"AA\" — Level AAA criteria are not reported. Pass \"AAA\" to include them (naming one AAA criterion in `wcag`, e.g. \"3.2.5\", also includes it)."
+          },
+          "minImpact": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "serious",
+              "moderate",
+              "minor"
+            ],
+            "description": "Only findings at this severity or above (critical > serious > moderate > minor)"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Only these rule ids (WebAbility type such as \"missing_alt\" or axe rule id such as \"image-alt\"). See get_rules."
+          },
+          "wcag": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Only these WCAG criteria. A prefix selects the whole guideline (\"1.4\") or principle (\"2\")."
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "json",
+              "compact"
+            ],
+            "description": "\"compact\" prints one line per element with rule metadata once. \"json\" returns every field (html, fix values, source). Default: JSON when it fits inline (under ~24k chars), otherwise compact plus a JSON summary of every count."
+          }
+        },
+        "required": [
+          "html"
+        ]
+      },
+      "annotations": {
+        "title": "Scan an HTML snippet",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_rules",
+      "title": "List accessibility rules",
+      "description": "List accessibility rules from both engines — axe-core (104) and the WebAbility detectors (90+) — with optional filters. Every rule carries `fixability` (mechanical | contextual | visual) and a `fix` op template, so you can pick the rules worth auto-fixing before scanning. Returns ruleId, engine, description, help, helpUrl, tags/wcag, fixability, fix.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "axe tag filter (e.g. [\"wcag2aa\"], [\"best-practice\"], [\"cat.aria\"]; a category also works without \"cat.\"). WebAbility rules match on their WCAG criterion tag (e.g. \"wcag143\"). An unknown tag or category is an error that lists the valid ones."
+          },
+          "rule": {
+            "type": "string",
+            "description": "Only rules whose id contains these whole words (e.g. \"link\" → link-name, skip-link, not blink; \"color-contrast\"; case and -/_ insensitive). Also accepted: ruleId, id, query."
+          },
+          "fixability": {
+            "type": "string",
+            "enum": [
+              "mechanical",
+              "contextual",
+              "visual"
+            ],
+            "description": "Only rules of this fixability tier"
+          },
+          "engine": {
+            "type": "string",
+            "enum": [
+              "all",
+              "axe",
+              "webability"
+            ],
+            "description": "Which engine's rules to list (default all)"
+          }
+        }
+      },
+      "annotations": {
+        "title": "List accessibility rules",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "check_color_contrast",
+      "title": "Check color contrast",
+      "description": "Check text contrast against the WCAG AA threshold (4.5:1, or 3:1 for large text); the AAA verdict is shown only when you pass level: \"AAA\". Either pass a `foreground` / `background` color pair, or pass `url` + `selector` to read the element's own text color, background (composited from the nearest painted ancestors), font size and weight from the live page; explicit colors win over the page. A gradient or image background is reported as an error, never a guessed ratio. When it fails, suggests BRAND-aligned replacements — extracts the actual brand palette from the `url` page using our scanner (CSS vars + most-used colors), or use a provided `brandColors` array. No `url` and no `brandColors` = ratio + pass/fail only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "foreground": {
+            "type": "string",
+            "description": "Foreground color (hex or rgb). Optional with url + selector."
+          },
+          "background": {
+            "type": "string",
+            "description": "Background color (hex or rgb). Optional with url + selector."
+          },
+          "fontSize": {
+            "type": "number",
+            "description": "Font size in px (default 16, or the element's computed size with url + selector)"
+          },
+          "isBold": {
+            "type": "boolean",
+            "description": "Whether text is bold (default false, or the element's computed weight with url + selector)"
+          },
+          "url": {
+            "type": "string",
+            "description": "Live page: with `selector`, the colors are read from that element; on a failing pair, the brand palette is extracted from it (uses our scanner — CSS vars + dominant colors)."
+          },
+          "selector": {
+            "type": "string",
+            "description": "CSS selector of the text element on `url` (e.g. the `selector` from a scan_page issue)"
+          },
+          "brandColors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Pre-supplied brand palette. Skips URL extraction if provided."
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "AA",
+              "AAA"
+            ],
+            "description": "Conformance level to judge. Default \"AA\". \"AAA\" adds the enhanced-contrast (1.4.6) verdict and AAA palette suggestions."
+          }
+        }
+      },
+      "annotations": {
+        "title": "Check color contrast",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "check_aria",
+      "title": "Validate ARIA in HTML or on a page",
+      "description": "Validate ARIA attribute + accessible name/role/value usage — in an HTML snippet (`html`) or on a live page (`url`), optionally limited to one element and its descendants (`selector`). Runs axe-core `cat.aria` and `cat.name-role-value` rules (aria-* attribute correctness, role validity, required parents/children, aria-hidden-focus, accessible names). Returns `violations`. A selector that matches nothing, or a page that answers an HTTP error, is an error — never \"no violations\". Nodes cap at 5 per rule by default — every rule reports nodesTotal + truncated; raise nodeLimit (max 50) or use scan_history(id) for the full set.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "html": {
+            "type": "string",
+            "description": "HTML to test for ARIA correctness (pass this or `url`)"
+          },
+          "url": {
+            "type": "string",
+            "description": "Live page to check (pass this or `html`)"
+          },
+          "selector": {
+            "type": "string",
+            "description": "Only report findings on this element and its descendants (e.g. the `selector` from a scan_page issue). ARIA references outside it still resolve."
+          },
+          "nodeLimit": {
+            "type": "number",
+            "description": "Max nodes returned per rule (default 5, max 50)"
+          }
+        }
+      },
+      "annotations": {
+        "title": "Validate ARIA in HTML or on a page",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "scan_history",
+      "title": "List past scans",
+      "description": "Browse past scans run through this MCP server. Every scan_page / flow_scan / scan_html / visual_audit / check_aria / verify_fix call is logged locally (~/.webability/scans; local installs only — the hosted server keeps no history). Without arguments, lists recent scans (when, what target, result summary). Pass `id` to retrieve the FULL stored result of one past scan, or `filter` to match a URL/tool substring.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "number",
+            "description": "Max history entries to return (default 20)"
+          },
+          "filter": {
+            "type": "string",
+            "description": "Substring match on target URL or tool name (e.g. \"webability.io\" or \"scan_page\")"
+          },
+          "id": {
+            "type": "string",
+            "description": "A scan id from the history list — returns that scan's full stored response"
+          }
+        }
+      },
+      "annotations": {
+        "title": "List past scans",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "generate_report_pdf",
+      "title": "Create an accessibility report PDF",
+      "description": "Turn scan findings into a branded WebAbility accessibility-report PDF, saved next to the project (local installs only). Pass the `issues[]` array a scan_page call returned plus the page `url`; the tool groups findings by functionality (Low Vision / Mobility / Navigation / Content / Cognitive), computes the WCAG score with the same penalty ladder as the platform, and renders a shareable PDF — free, no account. Use it when the user wants a deliverable to attach to an email, ticket, or compliance thread. Capped at 500 findings. For the full audit deliverable (Excel workbook + evidence screenshots), use start_audit instead.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The scanned page URL (used for the report header and file name)"
+          },
+          "issues": {
+            "type": "array",
+            "description": "Findings to include — pass the `issues[]` array from scan_page (message/type/wcag/selector/html/impact/fix).",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "wcag": {
+                  "type": "string"
+                },
+                "selector": {
+                  "type": "string"
+                },
+                "html": {
+                  "type": "string"
+                },
+                "impact": {
+                  "type": "string",
+                  "enum": [
+                    "critical",
+                    "serious",
+                    "moderate",
+                    "minor"
+                  ]
+                },
+                "fix": {
+                  "type": "object",
+                  "properties": {
+                    "attribute": {
+                      "type": "string"
+                    },
+                    "suggestedValue": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "widgetDetected": {
+            "type": "boolean",
+            "description": "Whether the WebAbility widget was detected on the page (shown in the report's widget status)."
+          }
+        },
+        "required": [
+          "url",
+          "issues"
+        ]
+      },
+      "annotations": {
+        "title": "Create an accessibility report PDF",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    }
+  ]
+}

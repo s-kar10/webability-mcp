@@ -1,0 +1,96 @@
+{
+  "run_id": "2026-11-13T21-26-42-779Z-wp-config-7ea0e73e",
+  "timestamp": "2026-11-13T21:26:42.781Z",
+  "git_commit": "991c6edfee443599d0803dd69ce6ffa82aeb2d06",
+  "tracked_dirty": false,
+  "environment": {
+    "node": "v25.9.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "case_id": "WP-csp",
+  "builder": "WordPress",
+  "scenario": "csp",
+  "command": [
+    "node",
+    "lab/wordpress/scenario.mjs",
+    "csp"
+  ],
+  "finished_at": "2026-11-13T21:26:45.487Z",
+  "steps": [
+    {
+      "command": [
+        "docker",
+        "compose",
+        "-f",
+        "lab/wordpress/compose.yaml",
+        "run",
+        "--rm",
+        "cli",
+        "wp",
+        "option",
+        "update",
+        "wa_lab_cache",
+        "no"
+      ],
+      "exit_code": 0,
+      "stdout": "Success: Value passed for 'wa_lab_cache' option is unchanged.\n",
+      "stderr": " Container webability-install-lab-cli-run-7fcd82a832dc Creating \n Container webability-install-lab-cli-run-7fcd82a832dc Created \n"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "-f",
+        "lab/wordpress/compose.yaml",
+        "run",
+        "--rm",
+        "cli",
+        "wp",
+        "eval",
+        "$f=WP_CONTENT_DIR.'/install-lab-page.html'; if(file_exists($f)) unlink($f);"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": " Container webability-install-lab-cli-run-67063b3fc867 Creating \n Container webability-install-lab-cli-run-67063b3fc867 Created \n"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "-f",
+        "lab/wordpress/compose.yaml",
+        "run",
+        "--rm",
+        "cli",
+        "wp",
+        "option",
+        "update",
+        "wa_lab_case",
+        "csp"
+      ],
+      "exit_code": 0,
+      "stdout": "Success: Updated 'wa_lab_case' option.\n",
+      "stderr": " Container webability-install-lab-cli-run-3c928b6e6956 Creating \n Container webability-install-lab-cli-run-3c928b6e6956 Created \n"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "-f",
+        "lab/wordpress/compose.yaml",
+        "run",
+        "--rm",
+        "cli",
+        "wp",
+        "option",
+        "update",
+        "wa_lab_installed",
+        "yes"
+      ],
+      "exit_code": 0,
+      "stdout": "Success: Value passed for 'wa_lab_installed' option is unchanged.\n",
+      "stderr": " Container webability-install-lab-cli-run-f07670200d57 Creating \n Container webability-install-lab-cli-run-f07670200d57 Created \n"
+    }
+  ]
+}

@@ -1,0 +1,1332 @@
+{
+  "review": "Reviewed selected local WordPress and public Framer/Wix diagnostic output; no credentials, cookies, account screens or participant identities. Raw copied bytes preserved. Account screenshots and full Shopify/Wix page captures remain private. November 24 Toronto revalidation (November 25 UTC) includes repository test logs and public-site checks; generated test identifiers are fixture data, not account credentials. November 25\u201326: public Wix/Framer check output reviewed; unchanged copies, no account identifiers beyond public site/container configuration. November 26 GTM samples contain public resource URLs only. Initial same-page warm series retained but excluded from final timing conclusions due possible previous-navigation event overlap.",
+  "files": [
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/build.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/typecheck.stdout.txt",
+      "sha256": "cfa0a294ffce5a5e790e5b6041b71c807df04c698a4554453270724ed4a9e71f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/test.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/build.stdout.txt",
+      "sha256": "6394ac035813823c4e301ef955b84f8ac82bc1d77001e47ffd28bd161063f527",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/typecheck.stderr.txt",
+      "sha256": "06ede01d2446a35b701474228c8ec3f3e8480fa6308bb64fd520ab39d6c8f8e6",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/run.json",
+      "sha256": "9c95433b83417d8b3b169b619715f369ba1aec73037f5527407862cf4e68da82",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-22-03-092Z-baseline-240679f3/test.stdout.txt",
+      "sha256": "d27bce0451716abaa47f195951f1f5273ab973fa7f344ff8d0c43ba0c7ef28c3",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-25-35-667Z-wp-config-08578e1e/page.html",
+      "sha256": "fedf743c39fc0eb8f01655e9bbebda3099adf6cd9942c830d5d13e47bb9d2329",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-25-35-667Z-wp-config-08578e1e/headers.json",
+      "sha256": "901a0ec8ccdcca42c39066c0da8f56e1151fd809cc008bbb4f03420fe308a57e",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-25-35-667Z-wp-config-08578e1e/run.json",
+      "sha256": "6442199d5821f12538677c64ae886a1fbc407d8bdea00bed6ff32cf2e733ca60",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-25-38-341Z-check-97671f6e/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-25-38-341Z-check-97671f6e/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-25-38-341Z-check-97671f6e/run.json",
+      "sha256": "c9b32a8988d09a720a01fdb70d720d121044fb2bd5f363bc1709cce104c5d664",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-31-373Z-wp-config-b96e65e8/page.html",
+      "sha256": "1064e8e95fb7dccf338c6b9de1a23d16a15854c15deb29d4a907433a6c4e6b1c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-31-373Z-wp-config-b96e65e8/headers.json",
+      "sha256": "cf1eeece32b5debb1f9d7fbcf61985ddca77eec0c3edcefdc5bed2154ffb996b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-31-373Z-wp-config-b96e65e8/run.json",
+      "sha256": "ee039c3c9d79bbf3a44f02fa9f9aa4774cb0b0b229c0943c27979f01e912e754",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-35-413Z-check-bf2bf623/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-35-413Z-check-bf2bf623/response.json",
+      "sha256": "cc254acedd680f7b39793bd0a439bfec910a8e4d253c7513cd052ec781042576",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-35-413Z-check-bf2bf623/run.json",
+      "sha256": "5435b8c34b0db790c4e1bd264cbdbaa82801100b43fb7a7ebc9b0d10a07c1cc5",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-37-844Z-wp-config-0f898058/page.html",
+      "sha256": "fedf743c39fc0eb8f01655e9bbebda3099adf6cd9942c830d5d13e47bb9d2329",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-37-844Z-wp-config-0f898058/headers.json",
+      "sha256": "70e919f89863c8ccfce905ab8d29d635ba0f4c6861471d2330076629cdbf1813",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-37-844Z-wp-config-0f898058/run.json",
+      "sha256": "24fc8637f3521dc56c7aed3b95c6b9fda9692d6b000e0ee76002ed6b10cfab90",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-40-464Z-check-703b5e56/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-40-464Z-check-703b5e56/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-40-464Z-check-703b5e56/run.json",
+      "sha256": "f3a2a93b38615d9484ce4157f057fc46a350569ce9e09ba89df8a79d3932aeb5",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-42-779Z-wp-config-7ea0e73e/page.html",
+      "sha256": "fedf743c39fc0eb8f01655e9bbebda3099adf6cd9942c830d5d13e47bb9d2329",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-42-779Z-wp-config-7ea0e73e/headers.json",
+      "sha256": "1a1157b1b36302a9c7a00a3a4e9ebc7fd1222504060862c41147f13b505cfb6c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-42-779Z-wp-config-7ea0e73e/run.json",
+      "sha256": "7b6aab699f0e569ffa92bbf945989a791f90612000185227691bf61156d85bc3",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-45-658Z-check-f567a618/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-45-658Z-check-f567a618/response.json",
+      "sha256": "4cde593e3f1c1dc66aa528ea2a38414385ae9d725ea7517292639e437fb508b2",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-45-658Z-check-f567a618/run.json",
+      "sha256": "0a5e8eee0988201335e842c0fa2f9ebacefdbd506d37c43d8e621c7f8b003d78",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-47-717Z-wp-config-de446504/page.html",
+      "sha256": "fedf743c39fc0eb8f01655e9bbebda3099adf6cd9942c830d5d13e47bb9d2329",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-47-717Z-wp-config-de446504/headers.json",
+      "sha256": "e76eb61f862cdd89af655a93b459ec9dc145b14591b100c3bd13e9700ad856e8",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-47-717Z-wp-config-de446504/run.json",
+      "sha256": "b8ddf4b623ee5c100a21a83c7f4ae7c29b50ecbbd79403caffafe1882a843e18",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-50-295Z-check-775cdca1/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-50-295Z-check-775cdca1/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-50-295Z-check-775cdca1/run.json",
+      "sha256": "4b9e850fabee980888f2e35ee6c0d2c492a6549f6947f3edfb86744140acc8a2",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-52-592Z-wp-config-cdef4b2e/prime-headers.json",
+      "sha256": "7046a65596f40ac6f1a091615ca24fecdc4ebe4ed531ef1b59fe3381e3aecce3",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-52-592Z-wp-config-cdef4b2e/page.html",
+      "sha256": "c54680f0a0aab28d0a16009cdd5dfeeb7b24e821aa99ade1857216993bee139b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-52-592Z-wp-config-cdef4b2e/primed-page.html",
+      "sha256": "c54680f0a0aab28d0a16009cdd5dfeeb7b24e821aa99ade1857216993bee139b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-52-592Z-wp-config-cdef4b2e/headers.json",
+      "sha256": "a516a9b6ee4e1221eba06dfee50ab1ca0be12e6eadae8659eac59f3915f4de12",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-52-592Z-wp-config-cdef4b2e/run.json",
+      "sha256": "02aeb764b950fb714fc8588aac19f41f8aab0068606e2ff1f91a7a09c87720f0",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-56-461Z-check-00cd4a7f/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-56-461Z-check-00cd4a7f/response.json",
+      "sha256": "8f8811365c932b555f4653950c941d551c71b09785fd82213bce75f1f8a3374f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-56-461Z-check-00cd4a7f/run.json",
+      "sha256": "5da5a80060b966769214003e18c9969c337f91ab9b041b5319ca887c36ff6471",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-58-407Z-wp-config-f99a1508/page.html",
+      "sha256": "fedf743c39fc0eb8f01655e9bbebda3099adf6cd9942c830d5d13e47bb9d2329",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-58-407Z-wp-config-f99a1508/headers.json",
+      "sha256": "8aeaf013ca6ed8f332236eaf24712555110a9f73aeafe0f8adac61cc89f330f3",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-26-58-407Z-wp-config-f99a1508/run.json",
+      "sha256": "3133be3be1f753f5f9a6a4534ba61cbe3d6cb8d6f488abf1c2ffbbb5ff88dd93",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-27-01-243Z-check-14647735/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-27-01-243Z-check-14647735/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-13T21-27-01-243Z-check-14647735/run.json",
+      "sha256": "dd9a4ccc2e2b7c6f03d2856485ac61387c43893db0e2c1d61d76a1e4a32c5361",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-17-17-967Z-wp-config-1c7a0736/page.html",
+      "sha256": "fedf743c39fc0eb8f01655e9bbebda3099adf6cd9942c830d5d13e47bb9d2329",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-17-17-967Z-wp-config-1c7a0736/headers.json",
+      "sha256": "1889e7bc64de37b9232b0ebcc2d4db202338d3d98258ed2a812e3c0ced0e573b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-17-17-967Z-wp-config-1c7a0736/run.json",
+      "sha256": "1d36582ab1997efefda428851324b8f9b3020f9ec821d5fb93cce5780284b76b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-17-21-139Z-check-1e098957/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-17-21-139Z-check-1e098957/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-17-21-139Z-check-1e098957/run.json",
+      "sha256": "72dc87b52c51d58008c67303d7725466fec8d21134aaa4ee7c09b487ca63b60a",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-17-24-197Z-wp-config-0db8a867/page.html",
+      "sha256": "1064e8e95fb7dccf338c6b9de1a23d16a15854c15deb29d4a907433a6c4e6b1c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-17-24-197Z-wp-config-0db8a867/headers.json",
+      "sha256": "cdbd619d4753e94d184798594c8bbdbfe774d407670b10440ed9ae2e1ff298d8",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-17-24-197Z-wp-config-0db8a867/run.json",
+      "sha256": "1c837f3650d5010f29b8266a3b94e68cbdd2a0b2d0d6b00e490fdda3f47f8c84",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-17-27-068Z-check-9004e2ae/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-17-27-068Z-check-9004e2ae/response.json",
+      "sha256": "4c1d501724550c47ff1c7e49c35afafba533a131073e806a27a66a6256c98599",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-17-27-068Z-check-9004e2ae/run.json",
+      "sha256": "df6427d8ad7aa3922e89a4fd716a8b87950d62d8daf888ee11f99a747f07905f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-04-981Z-check-86e3bb06/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-04-981Z-check-86e3bb06/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-04-981Z-check-86e3bb06/run.json",
+      "sha256": "39a1498bf9e92c160dde3f0abdb8616f6df0d8cd5c79a45b7f90e4cf06d0dc41",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-07-540Z-wp-config-f1a3eabc/prime-headers.json",
+      "sha256": "1ac0611c47b0356f17ff918d5d01b2b8542d1cd3ae4777dd61e1bea7e431367d",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-07-540Z-wp-config-f1a3eabc/page.html",
+      "sha256": "c54680f0a0aab28d0a16009cdd5dfeeb7b24e821aa99ade1857216993bee139b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-07-540Z-wp-config-f1a3eabc/primed-page.html",
+      "sha256": "c54680f0a0aab28d0a16009cdd5dfeeb7b24e821aa99ade1857216993bee139b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-07-540Z-wp-config-f1a3eabc/headers.json",
+      "sha256": "59ab6de0037534d9fef1f63b13e0522690976ec11d7dfe2d8bef62030e83fde3",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-07-540Z-wp-config-f1a3eabc/run.json",
+      "sha256": "ad852640247afa63fd76b00e1b2b6c33303a317597a27e293de29f859adb8904",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-11-588Z-check-ffa02431/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-11-588Z-check-ffa02431/response.json",
+      "sha256": "3867d6e845d9d9b04a3c2f607842432e231bc40e81fc001797e2f037fbb7f26b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-11-588Z-check-ffa02431/run.json",
+      "sha256": "2872235e65ea70b7e5b0637c6057ae98bad8241e2806b31f29c59ae4596432de",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-48-591Z-check-c03c03b7/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-48-591Z-check-c03c03b7/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-48-591Z-check-c03c03b7/run.json",
+      "sha256": "cd48684f710a9fd8a606fb25c75c7cabdbeaec5d48828cf8ca76735f83d8e1ec",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-50-938Z-wp-config-a39faca1/page.html",
+      "sha256": "fedf743c39fc0eb8f01655e9bbebda3099adf6cd9942c830d5d13e47bb9d2329",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-50-938Z-wp-config-a39faca1/headers.json",
+      "sha256": "9c5e88554172471c773815a937578a26b44553646a49126af369328859d17f39",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-50-938Z-wp-config-a39faca1/run.json",
+      "sha256": "17677e97a5c63848e0693ebd03d4737fc03a422cf5e49160f586cfef47796db7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-54-093Z-check-21d7f840/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-54-093Z-check-21d7f840/response.json",
+      "sha256": "4cde593e3f1c1dc66aa528ea2a38414385ae9d725ea7517292639e437fb508b2",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-18-54-093Z-check-21d7f840/run.json",
+      "sha256": "c885e19717a6241c74b3cc0b820062e3f4d6159545e987445740fb49ca89d243",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-30-10-356Z-check-db0ee8c5/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-30-10-356Z-check-db0ee8c5/response.json",
+      "sha256": "c140f3c36ac3267b33b2bd043d319b59ad1b5b8c36d3154cd7ba5ab09a56d6b7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-30-10-356Z-check-db0ee8c5/run.json",
+      "sha256": "3131c808778e0d731f9569c8e1471bff89bdc844a103b3fb69cad5424120b3cb",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-30-55-366Z-check-590f56d2/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-30-55-366Z-check-590f56d2/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-30-55-366Z-check-590f56d2/run.json",
+      "sha256": "0d86d1f3dc065fffd359e9aff4196c382c65058275a75deb6523be1f967dcbcf",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-31-40-981Z-page-8445f663/page.html",
+      "sha256": "fedf743c39fc0eb8f01655e9bbebda3099adf6cd9942c830d5d13e47bb9d2329",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-31-40-981Z-page-8445f663/run.json",
+      "sha256": "b3a65641e61b00348dabfce8a5825e047f2ac9a13c69ce43c8b4a412cf86bd10",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-32-26-546Z-page-8cfcda9d/page.html",
+      "sha256": "61c43ea8b227421c9ae1f906720eb2e020f627f0eefd96a76c17d0bacf484ce1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-32-26-546Z-page-8cfcda9d/run.json",
+      "sha256": "864669273542768a8b7ac1bdad20f35abfbe0bfbfa8996fb47dfffdba447fe89",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-32-40-919Z-check-0859e05f/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-32-40-919Z-check-0859e05f/response.json",
+      "sha256": "d7ca645783d3cae2d52d0c165d66ac2625f5e1a0ad80c0832545189e3f9316df",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-32-40-919Z-check-0859e05f/run.json",
+      "sha256": "bd02acf5ed42a853c3eeb10f223f6b10cb5919b18a88765b9e3b683cf8b6f603",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-33-28-526Z-check-13e3bc25/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-33-28-526Z-check-13e3bc25/response.json",
+      "sha256": "c140f3c36ac3267b33b2bd043d319b59ad1b5b8c36d3154cd7ba5ab09a56d6b7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-33-28-526Z-check-13e3bc25/run.json",
+      "sha256": "6ae4b6be1fc75ade95816d9443280fcb831e059c4c33a25ed441ec17ab4cf284",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-33-31-512Z-page-03fcd174/page.html",
+      "sha256": "61d95e78c40ea4dc8335fcac49b71032d668022ef8cdda3f366ad6c519955793",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-33-31-512Z-page-03fcd174/run.json",
+      "sha256": "a14232e020ed960d518097f8b77bdcab2f87e07f68b75748e4992d09fdc8238e",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-37-46-689Z-page-b94322ad/page.html",
+      "sha256": "9342650bd3266e07771e36f59f01efa6841cd6d7f41b7895cb35bbc4467a81cc",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-37-46-689Z-page-b94322ad/run.json",
+      "sha256": "1aeadb1d5e1388ca47b09afd506b748edb72ab672526c6d5d59b6607a3212758",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-37-47-259Z-check-7623a7c4/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-37-47-259Z-check-7623a7c4/response.json",
+      "sha256": "fba83cff87ef8b23f7981395181bb0f8ce8ac44c4dd4fa4d4f141888da9bc6dc",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-37-47-259Z-check-7623a7c4/run.json",
+      "sha256": "f6a57b7fd69189c628e7699255a84cf8329d44a34291373c702d87ee30bb3db9",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-32-230Z-check-9084a123/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-32-230Z-check-9084a123/response.json",
+      "sha256": "6c1a2de8b03c1978336593e0e6daf18cb696687506eec2432b94566444ccc66c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-32-230Z-check-9084a123/run.json",
+      "sha256": "a5060d0b6fec220f582ad43956f8f2bd6b2ee177f6999466cf3e33ebef931aa1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-34-981Z-gtm-b0f6c714/sample-2.json",
+      "sha256": "07bb464053687c92598485f5a61994e57d507936bb2dd12a174729509bff5f3f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-34-981Z-gtm-b0f6c714/sample-3.json",
+      "sha256": "4da8aeb8e2d4b9ef4327cf6230ec1ad564eca0e01cf4f494a510040b2ed918ce",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-34-981Z-gtm-b0f6c714/sample-8.json",
+      "sha256": "bf56b5f0f478a81994f340370e2ca5f47e097a517cee3cf8bda9768724d0a7c5",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-34-981Z-gtm-b0f6c714/sample-10.json",
+      "sha256": "8824674f668c1a5b21d5128c0c3e436000f5dd3636d4e5f8424fd35772191c67",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-34-981Z-gtm-b0f6c714/warm-prime.json",
+      "sha256": "a5bf026f00395e57e11197cd9de234e58354f76953e4acd2ec80ddd28e92829c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-34-981Z-gtm-b0f6c714/sample-4.json",
+      "sha256": "cab7d19206fc0b88535909e677b0548f21e8f8b196fdf66c5ca3e6d6abb012d3",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-34-981Z-gtm-b0f6c714/sample-5.json",
+      "sha256": "687419f8f931f8a5272e86c9420e7979bad7483420dd2ecbb838d5e57a724bf5",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-34-981Z-gtm-b0f6c714/sample-9.json",
+      "sha256": "784374cf06c149f6d5d01eb7b542af01a237b85e0b0c81b6256f9fd00b7d6f7a",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-34-981Z-gtm-b0f6c714/sample-6.json",
+      "sha256": "cecfcbc65e7059aec006c6e1a246fe9e7f82dae52af7b1868fbe79fcfdfec6dc",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-34-981Z-gtm-b0f6c714/sample-7.json",
+      "sha256": "e6de15075e1fe05ca531efb93a7cee8b8b073fbad35d35d89cd036d2a8bb793b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-34-981Z-gtm-b0f6c714/run.json",
+      "sha256": "9df599ad92031b8123bd78a1507a93416bb49df32e15254fbe6f311ea7cdcf85",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-38-34-981Z-gtm-b0f6c714/sample-1.json",
+      "sha256": "5399bab40745fc42419c80b91a88e2de40cc561b8280f47c309ce004aeed9906",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-39-15-862Z-check-8e78e004/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-39-15-862Z-check-8e78e004/response.json",
+      "sha256": "c140f3c36ac3267b33b2bd043d319b59ad1b5b8c36d3154cd7ba5ab09a56d6b7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-39-15-862Z-check-8e78e004/run.json",
+      "sha256": "f5fdb83159c55f28b4ef047c506edcbce73d172bcced83712c01905ca3ce66c2",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-40-23-233Z-check-1c7677c2/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-40-23-233Z-check-1c7677c2/response.json",
+      "sha256": "5509498f2a31c936f4f781a43c887c5771e68083dfba6c5b3cb373aa725a2b07",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-19T22-40-23-233Z-check-1c7677c2/run.json",
+      "sha256": "ee6054803b84229e9ee6f38c2e698f40327f68e9b3840e14135180be77ac6e42",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-20T12-38-35-231Z-check-14722b00/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-20T12-38-35-231Z-check-14722b00/response.json",
+      "sha256": "c140f3c36ac3267b33b2bd043d319b59ad1b5b8c36d3154cd7ba5ab09a56d6b7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-20T12-38-35-231Z-check-14722b00/run.json",
+      "sha256": "0997cfaa63f8f253a81e96659713f992f9a84419647a02ba0edd3d15d07d595b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-20T12-38-59-880Z-check-b96ee9cd/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-20T12-38-59-880Z-check-b96ee9cd/response.json",
+      "sha256": "a943f1420de425fcaac8ae3cffdaff4ceb38ed919af2e2464b4d6636f180e67b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-20T12-38-59-880Z-check-b96ee9cd/run.json",
+      "sha256": "17e0c74ff0a30a54be165545cfe1e838895136e961ad54da8affcc9c91d4bc3f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-20T12-39-16-317Z-page-24d314ee/page.html",
+      "sha256": "0b7e2d90e277b12bafafd409da5cb96a3db98cbc4b109ee3e48d27646300c7c7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-20T12-39-16-317Z-page-24d314ee/run.json",
+      "sha256": "98a53b5a07e3f1e71abd580e172bfe4ee07a381c841ab9d24e323cb19ae0d131",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-20T12-39-49-894Z-check-ddc22235/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-20T12-39-49-894Z-check-ddc22235/response.json",
+      "sha256": "c140f3c36ac3267b33b2bd043d319b59ad1b5b8c36d3154cd7ba5ab09a56d6b7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-20T12-39-49-894Z-check-ddc22235/run.json",
+      "sha256": "31d1fb1eedbffdd216ba42401fbfbf098cf94d5db8d6bca6d6bb1f26c76f96de",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/build.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/typecheck.stdout.txt",
+      "sha256": "cfa0a294ffce5a5e790e5b6041b71c807df04c698a4554453270724ed4a9e71f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/test.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/build.stdout.txt",
+      "sha256": "cb246f0fe5f71e166895b7b15ada899b45313f94545d828a9ce2085ca81f3393",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/typecheck.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/run.json",
+      "sha256": "0c5d151ed5ec218e1bd68cc655e729b6043edef72e1d9f19b9c2c977e558e517",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-40-749Z-baseline-f4cacc3d/test.stdout.txt",
+      "sha256": "04c3dd25ebf9ea7086123effaf5ddc67b8f63617f1ff262b6fef86cedd98980c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-52-173Z-check-e89105e4/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-52-173Z-check-e89105e4/response.json",
+      "sha256": "5509498f2a31c936f4f781a43c887c5771e68083dfba6c5b3cb373aa725a2b07",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-52-173Z-check-e89105e4/run.json",
+      "sha256": "d6232e2aefefdbc6f37d7407ab87920be2503506a0752cf4da178094a3a1db3a",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-53-447Z-check-041b132e/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-53-447Z-check-041b132e/response.json",
+      "sha256": "c140f3c36ac3267b33b2bd043d319b59ad1b5b8c36d3154cd7ba5ab09a56d6b7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-10-53-447Z-check-041b132e/run.json",
+      "sha256": "beb69824bb23df8db0298009a86149075a7b0031bae3901033962c541ca06edc",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-05-387Z-wp-config-1ca3d016/page.html",
+      "sha256": "7dde8b81a64e994b9747f0ef4953e31641ccf61919541318efaca3937a2fc9f1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-05-387Z-wp-config-1ca3d016/headers.json",
+      "sha256": "8380b3649bd1639c76a82661e7d7b41ab1eac5249828969ccd975dacfcd3162c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-05-387Z-wp-config-1ca3d016/run.json",
+      "sha256": "8623607fd7cd8e5c5dbafbe3740ed3f040c4fc4c2e4ebc61863462a18c8a367c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-13-858Z-check-ed05371f/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-13-858Z-check-ed05371f/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-13-858Z-check-ed05371f/run.json",
+      "sha256": "609ff424bdd01a9ec884c260c5c3143f7b87cbf88bde2d65b7c31d5b2c0b9b6c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-16-700Z-wp-config-03c57294/page.html",
+      "sha256": "e691426f059bd73dc5acbd91798ca29b0c357333bf446a0d586b3d766ff1faad",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-16-700Z-wp-config-03c57294/headers.json",
+      "sha256": "b0f2bdaacbe23b850a00d4a17a158246f3b6175baa08c9390e5a12de751c4c7e",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-16-700Z-wp-config-03c57294/run.json",
+      "sha256": "6d0621b9d87a7b36f92a712b00d697e1bad5090b6b40413dd68ca66b050359f9",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-20-904Z-check-22f80981/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-20-904Z-check-22f80981/response.json",
+      "sha256": "05e4a8bd0506e2c568ac050331f816783813e3d3dbc1f8fa28c61ba803d01869",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-20-904Z-check-22f80981/run.json",
+      "sha256": "57f4f7eebd26953bbf76f2d2d62a38bbda73034f0c5c47cb2c73dfe758c4ea99",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-23-110Z-wp-config-700c828c/page.html",
+      "sha256": "7dde8b81a64e994b9747f0ef4953e31641ccf61919541318efaca3937a2fc9f1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-23-110Z-wp-config-700c828c/headers.json",
+      "sha256": "da7b11c469ff154dc123c89f7b13f0d4c37326f8f97be3eb26e502b449ef2200",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-23-110Z-wp-config-700c828c/run.json",
+      "sha256": "54b08f4dd7ad521c5801ade9479cc67a4793e6c5ccb0e9b704c044439000795b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-26-357Z-check-a6237f0d/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-26-357Z-check-a6237f0d/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-26-357Z-check-a6237f0d/run.json",
+      "sha256": "99b88ec9831294dfd8847bbc2fb3bfeb5a356904f9e407de291f5224dbdba75f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-29-123Z-wp-config-03589234/page.html",
+      "sha256": "7dde8b81a64e994b9747f0ef4953e31641ccf61919541318efaca3937a2fc9f1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-29-123Z-wp-config-03589234/headers.json",
+      "sha256": "0c9cc9a824698075c5e7334a101e0ad9dbafcf01b2cf2a299f1fcbf9b0151ab5",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-29-123Z-wp-config-03589234/run.json",
+      "sha256": "515dd57daaf473daea0e24d14df2968069eb155215c01f5be18087e223da2af8",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-32-023Z-check-61f0df51/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-32-023Z-check-61f0df51/response.json",
+      "sha256": "4cde593e3f1c1dc66aa528ea2a38414385ae9d725ea7517292639e437fb508b2",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-32-023Z-check-61f0df51/run.json",
+      "sha256": "805c81226b4d7805d89c02f619b3fb4e36a3b077537a85c9919f33ec18ec1e01",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-34-012Z-wp-config-f07b3a89/page.html",
+      "sha256": "7dde8b81a64e994b9747f0ef4953e31641ccf61919541318efaca3937a2fc9f1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-34-012Z-wp-config-f07b3a89/headers.json",
+      "sha256": "b9025c1faba2afacc93e03de53fd3cfd1b2bf301d4fbe2cbcdf70e030e87e4f7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-34-012Z-wp-config-f07b3a89/run.json",
+      "sha256": "02a44d186ec029401de05950db98765d3db37c66960323010216da1043b647ff",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-36-934Z-check-8b04f2b9/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-36-934Z-check-8b04f2b9/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-36-934Z-check-8b04f2b9/run.json",
+      "sha256": "7b2c98aa19dd33c910e9b67a931bac97b8ce9454f2a8fe6f5ad8cb28a3db5ce4",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-39-093Z-wp-config-bcb1c167/prime-headers.json",
+      "sha256": "49e5b9051ff8d9cdb2bab40e065cf57b1f825504ff600c9ecc1c62f5e20dbdbd",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-39-093Z-wp-config-bcb1c167/page.html",
+      "sha256": "a3c4bcba008f424ac6fa1e7de6bc94b3f017a6dcf50e25bbf69c6062fcbf39fc",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-39-093Z-wp-config-bcb1c167/primed-page.html",
+      "sha256": "a3c4bcba008f424ac6fa1e7de6bc94b3f017a6dcf50e25bbf69c6062fcbf39fc",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-39-093Z-wp-config-bcb1c167/headers.json",
+      "sha256": "e26d7cefb0c83c892bedd0c17a48661f81b8e5a72a269bc6228d8a198528dbf6",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-39-093Z-wp-config-bcb1c167/run.json",
+      "sha256": "fa61f26e9c21dfe9f48ba82ff9d45d44fe1a0b181295d8791778085a28e6cd37",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-43-435Z-check-c05cde4b/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-43-435Z-check-c05cde4b/response.json",
+      "sha256": "e6a7e100a35a3f4cd293ba16c4a22787f1b544a5fe3ab86381898e65a07d7009",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-43-435Z-check-c05cde4b/run.json",
+      "sha256": "41999d7b2a093b4842f53bc598887c6cdf0e9ce8e7aa015a56549e5688f7ddeb",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-45-500Z-wp-config-49d05fbc/page.html",
+      "sha256": "7dde8b81a64e994b9747f0ef4953e31641ccf61919541318efaca3937a2fc9f1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-45-500Z-wp-config-49d05fbc/headers.json",
+      "sha256": "c6889fa308d67b0f1f7d14b5cee7b6e22ab8017db7565ab965cbc8cea2e04a65",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-45-500Z-wp-config-49d05fbc/run.json",
+      "sha256": "bb23ed2d0f5f025a9c754602763a31f652640cafd375303bb687b7184e658f9e",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-48-448Z-check-57dc6dc7/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-48-448Z-check-57dc6dc7/response.json",
+      "sha256": "32397450f96ca12bff836788d02c1de1cd2779df0500324b3de6f84921786e25",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-48-448Z-check-57dc6dc7/run.json",
+      "sha256": "6e2d67a9ff99b9c557d8822138b6eb84ce5f1b5803a0c55b43b5600130605683",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-50-679Z-wp-config-48f35208/page.html",
+      "sha256": "7dde8b81a64e994b9747f0ef4953e31641ccf61919541318efaca3937a2fc9f1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-50-679Z-wp-config-48f35208/headers.json",
+      "sha256": "e6d2da4ceb5ffdb678d8f63aac264c223324ea868e013b1f39b86bfd9e03b733",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-11-50-679Z-wp-config-48f35208/run.json",
+      "sha256": "dd4ef7b0ec3236bb75ad5f4a245f1c11d2fd8a119d554a97cb2356cf995a3185",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-12-02-029Z-smoke-a86fa404/tools.json",
+      "sha256": "0bdd3828a52cfccbe8825fdd924186116c2955ac33ba133b92920afe3f2f88bf",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-12-02-029Z-smoke-a86fa404/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T03-12-02-029Z-smoke-a86fa404/run.json",
+      "sha256": "e31d226dd34427a1f77b1023cd1278496e1c354ca514d0ead13c0a4c39a2bdf0",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T21-31-12-031Z-check-101f1f12/run.json",
+      "sha256": "a1e02788bca4d2a758df0116b732a8f10e73db5cdd0f40ca6770caba58f6d236",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T21-31-12-031Z-check-101f1f12/response.json",
+      "sha256": "5509498f2a31c936f4f781a43c887c5771e68083dfba6c5b3cb373aa725a2b07",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T21-31-12-031Z-check-101f1f12/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T21-32-18-614Z-check-a6b823d0/run.json",
+      "sha256": "4ffc4354a4662a50b7689672ed08004b3ec007e607e616d6acf76ccc0749767d",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T21-32-18-614Z-check-a6b823d0/response.json",
+      "sha256": "c140f3c36ac3267b33b2bd043d319b59ad1b5b8c36d3154cd7ba5ab09a56d6b7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-25T21-32-18-614Z-check-a6b823d0/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-23-21-492Z-check-e26cf25a/run.json",
+      "sha256": "c9130c22110aace79dde58f1a0c52dbf949749d40c7637eeefb9a0df1fe3b999",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-23-21-492Z-check-e26cf25a/response.json",
+      "sha256": "a943f1420de425fcaac8ae3cffdaff4ceb38ed919af2e2464b4d6636f180e67b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-23-21-492Z-check-e26cf25a/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-25-15-220Z-check-9a8e47bf/run.json",
+      "sha256": "c096e9929786bc9991812a4c7095cf37fcb9f45e840c8763e34512902a3fe681",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-25-15-220Z-check-9a8e47bf/response.json",
+      "sha256": "f72083cc4a1cfb109146cd3fe35a703313e0b09ea36c8bb2cd3c0f788d3693a4",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-25-15-220Z-check-9a8e47bf/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-25-42-661Z-check-71a1bc15/run.json",
+      "sha256": "794cb708de024d2ea6516c1a027d1727b52ec6396536f26a41ce3517cc1c500f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-25-42-661Z-check-71a1bc15/response.json",
+      "sha256": "5509498f2a31c936f4f781a43c887c5771e68083dfba6c5b3cb373aa725a2b07",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-25-42-661Z-check-71a1bc15/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-26-42-990Z-check-9cf5ba08/run.json",
+      "sha256": "a28fb29c4b7473e77efab4bd64dddb0f88620d1cf65925b87a7966a292c6357a",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-26-42-990Z-check-9cf5ba08/response.json",
+      "sha256": "c140f3c36ac3267b33b2bd043d319b59ad1b5b8c36d3154cd7ba5ab09a56d6b7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-26-42-990Z-check-9cf5ba08/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-27-32-160Z-check-02f301ef/run.json",
+      "sha256": "dbbdb9c51d0361da82d2be37c5ad878d654664aaae7b0309b91a90db26ad1b79",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-27-32-160Z-check-02f301ef/response.json",
+      "sha256": "c140f3c36ac3267b33b2bd043d319b59ad1b5b8c36d3154cd7ba5ab09a56d6b7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-27-32-160Z-check-02f301ef/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-27-48-351Z-check-6a243be3/run.json",
+      "sha256": "3616544b984daeb5e9643dea89e71457e6c90273c851631d9a20757b9e3db54f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-27-48-351Z-check-6a243be3/response.json",
+      "sha256": "d7f12b72876acaa3c44ad3303d6d4d26b661cb0af4b6cf1f75d1a6ffe397cc3a",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-27-48-351Z-check-6a243be3/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-28-23-843Z-check-f43eeaae/run.json",
+      "sha256": "0c8fb0f09787f3f03d1227353d6e0f120591b9191f2fc588cb478a9e06a0bd80",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-28-23-843Z-check-f43eeaae/response.json",
+      "sha256": "c140f3c36ac3267b33b2bd043d319b59ad1b5b8c36d3154cd7ba5ab09a56d6b7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T05-28-23-843Z-check-f43eeaae/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-26-21-327Z-gtm-f418d0dd/sample-2.json",
+      "sha256": "497ade94333bc2d291e469a5079653408ec03cf64b08ec99631e429fa149fbdd",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-26-21-327Z-gtm-f418d0dd/sample-3.json",
+      "sha256": "d6bf9c62679f1c9c70eb07d40d6ca0213e03af533204e4e12e8b68e8f41b9d2d",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-26-21-327Z-gtm-f418d0dd/sample-8.json",
+      "sha256": "2c7948d8155c0e827ecd16946f840c0a937cf6c70bef809a367f1b7a851fb975",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-26-21-327Z-gtm-f418d0dd/sample-10.json",
+      "sha256": "a690b80226e4527b5792e7bd910ebddfa04ba9070826fb8958f74886af74c86c",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-26-21-327Z-gtm-f418d0dd/warm-prime.json",
+      "sha256": "3d2e5487ce4f86d5bc5453843a727f3b12c07913a3aa0b41f1ca2a6eb485f752",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-26-21-327Z-gtm-f418d0dd/sample-4.json",
+      "sha256": "bdccaf326bf4f965d413119d7ee372d94fd8803a9154d667e3d3fb0dade2bb1b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-26-21-327Z-gtm-f418d0dd/sample-5.json",
+      "sha256": "d23dc927109cabfe8ab364a6815f76bbccd4e527ad3c327a71921962acf59007",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-26-21-327Z-gtm-f418d0dd/sample-9.json",
+      "sha256": "f408f4bd8c60850ae960de4527e5dfe7009983815bff1c79e606656d70905878",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-26-21-327Z-gtm-f418d0dd/sample-6.json",
+      "sha256": "1635224b94ab06750e196c4fcc9994bf2e88ae57edd7890b76d973bdde3135d2",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-26-21-327Z-gtm-f418d0dd/sample-7.json",
+      "sha256": "2f0b836b8d4a2eb7528051706e66b747dd456d207650f1516a8700ce5108ca5f",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-26-21-327Z-gtm-f418d0dd/run.json",
+      "sha256": "ed739039e15195542b5fcd8cd36f5d532bddb7ed44f584e5fb86a8a600e78c9a",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-26-21-327Z-gtm-f418d0dd/sample-1.json",
+      "sha256": "18645ec845f2d4a913229790b4f3f81727b7eaaf964b7f57d46e6821eba5cb0a",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-32-04-348Z-gtm-4e0c76f0/run.json",
+      "sha256": "a53448be11f1d4ea05bb49944deb11655fa19d1c7fe7fdf2067717b0cda7c3dd",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-32-04-348Z-gtm-4e0c76f0/sample-1.json",
+      "sha256": "db23c788546a8f9dd07009b0eb963f3cbd83b129f304e5dd55c6e255c8c95e98",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-32-04-348Z-gtm-4e0c76f0/sample-10.json",
+      "sha256": "ecd1dd1e7aeeaaace44b583d2359504da0c815564c5d30dc6e08a15971dca26a",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-32-04-348Z-gtm-4e0c76f0/sample-2.json",
+      "sha256": "b1c36cd1e0b618139c6a8a610c690a8501ef670508e454dae3898cf4a114abdf",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-32-04-348Z-gtm-4e0c76f0/sample-3.json",
+      "sha256": "c1b25b3a583c9585778b5bd73638183f8a238664c60f1442fb20d98e7fd3ebc1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-32-04-348Z-gtm-4e0c76f0/sample-4.json",
+      "sha256": "04f8b0bc40fdce2daab669f24a284d0917731db7c1cd37405be0f8efc8ecaa76",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-32-04-348Z-gtm-4e0c76f0/sample-5.json",
+      "sha256": "1f31cdd22a68e6a0d764b0f08a775de44968bca1b40986a3de3e82ec4fb6ee10",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-32-04-348Z-gtm-4e0c76f0/sample-6.json",
+      "sha256": "ed32f9057b6d9912d0f218cdde8593d97e3d19e6df3c2651157ffdf5eec6f0c3",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-32-04-348Z-gtm-4e0c76f0/sample-7.json",
+      "sha256": "1c5f11d52d965829fdd09fe21733b28f4605d22c8498ec76d0541b32a87c0e8e",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-32-04-348Z-gtm-4e0c76f0/sample-8.json",
+      "sha256": "b8a82b496f2923206fa23a90d5964c24a0df368d5ec47733f172853af56e5c0e",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-32-04-348Z-gtm-4e0c76f0/sample-9.json",
+      "sha256": "dcabc26c3df9b2fdeb39f24c105edd32224c6621285322a87688c0a3f0289604",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-32-04-348Z-gtm-4e0c76f0/warm-prime.json",
+      "sha256": "94cbff67500205fd59f399285e57279fbc8f81fa9f6127dffa3f0d60d48c655b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-45-59-354Z-check-d9a0d753/response.json",
+      "sha256": "47f4a531655819fb919ea3dc9900d6e600a5136f6d9e8679253d0de479844cca",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-45-59-354Z-check-d9a0d753/run.json",
+      "sha256": "61f4413e4f07754a807f4bdfd29938c7b916737a78095fcce5da52ce921c4fd4",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-45-59-354Z-check-d9a0d753/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-46-20-394Z-check-750e276a/response.json",
+      "sha256": "c140f3c36ac3267b33b2bd043d319b59ad1b5b8c36d3154cd7ba5ab09a56d6b7",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-46-20-394Z-check-750e276a/run.json",
+      "sha256": "f98af6161ae3984c991577e6794ce7cb78dcb8d358f81823cc868d31fc6f50d1",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-46-20-394Z-check-750e276a/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-50-01-551Z-check-82feb5c9/response.json",
+      "sha256": "a943f1420de425fcaac8ae3cffdaff4ceb38ed919af2e2464b4d6636f180e67b",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-50-01-551Z-check-82feb5c9/run.json",
+      "sha256": "ab0d0f571adbd06f2be8441c0348b8f8d701330bc550bdbfb1773436a0d95a04",
+      "redactions": []
+    },
+    {
+      "file": "evidence/2026-11-26T23-50-01-551Z-check-82feb5c9/stderr.txt",
+      "sha256": "f5f646bb22e55b27b998f5883b2acd309d27da2e7b0b5576128ca60362eddb30",
+      "redactions": []
+    }
+  ],
+  "excluded_runs": [
+    {
+      "run_id": "2026-11-13T21-25-14-802Z-wp-config-6694f5df",
+      "reason": "Setup invocation failed before valid WordPress configuration; retained privately."
+    },
+    {
+      "run_id": "2026-11-13T21-25-15-390Z-check-82dbe120",
+      "reason": "Initial setup attempt reached WordPress installer, not the configured site; excluded from control/results and retained privately."
+    },
+    {
+      "run_id": "2026-11-19T22-14-37-713Z-check-46f5150a",
+      "reason": "Shopify password page, not storefront; retained privately, storefront score unknown."
+    },
+    {
+      "run_id": "2026-11-19T22-35-55-748Z-check-c08378bb",
+      "reason": "Wix initial custom-code save failed; setup miss retained privately; later persisted embed control passed."
+    },
+    {
+      "run_id": "2026-11-25T03-12-25-230Z-check-8efac8cc",
+      "reason": "Fresh check reached password gate, not storefront. Retained privately; not_installed is not a storefront diagnosis."
+    }
+  ]
+}

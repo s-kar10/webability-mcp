@@ -1,0 +1,43 @@
+{
+  "local_date": "2026-11-24",
+  "timezone": "America/Toronto",
+  "timestamp_note": "Raw timestamps are UTC and therefore show November 25.",
+  "baseline_commit": "99e66db328301d99aef3b96d03818ef16d36eeaf",
+  "sid_detector_commit": "74b254cddbdfe2d59ef08cef9095f97e8fd2ba77",
+  "test_counts": {
+    "passed": 575,
+    "failed": 0,
+    "skipped": 0
+  },
+  "typecheck_exit_code": 0,
+  "build_exit_code": 0,
+  "mcp_tools": 21,
+  "run_ids": {
+    "BASELINE": "2026-11-25T03-10-40-749Z-baseline-f4cacc3d",
+    "WIX-CONTROL-UPDATED": "2026-11-25T03-10-52-173Z-check-e89105e4",
+    "FRAMER-CONTROL-UPDATED": "2026-11-25T03-10-53-447Z-check-041b132e",
+    "WP-healthy": "2026-11-25T03-11-50-679Z-wp-config-48f35208",
+    "WP-CONTROL-UPDATED": "2026-11-25T03-11-13-858Z-check-ed05371f",
+    "WP-wrong-slot": "2026-11-25T03-11-16-700Z-wp-config-03c57294",
+    "WP-SLOT-01": "2026-11-25T03-11-20-904Z-check-22f80981",
+    "WP-SLOT-01-REPAIRED": "2026-11-25T03-11-26-357Z-check-a6237f0d",
+    "WP-csp": "2026-11-25T03-11-29-123Z-wp-config-03589234",
+    "WP-CSP-01": "2026-11-25T03-11-32-023Z-check-61f0df51",
+    "WP-CSP-01-REPAIRED": "2026-11-25T03-11-36-934Z-check-8b04f2b9",
+    "WP-cached": "2026-11-25T03-11-39-093Z-wp-config-bcb1c167",
+    "WP-CACHE-01": "2026-11-25T03-11-43-435Z-check-c05cde4b",
+    "WP-CACHE-01-REPAIRED": "2026-11-25T03-11-48-448Z-check-57dc6dc7",
+    "MCP-STARTUP": "2026-11-25T03-12-02-029Z-smoke-a86fa404"
+  },
+  "pending": [
+    "Wix broken-install configuration and repair",
+    "Framer broken states on updated baseline",
+    "Consent-preserving network proof",
+    "Final-configuration GTM timing",
+    "Shopify storefront access",
+    "Cookiebot permanent Free transition",
+    "Real-builder usability sessions",
+    "Recordings and demo"
+  ],
+  "note": "Participant details and communication/recording drafts are outside Git. No browser-account edits performed during this revalidation."
+}
