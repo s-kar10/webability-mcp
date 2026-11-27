@@ -4,9 +4,9 @@ import { test } from 'node:test'
 import { redactSensitiveMcpPayloads, stabilizeScanTimeoutFingerprint } from '../src/posthog.ts'
 
 const SCAN_PAGE_TIMEOUT =
-  'https://slow-site.example/ took longer than 25s to scan, so it stopped before the 30s limit on hosted tool calls. Try again, or use start_audit for slow or large sites.'
+  'https://slow-site.example/ took longer than 55s to scan, so it stopped at the hosted limit for one tool call. Try again, or use start_audit for slow or large sites.'
 const DIFF_SCAN_TIMEOUT =
-  'diff_scan of https://baseline.example/ and https://slow-site.example/ took longer than 25s to scan, so it stopped before the 30s limit on hosted tool calls. Try again, or use start_audit for slow or large sites.'
+  'diff_scan of https://baseline.example/ and https://slow-site.example/ took longer than 55s to scan, so it stopped at the hosted limit for one tool call. Try again, or use start_audit for slow or large sites.'
 
 function exceptionEvent(value: string) {
   return {
@@ -30,10 +30,10 @@ test('diff_scan deadline timeout gets the same stable fingerprint', () => {
 
 test('every slow site groups into one issue instead of one per URL', () => {
   const a = stabilizeScanTimeoutFingerprint(
-    exceptionEvent('https://a.example/ took longer than 25s to scan, so it stopped before the 30s limit on hosted tool calls.'),
+    exceptionEvent('https://a.example/ took longer than 55s to scan, so it stopped at the hosted limit for one tool call.'),
   )
   const b = stabilizeScanTimeoutFingerprint(
-    exceptionEvent('https://b.example/ took longer than 25s to scan, so it stopped before the 30s limit on hosted tool calls.'),
+    exceptionEvent('https://b.example/ took longer than 55s to scan, so it stopped at the hosted limit for one tool call.'),
   )
   assert.equal(a.properties.$exception_fingerprint, b.properties.$exception_fingerprint)
 })

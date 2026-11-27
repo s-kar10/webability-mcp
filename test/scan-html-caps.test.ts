@@ -37,7 +37,7 @@ import {
   estimateMarkupSize,
   fastScanHtml,
 } from '../src/fastScan.ts'
-import { SCAN_PAGE_HOSTED_DEADLINE_MS, createServer } from '../src/server.ts'
+import { HOSTED_CALL_DEADLINE_MS, createServer } from '../src/server.ts'
 
 const require = createRequire(import.meta.url)
 
@@ -314,7 +314,7 @@ test('deadline: an aborted scan leaves the scanning chain healthy', async () => 
 
 test('deadline: 24 s default, one second under scan_page hosted budget', () => {
   assert.equal(SCAN_HTML_DEADLINE_MS, 24_000)
-  assert.ok(SCAN_HTML_DEADLINE_MS < SCAN_PAGE_HOSTED_DEADLINE_MS)
+  assert.ok(SCAN_HTML_DEADLINE_MS < HOSTED_CALL_DEADLINE_MS)
 })
 
 test('queue: past the cap the caller is told the server is busy, and the slot frees up', async () => {

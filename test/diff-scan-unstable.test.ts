@@ -271,11 +271,12 @@ test('hosted diff_scan: a second call during a run is refused as busy, and the n
   }
 }, 45_000)
 
-// Seen on prod: kedianomics pairs took 20.7s to 23.1s, and a 25s budget left little room.
-test('hosted diff_scan: the default budget runs to 28s and stops before the 30s limit', async () => {
-  // The second pair hangs, so the call ends exactly when the budget does.
+// Seen on prod: kedianomics pairs took 20.7s to 23.1s. diff_scan shares the one hosted deadline (55 s).
+test('hosted diff_scan: the default budget is the one hosted deadline and stops under the SDK timeout', async () => {
+  // The second pair hangs. The old 28 s budget stopped it at 28 s; now the browser's own 30 s
+  // navigation timeout ends the hanging load first, and the call still answers inside the one deadline.
   const { text, elapsed } = await hostedDiff(undefined, 0, 3)
-  assert.ok(elapsed > 26_000, `stopped after ${elapsed}ms`)
-  assert.ok(elapsed < 29_500, `stopped after ${elapsed}ms`)
+  assert.ok(elapsed > 29_000, `stopped after ${elapsed}ms: the old 28 s budget is still in force`)
+  assert.ok(elapsed < 57_500, `stopped after ${elapsed}ms`)
   assert.match(text, /^UNCONFIRMED: 1 possible new/)
-}, 45_000)
+}, 75_000)

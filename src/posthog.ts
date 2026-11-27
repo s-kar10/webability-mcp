@@ -85,7 +85,7 @@ export const redactSensitiveMcpPayloads: BeforeSendFn = (event) => {
 // this is deliberately NOT in MCP_CALLER_MISUSE_PATTERNS.
 const SCAN_DEADLINE_TIMEOUT_FINGERPRINT = 'webability-mcp:hosted-scan-deadline-timeout'
 const SCAN_DEADLINE_TIMEOUT_PATTERN =
-  /took longer than \d+(?:\.\d+)?s to scan, so it stopped before the 30s limit on hosted tool calls/
+  /took longer than \d+(?:\.\d+)?s to scan, so it stopped at the hosted limit for one tool call/
 
 export function stabilizeScanTimeoutFingerprint<
   T extends { event?: string; properties?: Record<string, unknown> },

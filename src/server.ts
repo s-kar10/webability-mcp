@@ -10,7 +10,7 @@ import { resolveVerifyFixArgs, verifyFixTargetUrl, VERIFY_FIX_URL_KEYS } from '.
 import { resolveGetRulesArgs, ruleIdMatches } from './getRulesArgs.js'
 import { runEngine, type EngineResult } from '@webability/core/engine'
 import { installOwnWidgetRoute, sessionPage } from './enginePage.js'
-import { scan, verifyFixRefusal, REASON_TEXT, getContrastRatio, extractSiteTheme, VIEWPORT_SIZES, JUDGE_DEFAULT_TIMEOUT_MS, type JudgeOptions } from '@webability/core'
+import { scan, verifyFixRefusal, REASON_TEXT, getContrastRatio, extractSiteTheme, VIEWPORT_SIZES, type JudgeOptions } from '@webability/core'
 import { contrastLaunchesBrowser, contrastPalette } from './contrastPalette.js'
 
 import { isTunnelUrl, parseTunnelTarget, type TunnelTarget, tunnelBlockHint, tunnelHeadersFor } from './tunnelAuth'
@@ -161,7 +161,7 @@ export interface ServerOptions {
    *  `securitySchemes`, and an account tool called without an account returns
    *  isError + `_meta["mcp/www_authenticate"]` so ChatGPT starts sign-in. */
   appsAuth?: boolean
-  /** Hosted scan_page / diff_scan time budget. Tests set it low; production uses SCAN_PAGE_HOSTED_DEADLINE_MS. */
+  /** Hosted scan_page / diff_scan time budget. Tests set it low; production uses HOSTED_CALL_DEADLINE_MS. */
   scanPageDeadlineMs?: number
   /** scan_html (in-process) time budget. Tests set it low; production uses SCAN_HTML_DEADLINE_MS. */
   scanHtmlDeadlineMs?: number
@@ -175,12 +175,14 @@ const JUDGE_DEADLINE_MARGIN_MS = 2_000
 /**
  * Cap the AI judge so it ends by `endsAt`. scan() spreads opts.judge when the
  * judge starts (after the engines), so timeoutMs is a getter: the judge gets
- * the time left at that moment, never more than its own budget. Without this
- * the scan deadline fires mid-judge and discards engine findings already made.
+ * the time left at that moment. Without this the scan deadline fires mid-judge
+ * and discards engine findings already made. There is no fixed judge budget on
+ * top: a fast page leaves the judge more time, a slow page less. Only an
+ * operator budget (WEBABILITY_JUDGE_TIMEOUT_MS) caps it further.
  */
 export function judgeWithin(judge: JudgeOptions | undefined, endsAt: number): JudgeOptions | undefined {
   if (!judge) return undefined
-  const budget = judge.timeoutMs ?? JUDGE_DEFAULT_TIMEOUT_MS
+  const budget = judge.timeoutMs ?? Infinity
   const capped = { ...judge }
   Object.defineProperty(capped, 'timeoutMs', { enumerable: true, get: () => Math.max(1, Math.min(budget, endsAt - Date.now())) })
   return capped
@@ -198,15 +200,20 @@ export function flowScanMaxPages(raw: unknown, remote: boolean): number {
   return remote ? Math.min(asked, HOSTED_FLOW_MAX_PAGES) : asked
 }
 
-/** Hosted scan_page (and diff_scan, for both scans together) stops here so the answer reaches Zapier (30s action limit) as a message, not a 504. */
-export const SCAN_PAGE_HOSTED_DEADLINE_MS = 25_000
 /**
- * A diff_scan does two scans of work, so it gets the most the 30s HTTP limit
- * allows. Ordinary pages took 20.7s to 23.1s on the shared hosted box.
+ * The one time budget for a hosted live-scan call (scan_page, diff_scan for
+ * both scans together). It sits under the MCP SDK's default request timeout
+ * (60 s), so a client on the default gets the answer as a message, not a
+ * timeout. The judge takes whatever the engines leave (judgeWithin). No
+ * progress heartbeat: the hosted transport answers in JSON (enableJsonResponse),
+ * which drops notifications sent during a request, so the deadline alone must
+ * fit under the client's timeout.
+ * Was 25 s for Zapier's 30 s action limit: 914 of 3,320 hosted scan_page calls
+ * in 90 days hit it, and none came from Zapier (2026-11-26).
  */
-export const DIFF_SCAN_HOSTED_DEADLINE_MS = 28_000
+export const HOSTED_CALL_DEADLINE_MS = 55_000
 
-/** A DNS lookup that hangs would hold a hosted request past the caller's 30s limit. */
+/** A DNS lookup that hangs would hold a hosted request past the caller's deadline. */
 const DNS_LOOKUP_DEADLINE_MS = 5_000
 
 /** SSRF guard: only http(s) to public, externally-resolvable addresses.
@@ -1302,11 +1309,11 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
         ...(args?.widgetView === 'applied' ? { widget: 'applied' as const } : {}),
         ...(storageState ? { storageState } : {}),
         // Hosted: the judge must finish inside the scan deadline (see judgeWithin).
-        judge: opts.remote ? judgeWithin(judgeFor(opts), startedAt + (opts.scanPageDeadlineMs ?? SCAN_PAGE_HOSTED_DEADLINE_MS) - JUDGE_DEADLINE_MARGIN_MS) : judgeFor(opts),
+        judge: opts.remote ? judgeWithin(judgeFor(opts), startedAt + (opts.scanPageDeadlineMs ?? HOSTED_CALL_DEADLINE_MS) - JUDGE_DEADLINE_MARGIN_MS) : judgeFor(opts),
       }
-      // Hosted only: Zapier and other HTTP callers give up at 30s and show a
-      // bare 504. Stop first and say what to do. Local stdio has no such limit.
-      const deadlineMs = opts.scanPageDeadlineMs ?? SCAN_PAGE_HOSTED_DEADLINE_MS
+      // Hosted only: an HTTP caller that gives up shows a bare timeout. Stop
+      // first and say what to do. Local stdio has no such limit.
+      const deadlineMs = opts.scanPageDeadlineMs ?? HOSTED_CALL_DEADLINE_MS
       let scanned: Awaited<ReturnType<typeof scanPageOnEngine>>
       try {
         scanned = opts.remote
@@ -1314,7 +1321,7 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
           : await scanPageOnEngine(url, tunnel, args?.viewport, scanOptions, false)
       } catch (err) {
         if (err instanceof DeadlineError) {
-          return toolError(`${url} took longer than ${deadlineMs / 1000}s to scan, so it stopped before the 30s limit on hosted tool calls. Try again, or use start_audit for slow or large sites.`)
+          return toolError(`${url} took longer than ${deadlineMs / 1000}s to scan, so it stopped at the hosted limit for one tool call. Try again, or use start_audit for slow or large sites.`)
         }
         throw err
       }
@@ -1744,10 +1751,10 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
         return { baseline, current }
       }
       // Hosted only, as scan_page: one budget covers both live scans so the
-      // HTTP caller gets this answer before its 30s limit, not a 504.
+      // HTTP caller gets this answer before its timeout.
       const firstPairStarted = Date.now()
       const { baseline, current } = opts.remote
-        ? await withDeadline(scanBoth, scanBudgetLeft(opts.scanPageDeadlineMs ?? DIFF_SCAN_HOSTED_DEADLINE_MS), 'diff_scan')
+        ? await withDeadline(scanBoth, scanBudgetLeft(opts.scanPageDeadlineMs ?? HOSTED_CALL_DEADLINE_MS), 'diff_scan')
         : await scanBoth()
       const firstPairMs = Date.now() - firstPairStarted
 
@@ -1803,9 +1810,9 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
         try {
           // The second pair takes about as long as the first. If it cannot fit,
           // say so now and do not spend the rest of the budget.
-          if (opts.remote && scanBudgetLeft(opts.scanPageDeadlineMs ?? DIFF_SCAN_HOSTED_DEADLINE_MS) < firstPairMs) throw new Error('no time for a second pair')
+          if (opts.remote && scanBudgetLeft(opts.scanPageDeadlineMs ?? HOSTED_CALL_DEADLINE_MS) < firstPairMs) throw new Error('no time for a second pair')
           const again = opts.remote
-            ? await withDeadline(scanBoth, scanBudgetLeft(opts.scanPageDeadlineMs ?? DIFF_SCAN_HOSTED_DEADLINE_MS), 'diff_scan')
+            ? await withDeadline(scanBoth, scanBudgetLeft(opts.scanPageDeadlineMs ?? HOSTED_CALL_DEADLINE_MS), 'diff_scan')
             : await scanBoth()
           // Compare counts, not keys: two equivalent elements share one key, so
           // a change from one to two shows only in the second pair's multiset diff.
@@ -1866,7 +1873,7 @@ const dispatchTool = async (request: CallToolRequest, opts: ServerOptions = {}):
       }
     } catch (err) {
       if (err instanceof DeadlineError) {
-        return toolError(`diff_scan of ${baselineUrl} and ${url} took longer than ${(opts.scanPageDeadlineMs ?? DIFF_SCAN_HOSTED_DEADLINE_MS) / 1000}s to scan, so it stopped before the 30s limit on hosted tool calls. Try again, or use start_audit for slow or large sites.`)
+        return toolError(`diff_scan of ${baselineUrl} and ${url} took longer than ${(opts.scanPageDeadlineMs ?? HOSTED_CALL_DEADLINE_MS) / 1000}s to scan, so it stopped at the hosted limit for one tool call. Try again, or use start_audit for slow or large sites.`)
       }
       return toolError(`diff_scan failed: ${(err as Error).message}`)
     } finally {

@@ -45,7 +45,7 @@ export function isBlockedAddress(addr: string): boolean {
   return false
 }
 
-/** A DNS lookup that hangs would hold a hosted request past the caller's 30s limit. */
+/** A DNS lookup that hangs would hold a hosted request past the caller's deadline. */
 const DNS_LOOKUP_DEADLINE_MS = 5_000
 
 /** Playwright `proxy` settings for a hosted context. `<-loopback>` removes
