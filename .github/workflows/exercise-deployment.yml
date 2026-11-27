@@ -1,0 +1,11 @@
+name: Exercise deployment check
+on:
+  push:
+    branches: [validation/check-install-deployment]
+permissions:
+  contents: read
+jobs:
+  framer:
+    uses: ./.github/workflows/check-install.yml
+    with:
+      url: https://jubilant-organization-752879.framer.app/
